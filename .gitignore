@@ -100,5 +100,13 @@ dist
 # DynamoDB Local files
 .dynamodb/
 
+
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
 # TernJS port file
 .tern-port
