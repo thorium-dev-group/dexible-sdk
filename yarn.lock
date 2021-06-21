@@ -4789,6 +4789,7 @@ __metadata:
     dex-algos: ^0.1.0
     dex-common: ^0.1.0
     dex-logger: ^0.1.0
+    dex-quote: ^0.1.0
     dex-web3: ^0.1.0
     dotenv: ^10.0.0
     ethers: ^5.3.1
@@ -4819,7 +4820,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-quote@workspace:packages/dex-quote":
+"dex-quote@^0.1.0, dex-quote@workspace:packages/dex-quote":
   version: 0.0.0-use.local
   resolution: "dex-quote@workspace:packages/dex-quote"
   dependencies:

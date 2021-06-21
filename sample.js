@@ -33,6 +33,7 @@ const main = async () => {
     let algo = await dexible.algo.create({
         type: dexible.algo.types.TWAP,
         timeWindow: "24h",
+        expireAfter: "48h",
         maxRounds: 10, //min per round is 10 in tokens (100 in/10 rounds)
         priceRange: {
             basePrice: .0006, //expressed in input units per output unit (in/out)

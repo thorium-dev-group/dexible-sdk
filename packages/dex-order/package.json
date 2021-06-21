@@ -13,6 +13,7 @@
     "dex-algos": "^0.1.0",
     "dex-common": "^0.1.0",
     "dex-logger": "^0.1.0",
+    "dex-quote": "^0.1.0",
     "dex-web3": "^0.1.0",
     "ethers": "^5.3.1"
   },

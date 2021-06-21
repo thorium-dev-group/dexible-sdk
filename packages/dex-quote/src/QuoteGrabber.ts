@@ -14,6 +14,7 @@ export interface QuoteRequest {
     tokenOut: Token;
     amountIn: BigNumberish;
     slippagePercent: number;
+    minOrderSize?:BigNumberish,
     network: string;
     chainId: number,
     chainName: string;
@@ -35,6 +36,7 @@ export default async (request: QuoteRequest): Promise<any> => {
         networkId: request.chainId,
         tokenIn: request.tokenIn.address,
         tokenOut: request.tokenOut.address,
+        minOrderSize: request.minOrderSize,
         slippagePercentage: request.slippagePercent/100
     };
 
