@@ -18,7 +18,6 @@ export interface DexParams {
     tokenOut: Token;
     amountIn: BigNumber;
     algo: IAlgo;
-    fee: BigNumberish; //for future use
     network: string; //for future use
     chainId: number;
     maxRounds: number;
@@ -44,7 +43,7 @@ export default class DexOrder {
         this.tokenOut = params.tokenOut;
         this.amountIn = params.amountIn;
         this.algo = params.algo;
-        this.fee = params.fee;
+        this.fee = "0"; //replaced by out-token BPS
         this.network = params.network;
         this.chainId = params.chainId;
         this.maxRounds = params.maxRounds;
@@ -55,7 +54,7 @@ export default class DexOrder {
 
     serialize = () => {
         if(!this.quoteId) {
-            throw new Error("Must generateQuote before serializing order");
+            throw new Error("No quote found to serialize order");
         }
 
         return {
@@ -68,7 +67,7 @@ export default class DexOrder {
         }
     }
 
-    generateQuote = async (slippagePercent:number) => {
+    _generateQuote = async (slippagePercent:number) => {
         let minPerRound = this.amountIn.mul(30).div(100);
         if(this.maxRounds) {
             let units = ethers.utils.formatUnits(this.amountIn, this.tokenIn.decimals);
@@ -107,11 +106,8 @@ export default class DexOrder {
         return quotes;
     }
 
-    estimateGas = async () => {
+    submit = async () => {
 
     }
 
-    verify = async ():Promise<VerificationResponse>  => {
-        return null as VerificationResponse;
-    }
 }

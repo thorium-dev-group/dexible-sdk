@@ -16,6 +16,6 @@ export default class StopLoss extends Base {
     }
 
     verify = () : string | undefined => {
-        return super.verifyPolicies([StopPrice.tag]);
+        return this.verifyPolicies([StopPrice.tag]);
     }
 }

@@ -16,6 +16,6 @@ export default class Limit extends Base  {
     }
 
     verify = () : string | undefined => {
-        return super.verifyPolicies([LimitPrice.tag]);
+        return this.verifyPolicies([LimitPrice.tag]);
     }
 }

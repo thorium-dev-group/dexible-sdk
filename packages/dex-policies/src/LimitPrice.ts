@@ -7,7 +7,7 @@ export interface LimitPriceParams {
 
 export default class LimitPrice extends Base {
 
-    limitAction: string;
+    limitAction: "buy" | "sell";
     price: number;
 
     static get tag() {

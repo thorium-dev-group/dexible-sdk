@@ -1,9 +1,10 @@
-import {ethers} from 'ethers';
+import {BigNumberish, ethers} from 'ethers';
 import {abi, chainConfig, Multicall} from 'dex-common';
 
 export interface TokenFindProps {
     address: string;
     provider: ethers.providers.Provider;
+    owner?: string;
 }
 
 export interface Token {
@@ -11,6 +12,8 @@ export interface Token {
     decimals: number;
     symbol: string;
     name?: string;
+    balance?: BigNumberish;
+    allowance?: BigNumberish;
 }
 
 const cache = {};
@@ -26,13 +29,16 @@ export default async (props:TokenFindProps):Promise<Token> => {
     let r:InfoResponse = await getInfo({
         token: props.address,
         chainId: netInfo.chainId,
-        provider: props.provider
+        provider: props.provider,
+        owner: props.owner
     });
     if(r) {
         info = {
             address: props.address.toLowerCase(),
             decimals: r.decimals,
             symbol: r.symbol, 
+            balance: r.balance,
+            allowance: r.allowance
         } as Token;
         cache[props.address.toLowerCase()] = info;
     }

@@ -1,5 +1,5 @@
 import {abi, chainConfig} from 'dex-common';
-import {BigNumber, BigNumberish, ethers} from 'ethers';
+import {BigNumberish, ethers} from 'ethers';
 
 export interface GetBalanceRequest {
     trader: string;

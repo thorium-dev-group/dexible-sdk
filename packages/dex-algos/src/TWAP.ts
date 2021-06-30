@@ -16,6 +16,6 @@ export default class TWAP extends Base {
     }
 
     verify = () : string | undefined => {
-        return super.verifyPolicies([BoundedDelay.tag]);
+        return this.verifyPolicies([BoundedDelay.tag]);
     }
 }
