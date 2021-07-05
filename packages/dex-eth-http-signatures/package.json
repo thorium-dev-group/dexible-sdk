@@ -5,8 +5,7 @@
   "main": "./dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "yarn run build:types",
-    "build:types": "tsc --build tsconfig.json",
+    "build": "yarn clean && tsc --build",
     "clean": "rimraf dist",
     "test": "mocha"
   },
