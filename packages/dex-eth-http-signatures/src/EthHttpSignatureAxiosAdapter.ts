@@ -40,8 +40,9 @@ export default class EthHttpSignatureAxiosAdapter {
             }
 
             // add signature auth header
+            const requestUrl = new URL(config.url || '/')
             const requestProps = {
-                urlPath: (new URL(config.url || '/')).pathname,
+                urlPath: requestUrl.pathname + requestUrl.search,
                 requestMethod: (config.method || 'GET').toUpperCase(),
                 requiredHeaderFields: Object.keys(additionalHeaders),
                 headers: {
