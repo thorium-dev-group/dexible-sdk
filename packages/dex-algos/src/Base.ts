@@ -1,6 +1,7 @@
 import {IPolicy, GasCost, Slippage} from 'dex-policies';
 import { Verifiable, Serializable } from 'dex-common';
 import Logger from 'dex-logger';
+import IAlgo from './IAlgo';
 
 const log = new Logger({component: "BaseAlgo"});
 
@@ -9,20 +10,20 @@ export interface BaseParams {
     maxRounds?: number;
 }
 
-export default class BaseAlgo {
+export default class BaseAlgo implements IAlgo {
     name:string;
     policies: Array<IPolicy>;
-    maxRounds?: number;
-
+    maxRounds: () => number;
     serialize: Serializable;
-
     verify: Verifiable;
 
     constructor(props:BaseParams, name: string) {
 
         this.name = name;
         this.policies = props.policies;
-        this.maxRounds = props.maxRounds;
+        this.maxRounds = () => {
+            return props.maxRounds || 0;
+        }
         this.serialize = ():object => {
             return {
                 algorithm: this.name,
@@ -34,6 +35,14 @@ export default class BaseAlgo {
         }
     }
 
+    getSlippage = ():number => {
+        let slip = this.policies.filter(p => p.name === Slippage.tag)[0] as Slippage;
+        if(!slip) {
+            return 0;
+        }
+        return slip.amount;
+    }
+
     verifyPolicies = (required?:Array<string>) : string | undefined => {
         if(!required) {
             required = [];
@@ -42,11 +51,17 @@ export default class BaseAlgo {
         //must at least have gas cost and slippage
         let hasGas = false;
         let hasSlippage = false;
+        let dupCheck = {};
+
         let reqMatches:Array<string> = [];
         log.info(this.name, "verifying policies");
         for(let i=0;i<this.policies.length;++i) {
             let p = this.policies[i];
             log.debug("Checking policy", p.name);
+            if(dupCheck[p.name]) {
+                return "Found duplicate policy definition: " + p.name;
+            }
+            dupCheck[p.name] = true;
             if(p.name === GasCost.tag) { hasGas = true};
             if(p.name === Slippage.tag) { hasSlippage = true};
             let err = p.verify();

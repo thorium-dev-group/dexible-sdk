@@ -4,6 +4,7 @@ import * as Multicall from './multicall';
 import { Serializable } from './ISerializable';
 import {Verifiable} from './IVerifiable';
 import chainToName from './chainToName';
+import * as Services from './services';
 
 export {
     abi,
@@ -11,5 +12,6 @@ export {
     Multicall,
     Serializable,
     Verifiable,
-    chainToName
+    chainToName,
+    Services
 }

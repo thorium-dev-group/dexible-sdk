@@ -1,5 +1,5 @@
 import * as TokenServices from 'dex-token';
-import {BigNumberish, ethers, Transaction} from 'ethers';
+import {BigNumberish, ethers} from 'ethers';
 
 export interface ConstructorProps {
     wallet: ethers.Wallet;
@@ -10,6 +10,8 @@ export interface SpendIncreaseProps {
     token: TokenServices.Token;
     amount: BigNumberish;
 }
+
+const sleep = ms => new Promise(done=>setTimeout(done, ms));
 
 export default class TokenSupport {
 
@@ -30,10 +32,21 @@ export default class TokenSupport {
     }
 
     increaseSpending = async (props:SpendIncreaseProps): Promise<any> => {
-        return TokenServices.TokenUtils.increaseSpending({
+        let txn = await TokenServices.TokenUtils.increaseSpending({
             wallet: this.wallet,
             token: props.token,
             amount: props.amount
         });
+        let r = await txn.wait();
+        if(!r.status) {
+            throw new Error("Allowance transaction failed");
+        }
+        //we pause for at least a block to give the network time to sync 
+        //since we've just increased spending. Otherwise, any subsequent
+        //check could result in order failure because allowance may not 
+        //be visible to all nodes yet.
+        await sleep(15000);
+
+        return txn;
     }
 }

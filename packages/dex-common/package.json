@@ -16,6 +16,7 @@
     "@tsconfig/node14": "^1.0.1",
     "@types/mocha": "^8.2.2",
     "chai": "^4.3.4",
+    "dex-eth-http-signatures": "^0.1.0",
     "mocha": "^8.4.0",
     "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",

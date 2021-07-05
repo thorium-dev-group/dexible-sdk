@@ -1,4 +1,3 @@
-import {ethers} from 'ethers';
 import * as Algos from 'dex-algos';
 import * as Policies from 'dex-policies';
 import moment from 'moment';

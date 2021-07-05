@@ -37,8 +37,8 @@ export default class GasCost extends Base {
             type: this.name,
             params: {
                 gasType: this.gasType,
-                amount: this.amount,
-                deviation: this.deviation
+                amount: this.amount || "0",
+                deviation: this.deviation || "0"
             }
         }
     }

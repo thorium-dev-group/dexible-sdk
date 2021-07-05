@@ -1,4 +1,7 @@
 import {ethers} from 'ethers';
+import Logger from 'dex-logger';
+
+const log = new Logger({component: "HttpSignature"});
 
 const PARAMETER_SEPARATOR_PATTERN = /\s*,\s*/;
 
@@ -113,6 +116,7 @@ export default abstract class HttpSignature {
             .concat(headerTuples)
             .map((nameValue) => `${nameValue[0]}: ${nameValue[1]}`).join(`\n`);
 
+        log.debug("Signature payload", signaturePayload);
         return signaturePayload;
     }
 

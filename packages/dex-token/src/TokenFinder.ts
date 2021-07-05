@@ -1,4 +1,4 @@
-import {BigNumberish, ethers} from 'ethers';
+import {BigNumber, ethers} from 'ethers';
 import {abi, chainConfig, Multicall} from 'dex-common';
 
 export interface TokenFindProps {
@@ -12,10 +12,11 @@ export interface Token {
     decimals: number;
     symbol: string;
     name?: string;
-    balance?: BigNumberish;
-    allowance?: BigNumberish;
+    balance?: BigNumber;
+    allowance?: BigNumber;
 }
 
+const bn = BigNumber.from;
 const cache = {};
 
 export default async (props:TokenFindProps):Promise<Token> => {
@@ -37,8 +38,8 @@ export default async (props:TokenFindProps):Promise<Token> => {
             address: props.address.toLowerCase(),
             decimals: r.decimals,
             symbol: r.symbol, 
-            balance: r.balance,
-            allowance: r.allowance
+            balance: bn(r.balance||"0"),
+            allowance: bn(r.allowance||"0")
         } as Token;
         cache[props.address.toLowerCase()] = info;
     }
@@ -66,7 +67,7 @@ const getInfo = async (props:InfoProps):Promise<InfoResponse> => {
     };
     let chainId = props.chainId || 1;
 
-    let dexibleAddress = chainConfig[chainId];
+    let dexibleAddress = chainConfig[chainId].Settlement;
     let ifc = new ethers.utils.Interface(abi.ERC20ABI);
     let getDecimals = ifc.encodeFunctionData("decimals");
     let getSymbol = ifc.encodeFunctionData("symbol");

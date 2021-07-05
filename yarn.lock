@@ -4717,6 +4717,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
+    dex-eth-http-signatures: ^0.1.0
     ethers: ^5.1.4
     mocha: ^8.4.0
     rimraf: ^3.0.2
@@ -4725,7 +4726,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-core@workspace:packages/dex-core":
+"dex-core@^0.1.0, dex-core@workspace:packages/dex-core":
   version: 0.0.0-use.local
   resolution: "dex-core@workspace:packages/dex-core"
   dependencies:
@@ -5620,6 +5621,24 @@ __metadata:
   checksum: fa1a206c4e4e8e427542f7fdfa10bd073a4ddf2510fb22e2f9a33b9aa7a0d5669bffba9b889e22d8c1c976af51a92dab274845e58d626ddb2d3563ed4d5d50dc
   languageName: node
   linkType: hard
+
+"examples@workspace:packages/examples":
+  version: 0.0.0-use.local
+  resolution: "examples@workspace:packages/examples"
+  dependencies:
+    "@tsconfig/node14": ^1.0.1
+    "@types/mocha": ^8.2.2
+    chai: ^4.3.4
+    dex-common: ^0.1.0
+    dex-core: ^0.1.0
+    dotenv: ^10.0.0
+    ethers: ^5.3.1
+    mocha: ^8.4.0
+    rimraf: ^3.0.2
+    ts-node: ^9.1.1
+    typescript: 4.2.4
+  languageName: unknown
+  linkType: soft
 
 "execa@npm:^1.0.0":
   version: 1.0.0

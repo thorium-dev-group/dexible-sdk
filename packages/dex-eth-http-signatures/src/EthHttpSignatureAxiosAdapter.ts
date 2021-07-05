@@ -2,6 +2,9 @@ import { default as axios, AxiosAdapter, AxiosRequestConfig } from 'axios';
 import { ethers } from 'ethers';
 import { EthHttpSignature, HttpDigest } from '.';
 import { URL } from 'url';
+import Logger from 'dex-logger';
+
+const log = new Logger({component: "EthHttpSignatureAxiosAdapter"});
 
 export default class EthHttpSignatureAxiosAdapter {
 
@@ -54,6 +57,8 @@ export default class EthHttpSignatureAxiosAdapter {
             for(const [key, value] of Object.entries(additionalHeaders)) {
                 config.headers[key] = value;
             }
+
+            log.debug("Adding Axios headers", config);
 
             // call original adapter
             return defaultAdapter(config);
