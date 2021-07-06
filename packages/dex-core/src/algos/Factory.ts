@@ -2,6 +2,7 @@ import * as Algos from 'dex-algos';
 import * as Policies from 'dex-policies';
 import moment from 'moment';
 import Logger from 'dex-logger';
+import {Price} from 'dex-common';
 
 const log = new Logger({component: "AlgoFactory"});
 
@@ -19,20 +20,19 @@ export interface CommonProps {
 }
 
 export interface StopLossProps extends CommonProps {
-    triggerPrice: number;
+    triggerPrice: Price;
     isAbove: boolean;
 }
 
 export interface PriceRangeProps {
-    basePrice: number;
+    basePrice: Price;
     upperBoundPercent: number;
     lowerBoundPercent: number;
 }
 
 
 export interface LimitProps extends CommonProps {
-    price: number;
-    limitAction: "buy" | "sell";
+    price: Price;
 }
 
 
@@ -61,8 +61,7 @@ export default class Factory {
         let policies = [
             ...this._buildBasePolicies(props),
             new Policies.LimitPrice({
-                limitAction: props.limitAction,
-                price: 1/props.price
+                price: props.price
             })
         ];
 
@@ -104,7 +103,7 @@ export default class Factory {
             //invert price since quotes are in output tokens while prices are 
             //expressed in input tokens
             policies.push(new Policies.PriceBounds({
-                basePrice: 1/props.priceRange.basePrice,
+                basePrice: props.priceRange.basePrice,
                 lowerBoundPercent: props.priceRange.lowerBoundPercent,
                 upperBoundPercent: props.priceRange.upperBoundPercent
             }));

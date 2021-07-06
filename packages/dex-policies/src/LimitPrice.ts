@@ -1,14 +1,13 @@
 import Base from './Base';
+import {Price} from 'dex-common';
 
 export interface LimitPriceParams {
-    limitAction: "buy" | "sell";
-    price: number;
+    price: Price;
 }
 
 export default class LimitPrice extends Base {
 
-    limitAction: "buy" | "sell";
-    price: number;
+    price: Price;
 
     static get tag() {
         return "LimitPrice";
@@ -16,14 +15,10 @@ export default class LimitPrice extends Base {
 
     constructor(props:LimitPriceParams) {
         super(LimitPrice.tag);
-        this.limitAction = props.limitAction;
         this.price = props.price;
     }
 
     verify = ():string|undefined => {
-        if(!this.limitAction) {
-            return "LimitPrice requires a limitAction of buy or sell";
-        }
         if(!this.price) {
             return "LimitPrice requires a price expressed in input token units";
         }
@@ -33,8 +28,7 @@ export default class LimitPrice extends Base {
         return {
             type: this.name,
             params: {
-                limitAction: this.limitAction,
-                price: this.price
+                price: this.price.toJSON()
             }
         }
     }

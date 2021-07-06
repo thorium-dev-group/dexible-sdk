@@ -1,13 +1,14 @@
 import Base from './Base';
+import {Price} from 'dex-common';
 
 export interface PriceBoundsParams {
-    basePrice: number;
+    basePrice: Price;
     upperBoundPercent: number;
     lowerBoundPercent: number;
 }
 
 export default class PriceBounds extends Base {
-    basePrice: number;
+    basePrice: Price;
     upperBoundPercent: number;
     lowerBoundPercent: number;
 
@@ -36,7 +37,7 @@ export default class PriceBounds extends Base {
         return {
             type: this.name,
             params: {
-                basePrice: this.basePrice,
+                basePrice: this.basePrice.toJSON(),
                 upperBoundPercentage: this.upperBoundPercent,
                 lowerBoundPercentage: this.lowerBoundPercent
             }

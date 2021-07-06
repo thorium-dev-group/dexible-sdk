@@ -5,6 +5,7 @@ import { Serializable } from './ISerializable';
 import {Verifiable} from './IVerifiable';
 import chainToName from './chainToName';
 import * as Services from './services';
+import {default as Price} from './Price';
 
 export {
     abi,
@@ -13,5 +14,6 @@ export {
     Serializable,
     Verifiable,
     chainToName,
-    Services
+    Services,
+    Price
 }

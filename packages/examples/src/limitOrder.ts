@@ -1,27 +1,34 @@
+import {Price} from 'dex-common';
 import {ethers} from 'ethers';
 import BaseOrder from './BaseOrder';
-
 const dotenv = require('dotenv');
 dotenv.config();
 
 const WETH_KOVAN = "0xd0A1E359811322d97991E03f863a0C30C2cF029C";
 const DAI_KOVAN = "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa";
 
-class TWAP extends BaseOrder {}
+class LimitOrder extends BaseOrder { }
 
 const main = async () => {
 
-    let amountIn = ethers.utils.parseEther("5100");
-    
-    let twap = new TWAP({
-        tokenIn: DAI_KOVAN,
-        tokenOut: WETH_KOVAN,
-        amountIn,
+    let sdk = LimitOrder.createDexibleSDK();
+    let tokenIn = await sdk.token.lookup(DAI_KOVAN);
+    let tokenOut = await sdk.token.lookup(WETH_KOVAN);
+
+    let limit = new LimitOrder({
+        tokenIn,
+        tokenOut,
+        amountIn: ethers.utils.parseUnits("100", 18),
         algoDetails: {
-            type: "TWAP",
+            type: "Limit",
             params: {
-                timeWindow: "2m",
-                maxRounds: 10, //min per round is 3 input tokens (30 in/10 rounds)
+                price: Price.unitsToPrice({
+                    inToken: tokenIn,
+                    outToken: tokenOut,
+                    inUnits: 100, //dai in
+                    outUnits: .1279 //WETH out
+                }),
+                maxRounds: 1,
                 gasPolicy: {
                     type: "relative",
                     deviation: 0
@@ -31,7 +38,8 @@ const main = async () => {
         }
     });
 
-    let r = await twap.createOrder();
+    let r = await limit.createOrder( );
+    
     if(r.error) {
         console.log("Problem with order", r.error);
         throw new Error(r.error);
@@ -42,17 +50,12 @@ const main = async () => {
         //could check the quote estimate and make sure it's good
         console.log("Order Quote", order.quote);
 
-        if(order.quote.rounds === 1) {
-            console.log("Single-round order quote so will not submit");
-        } else {
-            //then submit for execution
-            console.log("Submitting order...");
-            r = await order.submit();
-            if(r.error) {
-                throw new Error(r.error);
-            } 
-            console.log("Order result", r);
-        }
+        console.log("Submitting order...");
+        r = await order.submit();
+        if(r.error) {
+            throw new Error(r.error);
+        } 
+        console.log("Order result", r);
     }
 }
 

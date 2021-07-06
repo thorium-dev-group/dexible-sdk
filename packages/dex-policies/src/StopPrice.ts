@@ -1,12 +1,13 @@
 import Base from './Base';
+import {Price} from 'dex-common';
 
 export interface StopPriceParams {
-    trigger: number;
+    trigger: Price;
     above: boolean;
 }
 
 export default class StopPrice extends Base {
-    trigger: number;
+    trigger: Price;
     above: boolean;
 
     static get tag() {
@@ -29,7 +30,7 @@ export default class StopPrice extends Base {
         return {
             type: this.name,
             params: {
-                trigger: this.trigger,
+                trigger: this.trigger.toJSON(),
                 above: this.above
             }
         }
