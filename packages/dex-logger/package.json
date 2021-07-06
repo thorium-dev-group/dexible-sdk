@@ -4,8 +4,7 @@
     "description": "Simple logger for SDK client",
     "main": "dist/index.js",
     "scripts": {
-        "build": "yarn run build:types",
-        "build:types": "tsc --build tsconfig.json",
+        "build": "yarn clean && yarn tsc --build",
         "clean": "rimraf dist",
         "test": "mocha"
     },
