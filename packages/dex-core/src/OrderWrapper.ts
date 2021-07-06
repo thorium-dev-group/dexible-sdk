@@ -20,16 +20,13 @@ export interface OrderListParams {
 
 export default class OrderWrapper {
     apiClient: Services.APIClient;
-    wallet: ethers.Wallet;
 
-    constructor(apiClient: Services.APIClient, wallet: ethers.Wallet) {
+    constructor(apiClient: Services.APIClient) {
         this.apiClient = apiClient;
-        this.wallet = wallet;
     }
 
     prepare = async (params: OrderSpec): Promise<OrderSupport.PrepareResponse> => {
         let order = new OrderSupport.DexOrder({
-            wallet: this.wallet,
             apiClient: this.apiClient,
             tokenIn: params.tokenIn,
             tokenOut: params.tokenOut,

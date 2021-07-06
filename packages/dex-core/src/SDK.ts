@@ -1,22 +1,20 @@
-import {ethers} from 'ethers';
+import {ethers, providers, Signer, Wallet} from 'ethers';
 import { AlgoWrapper} from './algos';
 import TokenSupport from './TokenSupport';
 import OrderWrapper from './OrderWrapper';
 import {Services} from 'dex-common';
 
-interface ConstructorProps {
-    network: 'ethereum'; //for now only ethereum allowed
+
+export interface WalletConnection {
+    network: 'ethereum'; //for now only ethereum
     chainId: number;
-    walletKey: string;
-    infuraKey: string;
+    signer: Signer;
 }
-
-
 
 export default class SDK {
 
-    provider: ethers.providers.Provider;
-    wallet: ethers.Wallet;
+    provider: ethers.providers.Provider|undefined;
+    signer: ethers.Signer;
     gasPolicyTypes: {
         RELATIVE: string;
         FIXED: string;
@@ -26,20 +24,24 @@ export default class SDK {
     order: OrderWrapper;
     apiClient: Services.APIClient;
 
-    constructor(props:ConstructorProps) {
-        this.provider = new ethers.providers.InfuraProvider(props.chainId, props.infuraKey);
-        this.wallet = new ethers.Wallet(props.walletKey, this.provider);
+    constructor(props:WalletConnection) {
+        this.signer = props.signer;
+        this.provider = this.signer.provider;
+        if(!this.provider) {
+            throw new Error("Signer must have an ethers RPC provider");
+        }
+       
         this.algo = new AlgoWrapper();
         this.token = new TokenSupport({
             provider: this.provider,
-            wallet: this.wallet
+            signer: this.signer
         });
         this.apiClient = new Services.APIClient({
             chainId: props.chainId,
             network: props.network,
-            wallet: this.wallet
+            signer: this.signer
         });
-        this.order = new OrderWrapper(this.apiClient, this.wallet);
+        this.order = new OrderWrapper(this.apiClient);
 
         this.gasPolicyTypes = {
             RELATIVE: "relative",

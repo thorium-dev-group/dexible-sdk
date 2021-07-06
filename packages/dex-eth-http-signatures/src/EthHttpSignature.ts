@@ -9,7 +9,7 @@ import {ethers} from 'ethers';
 export default class EthHttpSignature extends HttpSignature {
 
 
-    async generateSignatureString(wallet: ethers.Wallet, requestProps : HttpSignatureRequestProps) : Promise<string> {
+    async generateSignatureString(wallet: ethers.Signer, requestProps : HttpSignatureRequestProps) : Promise<string> {
         
         // public key
         const keyId = await wallet.getAddress();

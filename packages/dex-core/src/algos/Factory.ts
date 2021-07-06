@@ -18,11 +18,6 @@ export interface CommonProps {
     slippagePercent: number;
 }
 
-export interface LimitProps extends CommonProps {
-    price: number;
-    limitAction: "buy" | "sell";
-}
-
 export interface StopLossProps extends CommonProps {
     triggerPrice: number;
     isAbove: boolean;
@@ -33,6 +28,13 @@ export interface PriceRangeProps {
     upperBoundPercent: number;
     lowerBoundPercent: number;
 }
+
+
+export interface LimitProps extends CommonProps {
+    price: number;
+    limitAction: "buy" | "sell";
+}
+
 
 export interface TWAPProps extends CommonProps {
     timeWindow: string;
@@ -54,15 +56,19 @@ export default class Factory {
     }
 
     createLimit = (props:LimitProps): Algos.Limit => {
+        //invert price since quotes are in output tokens while prices are 
+        //expressed in input tokens
+        let policies = [
+            ...this._buildBasePolicies(props),
+            new Policies.LimitPrice({
+                limitAction: props.limitAction,
+                price: 1/props.price
+            })
+        ];
+
         return new Algos.Limit({
             maxRounds: props.maxRounds,
-            policies: [
-                ...this._buildBasePolicies(props),
-                new Policies.LimitPrice({
-                    limitAction: props.limitAction,
-                    price: props.price
-                })
-            ]
+            policies
         })
     }
 
@@ -95,8 +101,10 @@ export default class Factory {
             })
         ];
         if(props.priceRange) {
+            //invert price since quotes are in output tokens while prices are 
+            //expressed in input tokens
             policies.push(new Policies.PriceBounds({
-                basePrice: props.priceRange.basePrice,
+                basePrice: 1/props.priceRange.basePrice,
                 lowerBoundPercent: props.priceRange.lowerBoundPercent,
                 upperBoundPercent: props.priceRange.upperBoundPercent
             }));

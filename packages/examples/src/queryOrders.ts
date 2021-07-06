@@ -23,15 +23,14 @@ const main = async () => {
     let dexible = new SDK({
         network: "ethereum",
         chainId: 42,
-        walletKey: key,
-        infuraKey: infura
+        signer: new ethers.Wallet(key, new ethers.providers.InfuraProvider(42, infura))
     });
 
     let r = await dexible.order.getAll({
         state: 'all'
     });
 
-    console.log("Orders", r);
+    console.log("Orders", JSON.stringify(r, null, 2));
 
 }
 

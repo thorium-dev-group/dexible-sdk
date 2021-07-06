@@ -37,8 +37,8 @@ export default class PriceBounds extends Base {
             type: this.name,
             params: {
                 basePrice: this.basePrice,
-                upperBoundPercent: this.upperBoundPercent,
-                lowerBoundPercent: this.lowerBoundPercent
+                upperBoundPercentage: this.upperBoundPercent,
+                lowerBoundPercentage: this.lowerBoundPercent
             }
         }
     }

@@ -15,7 +15,6 @@ export interface PrepareResponse {
 }
 
 export interface DexOrderParams {
-    wallet: ethers.Wallet;
     apiClient: Services.APIClient;
     tokenIn: Token;
     tokenOut: Token;
@@ -25,7 +24,6 @@ export interface DexOrderParams {
 }
 
 export default class DexOrder {
-    wallet: ethers.Wallet;
     tokenIn: Token;
     tokenOut: Token;
     amountIn: BigNumberish;
@@ -37,7 +35,6 @@ export default class DexOrder {
     maxRounds: number;
 
     constructor(params:DexOrderParams) {
-        this.wallet = params.wallet;
         this.tokenIn = params.tokenIn;
         this.tokenOut = params.tokenOut;
         this.amountIn = params.amountIn;

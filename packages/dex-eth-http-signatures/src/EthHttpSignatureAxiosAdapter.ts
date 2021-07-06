@@ -8,7 +8,7 @@ const log = new Logger({component: "EthHttpSignatureAxiosAdapter"});
 
 export default class EthHttpSignatureAxiosAdapter {
 
-    static  build(wallet: ethers.Wallet): AxiosAdapter {
+    static  build(signer: ethers.Signer): AxiosAdapter {
 
         const httpSignature = new EthHttpSignature();
 
@@ -51,7 +51,7 @@ export default class EthHttpSignatureAxiosAdapter {
                 },
             };
         
-            const signature = await httpSignature.generateSignatureString(wallet, requestProps);
+            const signature = await httpSignature.generateSignatureString(signer, requestProps);
             additionalHeaders['Authorization'] = signature;
         
             // set request headers

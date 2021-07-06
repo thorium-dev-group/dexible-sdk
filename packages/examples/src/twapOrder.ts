@@ -26,8 +26,7 @@ const main = async () => {
     let dexible = new SDK({
         network: "ethereum",
         chainId: 42,
-        walletKey: key,
-        infuraKey: infura
+        signer: new ethers.Wallet(key, new ethers.providers.InfuraProvider(42, infura))
     });
 
     
@@ -37,7 +36,7 @@ const main = async () => {
     let tokenOut = await dexible.token.lookup(WETH_KOVAN);
 
     console.log("TokenIn Decimals", tokenIn.decimals, "Balance", tokenIn.balance?.toString(), "Allowance", tokenIn.allowance?.toString());
-    let amountIn = ethers.utils.parseUnits("4400", tokenIn.decimals);
+    let amountIn = ethers.utils.parseUnits("5100", tokenIn.decimals);
     
 
     //algos have a specification schema that determines the properties
@@ -45,7 +44,7 @@ const main = async () => {
     console.log("Creating algo...");
     let algo = await dexible.algo.create({
         type: dexible.algo.types.TWAP,
-        timeWindow: "5m",
+        timeWindow: "2m",
         maxRounds: 10, //min per round is 3 input tokens (30 in/10 rounds)
         gasPolicy: {
             type: dexible.gasPolicyTypes.RELATIVE,
@@ -99,13 +98,17 @@ const main = async () => {
         //could check the quote estimate and make sure it's good
         console.log("Order Quote", order.quote);
 
-        //then submit for execution
-        console.log("Submitting order...");
-        r = await order.submit();
-        if(r.error) {
-            throw new Error(r.error);
-        } 
-        console.log("Order result", r);
+        if(order.quote.rounds === 1) {
+            console.log("Single-round order quote so will not submit");
+        } else {
+            //then submit for execution
+            console.log("Submitting order...");
+            r = await order.submit();
+            if(r.error) {
+                throw new Error(r.error);
+            } 
+            console.log("Order result", r);
+        }
     }
 }
 

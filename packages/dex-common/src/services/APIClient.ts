@@ -9,13 +9,13 @@ const log = new Logger({component: "APIClient"});
 const DEFAULT_BASE_ENDPOINT = "api.dexible.io/vi";
 
 export interface APIProps {
-    wallet: ethers.Wallet;
+    signer: ethers.Signer;
     network: "ethereum"; //for now only support one network
     chainId: number;
 }
 
 export default class APIClient {
-    wallet: ethers.Wallet;
+    signer: ethers.Signer;
     adapter: AxiosAdapter|null;
     network: "ethereum";
     chainId: number;
@@ -23,7 +23,7 @@ export default class APIClient {
     baseUrl: string;
 
     constructor(props:APIProps) {
-        this.wallet = props.wallet;
+        this.signer = props.signer;
         this.adapter = null; 
         this.network = props.network;
         this.chainId = props.chainId;
@@ -39,7 +39,7 @@ export default class APIClient {
         let url = `${this.baseUrl}/${endpoint}`;
         log.debug("GET call to", url);
         if(!this.adapter) {
-            this.adapter = await EthHttpSignatureAxiosAdapter.build(this.wallet);
+            this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
         }
 
         let r = await axios({
@@ -65,7 +65,7 @@ export default class APIClient {
         let url = `${this.baseUrl}/${endpoint}`;
         log.debug("Posting to url", url);
         if(!this.adapter) {
-            this.adapter = await EthHttpSignatureAxiosAdapter.build(this.wallet);
+            this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
         }
         let r = await axios({
             method: "POST",

@@ -2,7 +2,7 @@ import * as TokenServices from 'dex-token';
 import {BigNumberish, ethers} from 'ethers';
 
 export interface ConstructorProps {
-    wallet: ethers.Wallet;
+    signer: ethers.Signer;
     provider: ethers.providers.Provider;
 }
 
@@ -15,25 +15,29 @@ const sleep = ms => new Promise(done=>setTimeout(done, ms));
 
 export default class TokenSupport {
 
-    wallet: ethers.Wallet;
+    signer: ethers.Signer;
     provider: ethers.providers.Provider;
+    address: string | undefined;
 
     constructor(props:ConstructorProps) {
-        this.wallet = props.wallet;
+        this.signer = props.signer;
         this.provider = props.provider;
     }
 
     lookup = async (address:string): Promise<TokenServices.Token> => {
+        if(!this.address) {
+            this.address = await this.signer.getAddress();
+        }
         return TokenServices.TokenFinder({
             address,
-            owner: this.wallet.address,
+            owner: this.address,
             provider: this.provider
         });
     }
 
     increaseSpending = async (props:SpendIncreaseProps): Promise<any> => {
         let txn = await TokenServices.TokenUtils.increaseSpending({
-            wallet: this.wallet,
+            signer: this.signer,
             token: props.token,
             amount: props.amount
         });

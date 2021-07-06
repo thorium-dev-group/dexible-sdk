@@ -44,7 +44,7 @@ export interface HttpSignatureRequestProps {
 
 export default abstract class HttpSignature {
 
-    abstract generateSignatureString(wallet: ethers.Wallet, requestProps) : Promise<string>
+    abstract generateSignatureString(wallet: ethers.Signer, requestProps) : Promise<string>
 
     abstract validate(parsedSignatureFields : HttpSignatureParams, requestProps) : Promise<void>
 
