@@ -1,0 +1,37 @@
+import {QuoteGrabber,QuoteRequest} from 'dex-quote';
+import {Services, Token} from 'dex-common';
+import { BigNumber } from 'ethers';
+
+export interface QuoteParams {
+    tokenIn: Token;
+    tokenOut: Token;
+    amountIn: BigNumber;
+    slippagePercent: number;
+    maxRounds?: number;
+}
+export default class QuoteWrapper {
+    api: Services.APIClient;
+
+    constructor(apiClient:Services.APIClient) {
+        this.api = apiClient;
+    }
+
+    getQuote = async (props:QuoteParams) => {
+        let minAmount = props.amountIn.mul(30).div(100);
+        if(props.maxRounds) {
+            minAmount = props.amountIn.div(props.maxRounds);
+        }
+        if(minAmount.lt(1)) {
+            minAmount = props.amountIn.mul(30).div(100);
+        }
+        let req = {
+            tokenIn: props.tokenIn,
+            tokenOut: props.tokenOut,
+            amountIn: props.amountIn.toString(),
+            slippagePercent: props.slippagePercent,
+            apiClient: this.api,
+            minOrderSize: minAmount.toString()
+        } as QuoteRequest;
+        return QuoteGrabber(req);
+    }
+}

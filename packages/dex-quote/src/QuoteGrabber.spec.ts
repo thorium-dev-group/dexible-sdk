@@ -1,5 +1,4 @@
 import Quote, {QuoteRequest} from './QuoteGrabber';
-import {EthHttpSignatureAxiosAdapter} from 'dex-eth-http-signatures';
 import {ethers} from 'ethers';
 import {TokenFinder} from 'dex-token';
 import {Web3Factory} from 'dex-web3';

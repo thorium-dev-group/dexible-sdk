@@ -42,23 +42,32 @@ export default class APIClient {
             this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
         }
 
-        let r = await axios({
-            method: "GET",
-            url,
-            adapter: this.adapter
-        });
-        if(!r.data) {
-            throw new Error("Missing result in get request");
-        }
-        if(r.data.error) {
-            log.debug("Problem reported from server", r.data.error);
-            let msg = r.data.error.message;
-            if(!msg) {
-                msg = r.data.error;
+        try {
+
+        
+            let r = await axios({
+                method: "GET",
+                url,
+                adapter: this.adapter
+            });
+            if(!r.data) {
+                throw new Error("Missing result in get request");
             }
-            throw new Error(msg);
+            if(r.data.error) {
+                log.debug("Problem reported from server", r.data.error);
+                let msg = r.data.error.message;
+                if(!msg) {
+                    msg = r.data.error;
+                }
+                throw new Error(msg);
+            }
+            return r.data;
+        } catch (e) {
+            if(e.response && e.response.data) {
+                throw new Error(e.response.data.message);
+            }
+            throw e;
         }
-        return r.data;
     }
 
     post = async (endpoint:string, data:object|undefined) => {
@@ -67,21 +76,28 @@ export default class APIClient {
         if(!this.adapter) {
             this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
         }
-        let r = await axios({
-            method: "POST",
-            url,
-            data,
-            adapter: this.adapter
-        });
-        if(r.data && r.data.error) {
-            let msg = r.data.error.message;
-            if(!msg) {
-                msg = r.data.error;
+        try {
+            let r = await axios({
+                method: "POST",
+                url,
+                data,
+                adapter: this.adapter
+            });
+            if(r.data && r.data.error) {
+                let msg = r.data.error.message;
+                if(!msg) {
+                    msg = r.data.error;
+                }
+                log.error("Problem reported from server", r.data.error);
+                throw new Error(msg);
             }
-            log.error("Problem reported from server", r.data.error);
-            throw new Error(msg);
+            return r.data;
+        } catch (e) {
+            if(e.response && e.response.data) {
+                throw new Error(e.response.data.message);
+            }
+            throw e;
         }
-        return r.data;
     }
 
     _buildBaseUrl = () => {

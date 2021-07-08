@@ -4,6 +4,11 @@ export default {
         "Settlement": "0xad84693a21E0a1dB73ae6c6e5aceb041A6C8B6b3"
     },
 
+    3: {
+        "Settlement": "0xBB700EdAE5f57fc597aF089e9Ff45ed5d4ab26E2",
+        "Multicall": "0x53c43764255c17bd724f74c4ef150724ac50a3ed"
+    },
+
     42: {
         "Settlement": "0x147bFD9cEffcd58A2B2594932963F52B16d528b1",
         "Multicall": "0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a"

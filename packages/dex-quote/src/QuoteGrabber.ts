@@ -1,8 +1,6 @@
 import { BigNumberish } from '@ethersproject/bignumber';
-import axios, { AxiosAdapter } from 'axios';
-import {Token} from 'dex-token';
 import Logger from 'dex-logger';
-import {Services} from 'dex-common';
+import {Services, Token} from 'dex-common';
 
 const log = new Logger({
     component: "QuoteGrabber"

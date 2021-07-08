@@ -1,9 +1,8 @@
-import {Token} from 'dex-token';
 import {BigNumberish } from 'ethers';
 import {IAlgo} from 'dex-algos';
 import {ethers} from 'ethers';
 import {QuoteGrabber, QuoteRequest} from 'dex-quote';
-import {Services} from 'dex-common';
+import {Services, Token} from 'dex-common';
 import Logger from 'dex-logger';
 
 const bn = ethers.BigNumber.from;

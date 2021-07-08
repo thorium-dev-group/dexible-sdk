@@ -7,6 +7,13 @@ dotenv.config();
 const WETH_KOVAN = "0xd0A1E359811322d97991E03f863a0C30C2cF029C";
 const DAI_KOVAN = "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa";
 
+
+const WETH_ROPSTEN = "0xc778417e063141139fce010982780140aa0cd5ab";
+const DAI_ROPSTEN = "0xad6d458402f60fd3bd25163575031acdce07538d";
+
+const WETH = WETH_ROPSTEN;
+const DAI = DAI_ROPSTEN;
+
 class Market extends BaseOrder {}
 
 const main = async () => {
@@ -14,8 +21,8 @@ const main = async () => {
     let amountIn = ethers.utils.parseEther("30");
     
     let market = new Market({
-        tokenIn: DAI_KOVAN,
-        tokenOut: WETH_KOVAN,
+        tokenIn: WETH,
+        tokenOut: DAI,
         amountIn,
         algoDetails: {
             type: "Market",

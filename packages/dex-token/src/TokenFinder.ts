@@ -1,5 +1,5 @@
 import {BigNumber, ethers} from 'ethers';
-import {abi, chainConfig, Multicall} from 'dex-common';
+import {abi, chainConfig, Token, Multicall} from 'dex-common';
 
 export interface TokenFindProps {
     address: string;
@@ -7,14 +7,6 @@ export interface TokenFindProps {
     owner?: string;
 }
 
-export interface Token {
-    address: string;
-    decimals: number;
-    symbol: string;
-    name?: string;
-    balance?: BigNumber;
-    allowance?: BigNumber;
-}
 
 const bn = BigNumber.from;
 const cache = {};

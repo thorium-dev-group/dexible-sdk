@@ -1,6 +1,5 @@
-import { BigNumberish, ethers, Transaction } from 'ethers';
-import {Token} from './TokenFinder';
-import {abi, chainConfig} from 'dex-common';
+import { BigNumberish, ethers } from 'ethers';
+import {abi, Token, chainConfig} from 'dex-common';
 
 
 export interface SpendingParams {

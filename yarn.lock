@@ -1298,6 +1298,7 @@ __metadata:
     axios: ^0.21.1
     chai: ^4.3.4
     dex-eth-http-signatures: ^0.1.0
+    dex-token: ^0.1.0
     ethers: ^5.1.4
     mocha: ^8.4.0
     rimraf: ^3.0.2

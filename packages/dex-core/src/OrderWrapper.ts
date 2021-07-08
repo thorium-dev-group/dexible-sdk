@@ -1,7 +1,6 @@
 import * as OrderSupport from 'dex-order';
-import {Services} from 'dex-common';
+import {Services, Token} from 'dex-common';
 import { BigNumberish, ethers } from 'ethers';
-import {Token} from 'dex-token';
 import { IAlgo } from 'dex-algos';
 
 export interface OrderSpec {
@@ -43,5 +42,13 @@ export default class OrderWrapper {
 
     cancel = async (orderId:number): Promise<any> => {
         return this.apiClient.post(`orders/${orderId}/actions/cancel`, {orderId});
+    }
+
+    pause = async (orderId:number): Promise<any> => {
+        return this.apiClient.post(`orders/${orderId}/actions/pause`, {orderId});
+    }
+
+    resume = async (orderId:number): Promise<any> => {
+        return this.apiClient.post(`orders/${orderId}/actions/resume`, {orderId});
     }
 }

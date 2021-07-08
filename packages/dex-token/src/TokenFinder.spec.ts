@@ -1,4 +1,4 @@
-import Finder, {Token, TokenFindProps} from './TokenFinder';
+import Finder from './TokenFinder';
 import {Web3Factory} from 'dex-web3';
 
 const dotenv = require('dotenv');

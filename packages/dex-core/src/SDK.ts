@@ -1,9 +1,9 @@
-import {ethers, providers, Signer, Wallet} from 'ethers';
+import {ethers, Signer} from 'ethers';
 import { AlgoWrapper} from './algos';
 import TokenSupport from './TokenSupport';
 import OrderWrapper from './OrderWrapper';
 import {Services} from 'dex-common';
-
+import QuoteWrapper from './QuoteWrapper';
 
 export interface WalletConnection {
     network: 'ethereum'; //for now only ethereum
@@ -23,6 +23,7 @@ export default class SDK {
     token: TokenSupport;
     order: OrderWrapper;
     apiClient: Services.APIClient;
+    quote: QuoteWrapper;
 
     constructor(props:WalletConnection) {
         this.signer = props.signer;
@@ -42,7 +43,8 @@ export default class SDK {
             signer: this.signer
         });
         this.order = new OrderWrapper(this.apiClient);
-
+        this.quote = new QuoteWrapper(this.apiClient);
+        
         this.gasPolicyTypes = {
             RELATIVE: "relative",
             FIXED: "fixed"

@@ -1,4 +1,4 @@
-import {Token} from 'dex-token';
+import Token from './Token';
 import { BigNumber, ethers } from 'ethers';
 
 /**

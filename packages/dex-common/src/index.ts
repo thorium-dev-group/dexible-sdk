@@ -6,6 +6,7 @@ import {Verifiable} from './IVerifiable';
 import chainToName from './chainToName';
 import * as Services from './services';
 import {default as Price} from './Price';
+import {default as Token} from './Token';
 
 export {
     abi,
@@ -15,5 +16,6 @@ export {
     Verifiable,
     chainToName,
     Services,
-    Price
+    Price,
+    Token
 }

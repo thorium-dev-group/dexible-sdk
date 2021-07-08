@@ -1,6 +1,6 @@
-import {SDK, OrderSpec} from 'dex-core';
+import {SDK} from 'dex-core';
 import { BigNumber, ethers} from 'ethers';
-import { Token } from 'dex-token';
+import { Token } from 'dex-common';
 
 export interface OrderProps {
     tokenIn: Token|string;
@@ -11,6 +11,9 @@ export interface OrderProps {
         params: any;
     }
 }
+
+const NETWORK = 3;
+
 export default class BaseOrder {
     dexible: SDK;
     orderProps: OrderProps;
@@ -32,8 +35,8 @@ export default class BaseOrder {
         //Infura is used as the default RPC provider to do on-chain lookups.
         return new SDK({
             network: "ethereum",
-            chainId: 42,
-            signer: new ethers.Wallet(key, new ethers.providers.InfuraProvider(42, infura))
+            chainId: NETWORK,
+            signer: new ethers.Wallet(key, new ethers.providers.InfuraProvider(NETWORK, infura))
         });
     }
 
@@ -51,10 +54,13 @@ export default class BaseOrder {
 
         if(typeof this.orderProps.tokenIn === 'string') {
             tokenIn = await this.dexible.token.lookup(this.orderProps.tokenIn);
+            console.log("Resolved input token", tokenIn);
         }
         if(typeof this.orderProps.tokenOut === 'string') {
             tokenOut = await this.dexible.token.lookup(this.orderProps.tokenOut);
         }
+
+       
 
         console.log("Creating algo...");
         let algo = await this.dexible.algo.create({

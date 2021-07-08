@@ -1,4 +1,5 @@
 import * as TokenServices from 'dex-token';
+import {Token} from 'dex-common';
 import {BigNumberish, ethers} from 'ethers';
 
 export interface ConstructorProps {
@@ -7,7 +8,7 @@ export interface ConstructorProps {
 }
 
 export interface SpendIncreaseProps {
-    token: TokenServices.Token;
+    token: Token;
     amount: BigNumberish;
 }
 
@@ -24,7 +25,7 @@ export default class TokenSupport {
         this.provider = props.provider;
     }
 
-    lookup = async (address:string): Promise<TokenServices.Token> => {
+    lookup = async (address:string): Promise<Token> => {
         if(!this.address) {
             this.address = await this.signer.getAddress();
         }
@@ -49,7 +50,7 @@ export default class TokenSupport {
         //since we've just increased spending. Otherwise, any subsequent
         //check could result in order failure because allowance may not 
         //be visible to all nodes yet.
-        await sleep(15000);
+        await sleep(30000);
 
         return txn;
     }
