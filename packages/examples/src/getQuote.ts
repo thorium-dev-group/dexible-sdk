@@ -12,19 +12,23 @@ const AMT = ethers.utils.parseEther("30");
 
 const main = async () => {
 
-    let sdk = BaseOrder.createDexibleSDK();
-    let tokenIn = await sdk.token.lookup(WETH_ROPSTEN);
-    let tokenOut = await sdk.token.lookup(DAI_ROPSTEN);
+    try {
+        let sdk = BaseOrder.createDexibleSDK();
+        let tokenIn = await sdk.token.lookup(WETH_ROPSTEN);
+        let tokenOut = await sdk.token.lookup(DAI_ROPSTEN);
 
-    let r = await sdk.quote.getQuote({
-        tokenIn,
-        tokenOut,
-        amountIn: AMT,
-        slippagePercent: .5
-    });
+        let r = await sdk.quote.getQuote({
+            tokenIn,
+            tokenOut,
+            amountIn: AMT,
+            slippagePercent: .5
+        });
 
 
-    console.log("Quote", JSON.stringify(r, null, 2));
+        console.log("Quote", JSON.stringify(r, null, 2));
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 main();

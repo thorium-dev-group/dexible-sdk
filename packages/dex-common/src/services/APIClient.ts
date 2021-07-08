@@ -38,12 +38,14 @@ export default class APIClient {
     get = async (endpoint:string): Promise<any> => {
         let url = `${this.baseUrl}/${endpoint}`;
         log.debug("GET call to", url);
-        if(!this.adapter) {
-            this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
-        }
+        
 
         try {
 
+
+            if(!this.adapter) {
+                this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
+            }
         
             let r = await axios({
                 method: "GET",
@@ -64,8 +66,10 @@ export default class APIClient {
             return r.data;
         } catch (e) {
             if(e.response && e.response.data) {
+                log.error("Problem from server", e.response.data);
                 throw new Error(e.response.data.message);
             }
+            log.error("Problem in API client get request", e);
             throw e;
         }
     }
@@ -73,10 +77,12 @@ export default class APIClient {
     post = async (endpoint:string, data:object|undefined) => {
         let url = `${this.baseUrl}/${endpoint}`;
         log.debug("Posting to url", url);
-        if(!this.adapter) {
-            this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
-        }
+        
         try {
+            if(!this.adapter) {
+                this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
+            }
+
             let r = await axios({
                 method: "POST",
                 url,
@@ -94,8 +100,10 @@ export default class APIClient {
             return r.data;
         } catch (e) {
             if(e.response && e.response.data) {
+                log.error("Problem from server", e.response.data);
                 throw new Error(e.response.data.message);
             }
+            log.error({err: e}, "Problem in API post");
             throw e;
         }
     }

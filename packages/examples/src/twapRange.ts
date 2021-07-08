@@ -29,7 +29,7 @@ const main = async () => {
     let tokenOut = await sdk.token.lookup(WETH);
 
     console.log("TokenIn Decimals", tokenIn.decimals, "Balance", tokenIn.balance?.toString(), "Allowance", tokenIn.allowance?.toString());
-    let amountIn = ethers.utils.parseUnits("5400", tokenIn.decimals);
+    let amountIn = ethers.utils.parseUnits("16950", tokenIn.decimals);
     
 
     let twap = new TWAP({
@@ -39,18 +39,18 @@ const main = async () => {
         algoDetails: {
             type: "TWAP",
             params: {
-                timeWindow: "2m",
+                timeWindow: "10m",
                 priceRange: {
                     basePrice: Price.unitsToPrice({
                         inToken: tokenIn,
                         outToken: tokenOut,
                         inUnits: 1, //1 dai
-                        outUnits: .001279 //for this amount of WETH
+                        outUnits: .001750 //for this amount of WETH
                     }),
                     lowerBoundPercent: 1,
-                    upperBoundPercent: 1
+                    upperBoundPercent: 15
                 },
-                maxRounds: 20,
+                //maxRounds: 20,
                 gasPolicy: {
                     type: "relative",
                     deviation: 0

@@ -89,7 +89,7 @@ export default class BaseOrder {
             //spend limits.
             console.log("Increasing spend allowance for input token...");
             let txn = await this.dexible.token.increaseSpending({
-                amount: amountIn,
+                amount: ethers.constants.MaxUint256,
                 token: tokenIn as Token
             });
             console.log("Spending increased with txn hash", txn.hash);

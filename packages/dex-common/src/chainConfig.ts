@@ -5,7 +5,7 @@ export default {
     },
 
     3: {
-        "Settlement": "0xBB700EdAE5f57fc597aF089e9Ff45ed5d4ab26E2",
+        "Settlement": "0x18b534C7D9261C2af0D65418309BA2ABfc4b682d",
         "Multicall": "0x53c43764255c17bd724f74c4ef150724ac50a3ed"
     },
 
