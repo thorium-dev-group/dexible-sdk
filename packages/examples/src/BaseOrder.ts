@@ -12,7 +12,7 @@ export interface OrderProps {
     }
 }
 
-const NETWORK = 3;
+const NETWORK = +(process.env.NET_ID || 42);
 
 export default class BaseOrder {
     dexible: SDK;

@@ -13,6 +13,7 @@ export interface SpendIncreaseProps {
 }
 
 const sleep = ms => new Promise(done=>setTimeout(done, ms));
+const bn = ethers.BigNumber.from;
 
 export default class TokenSupport {
 
@@ -51,7 +52,7 @@ export default class TokenSupport {
         //check could result in order failure because allowance may not 
         //be visible to all nodes yet.
         await sleep(30000);
-
+        props.token.allowance = bn(props.amount);
         return txn;
     }
 }
