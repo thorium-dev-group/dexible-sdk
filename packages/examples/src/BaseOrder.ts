@@ -24,9 +24,11 @@ export default class BaseOrder {
         if(!key) {
             throw new Error("Missing wallet key in env");
         }
+
         let infura = process.env.INFURA_PROJECT_ID;
-        if(!infura) {
-            throw new Error("Missing infura key in env");
+        let localRPC = process.env.LOCAL_RPC;
+        if(!infura && !localRPC) {
+            throw new Error("Missing INFURA_PROJECT_ID or a LOCAL_RPC in env");
         }
 
         console.log("Creating SDK instance");
@@ -34,10 +36,17 @@ export default class BaseOrder {
         //and the chain id within that network. 
         //Trader must link their wallet private key to sign txns and interact with orders API
         //Infura is used as the default RPC provider to do on-chain lookups.
+        let p:ethers.providers.Provider|undefined = undefined;
+        if(localRPC) {
+            p = new ethers.providers.StaticJsonRpcProvider(localRPC, NETWORK);
+        } else {
+            p = new ethers.providers.InfuraProvider(NETWORK, infura);
+        }
+
         return new SDK({
             network: "ethereum",
             chainId: NETWORK,
-            signer: new ethers.Wallet(key, new ethers.providers.InfuraProvider(NETWORK, infura))
+            signer: new ethers.Wallet(key, p)
         });
     }
 

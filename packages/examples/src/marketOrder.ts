@@ -12,7 +12,7 @@ class Market extends BaseOrder {}
 
 const main = async () => {
 
-    let amountIn = ethers.utils.parseEther("8");
+    let amountIn = ethers.utils.parseEther("1");
     
     let market = new Market({
         tokenIn: WETH,

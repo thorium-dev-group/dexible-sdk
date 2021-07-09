@@ -12,7 +12,7 @@ class TWAP extends BaseOrder {}
 
 const main = async () => {
 
-    let amountIn = ethers.utils.parseEther("8");
+    let amountIn = ethers.utils.parseEther("9");
     
     let twap = new TWAP({
         tokenIn: WETH,
