@@ -2,20 +2,13 @@ import {SDK} from 'dex-core';
 import {ethers} from 'ethers';
 import { Price } from 'dex-common';
 import BaseOrder from './BaseOrder';
+import * as TOKENS from './tokens';
 
 const dotenv = require('dotenv');
 dotenv.config();
 
-const WETH_KOVAN = "0xd0A1E359811322d97991E03f863a0C30C2cF029C";
-const DAI_KOVAN = "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa";
-const AAVE_ADAI_KOVAN = "0x58ad4cb396411b691a9aab6f74545b2c5217fe6a";
-
-
-const WETH_ROPSTEN = "0xc778417e063141139fce010982780140aa0cd5ab";
-const DAI_ROPSTEN = "0xad6d458402f60fd3bd25163575031acdce07538d";
-
-const DAI = DAI_ROPSTEN;
-const WETH = WETH_ROPSTEN;
+const DAI = TOKENS.DAI_KOVAN;
+const WETH = TOKENS.WETH_KOVAN;
 
 class TWAP extends BaseOrder {};
 
@@ -29,7 +22,7 @@ const main = async () => {
     let tokenOut = await sdk.token.lookup(WETH);
 
     console.log("TokenIn Decimals", tokenIn.decimals, "Balance", tokenIn.balance?.toString(), "Allowance", tokenIn.allowance?.toString());
-    let amountIn = ethers.utils.parseUnits("16950", tokenIn.decimals);
+    let amountIn = ethers.utils.parseUnits("5900", tokenIn.decimals);
     
 
     let twap = new TWAP({
@@ -45,10 +38,10 @@ const main = async () => {
                         inToken: tokenIn,
                         outToken: tokenOut,
                         inUnits: 1, //1 dai
-                        outUnits: .001750 //for this amount of WETH
+                        outUnits: .00134 //for this amount of WETH
                     }),
-                    lowerBoundPercent: 1,
-                    upperBoundPercent: 15
+                    lowerBoundPercent: 2,
+                    upperBoundPercent: 2
                 },
                 //maxRounds: 20,
                 gasPolicy: {
