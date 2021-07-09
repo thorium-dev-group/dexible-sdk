@@ -2,7 +2,7 @@ import {BigNumberish } from 'ethers';
 import {IAlgo} from 'dex-algos';
 import {ethers} from 'ethers';
 import {QuoteGrabber, QuoteRequest} from 'dex-quote';
-import {Services, Token} from 'dex-common';
+import {Services, Tag, Token} from 'dex-common';
 import Logger from 'dex-logger';
 
 const bn = ethers.BigNumber.from;
@@ -20,6 +20,7 @@ export interface DexOrderParams {
     amountIn: BigNumberish;
     algo: IAlgo;
     maxRounds: number;
+    tags?: Array<Tag>;
 }
 
 export default class DexOrder {
@@ -32,6 +33,7 @@ export default class DexOrder {
     apiClient: Services.APIClient;
     quote: any;
     maxRounds: number;
+    tags?: Array<Tag>;
 
     constructor(params:DexOrderParams) {
         this.tokenIn = params.tokenIn;
@@ -43,6 +45,7 @@ export default class DexOrder {
         this.maxRounds = params.maxRounds;
         this.quoteId = 0;
         this.quote = null;
+        this.tags = params.tags;
     }
 
     serialize = () => {
@@ -58,7 +61,8 @@ export default class DexOrder {
             amountIn: this.amountIn.toString(),
             networkId: this.apiClient.chainId,
             policies: algoSer.policies,
-            algorithm: algoSer.algorithm
+            algorithm: algoSer.algorithm,
+            tags: this.tags
         }
     }
 

@@ -1,5 +1,5 @@
 import * as OrderSupport from 'dex-order';
-import {Services, Token} from 'dex-common';
+import {Services, Tag, Token} from 'dex-common';
 import { BigNumberish, ethers } from 'ethers';
 import { IAlgo } from 'dex-algos';
 
@@ -8,7 +8,7 @@ export interface OrderSpec {
     tokenOut: Token;
     amountIn: BigNumberish;
     algo: IAlgo;
-
+    tags?: Array<Tag>
 }
 
 export interface OrderListParams {
@@ -31,7 +31,8 @@ export default class OrderWrapper {
             tokenOut: params.tokenOut,
             amountIn: params.amountIn,
             maxRounds: params.algo.maxRounds(),
-            algo: params.algo
+            algo: params.algo,
+            tags: params.tags
         });
         return order.prepare();
     }

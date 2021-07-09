@@ -1,6 +1,6 @@
 import {SDK} from 'dex-core';
 import { BigNumber, ethers} from 'ethers';
-import { Token } from 'dex-common';
+import { Token, Tag} from 'dex-common';
 
 export interface OrderProps {
     tokenIn: Token|string;
@@ -9,7 +9,8 @@ export interface OrderProps {
     algoDetails: {
         type: string;
         params: any;
-    }
+    },
+    tags?: Array<Tag>;
 }
 
 const NETWORK = +(process.env.NET_ID || 42);
@@ -60,7 +61,15 @@ export default class BaseOrder {
             tokenOut = await this.dexible.token.lookup(this.orderProps.tokenOut);
         }
 
-       
+        //verify tokens
+        let ok = await this.dexible.token.verify((tokenIn as Token).address);
+        if(!ok || ok.error) {
+            throw new Error("Unsupported input token");
+        }
+        ok = await this.dexible.token.verify((tokenOut as Token).address);
+        if(!ok || ok.error) {
+            throw new Error("Unsupported output token");
+        }
 
         console.log("Creating algo...");
         let algo = await this.dexible.algo.create({
@@ -99,7 +108,8 @@ export default class BaseOrder {
             tokenIn: tokenIn as Token,
             tokenOut: tokenOut as Token,
             amountIn,
-            algo
+            algo,
+            tags: this.orderProps.tags
         };
 
         console.log("Preparing order spec", orderSpec);

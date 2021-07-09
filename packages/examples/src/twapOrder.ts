@@ -29,7 +29,17 @@ const main = async () => {
                 },
                 slippagePercent: .5
             }
-        }
+        },
+        tags: [
+            {
+                name: "client_order_id",
+                value: "abcd-efgh-ijkl"
+            },
+            {
+                name: "test",
+                value: 'true'
+            }
+        ]
     });
 
     let r = await twap.createOrder();

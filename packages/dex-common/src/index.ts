@@ -8,6 +8,11 @@ import * as Services from './services';
 import {default as Price} from './Price';
 import {default as Token} from './Token';
 
+interface Tag {
+    name: string;
+    value: string;
+}
+
 export {
     abi,
     chainConfig,
@@ -17,5 +22,6 @@ export {
     chainToName,
     Services,
     Price,
-    Token
+    Token,
+    Tag
 }

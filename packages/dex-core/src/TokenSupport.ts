@@ -1,10 +1,12 @@
 import * as TokenServices from 'dex-token';
-import {Token} from 'dex-common';
+import {Token, Services} from 'dex-common';
 import {BigNumberish, ethers} from 'ethers';
 
 export interface ConstructorProps {
     signer: ethers.Signer;
     provider: ethers.providers.Provider;
+    apiClient: Services.APIClient;
+    chainId: number;
 }
 
 export interface SpendIncreaseProps {
@@ -20,13 +22,21 @@ export default class TokenSupport {
     signer: ethers.Signer;
     provider: ethers.providers.Provider;
     address: string | undefined;
+    apiClient: Services.APIClient;
+    chainId: number;
 
     constructor(props:ConstructorProps) {
         this.signer = props.signer;
         this.provider = props.provider;
+        this.apiClient = props.apiClient;
+        this.chainId = props.chainId;
     }
 
     lookup = async (address:string): Promise<Token> => {
+        let r = await this.verify(address);
+        if(!r || r.error) {
+            throw new Error("Unsupported token address:" + address);
+        }
         if(!this.address) {
             this.address = await this.signer.getAddress();
         }
@@ -54,5 +64,9 @@ export default class TokenSupport {
         await sleep(30000);
         props.token.allowance = bn(props.amount);
         return txn;
+    }
+
+    verify = async (address:string) => {
+        return this.apiClient.get(`token/verify/${this.chainId}/${address}`);
     }
 }

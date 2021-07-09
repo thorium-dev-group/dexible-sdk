@@ -31,17 +31,20 @@ export default class SDK {
         if(!this.provider) {
             throw new Error("Signer must have an ethers RPC provider");
         }
-       
-        this.algo = new AlgoWrapper();
-        this.token = new TokenSupport({
-            provider: this.provider,
-            signer: this.signer
-        });
         this.apiClient = new Services.APIClient({
             chainId: props.chainId,
             network: props.network,
             signer: this.signer
         });
+       
+        this.algo = new AlgoWrapper();
+        this.token = new TokenSupport({
+            provider: this.provider,
+            signer: this.signer,
+            apiClient: this.apiClient,
+            chainId: props.chainId
+        });
+        
         this.order = new OrderWrapper(this.apiClient);
         this.quote = new QuoteWrapper(this.apiClient);
         
