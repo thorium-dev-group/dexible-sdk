@@ -6,7 +6,7 @@ import chainToName from '../chainToName';
 
 const log = new Logger({component: "APIClient"});
 
-const DEFAULT_BASE_ENDPOINT = "api.dexible.io/vi";
+const DEFAULT_BASE_ENDPOINT = "api.dexible.io/v1";
 
 export interface APIProps {
     signer: ethers.Signer;

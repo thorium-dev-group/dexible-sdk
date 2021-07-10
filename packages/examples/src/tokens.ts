@@ -1,5 +1,7 @@
 
 
+export const WETH_MAINNET = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+export const DAI_MAINNET = "0x6b175474e89094c44da98b954eedeac495271d0f";
 
 export const WETH_KOVAN = "0xd0A1E359811322d97991E03f863a0C30C2cF029C";
 export const DAI_KOVAN = "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa";

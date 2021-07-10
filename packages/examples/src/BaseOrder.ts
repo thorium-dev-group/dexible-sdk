@@ -13,13 +13,15 @@ export interface OrderProps {
     tags?: Array<Tag>;
 }
 
-const NETWORK = +(process.env.NET_ID || 42);
 
 export default class BaseOrder {
     dexible: SDK;
     orderProps: OrderProps;
 
     static createDexibleSDK = () => {
+
+        const NETWORK = +(process.env.NET_ID || 42);
+
         let key = process.env.WALLET_KEY;
         if(!key) {
             throw new Error("Missing wallet key in env");
@@ -31,7 +33,7 @@ export default class BaseOrder {
             throw new Error("Missing INFURA_PROJECT_ID or a LOCAL_RPC in env");
         }
 
-        console.log("Creating SDK instance");
+        console.log("Creating SDK instance for network", NETWORK);
         //create an SDK instance. The sdk is tied to an EVM-compatible network (currently only ethereum)
         //and the chain id within that network. 
         //Trader must link their wallet private key to sign txns and interact with orders API

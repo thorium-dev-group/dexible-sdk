@@ -6,8 +6,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 
-const WETH = TOKENS.WETH_KOVAN;
-const DAI = TOKENS.DAI_KOVAN;
+const WETH = TOKENS.WETH_MAINNET;
+const DAI = TOKENS.DAI_MAINNET;
 
 const AMT = ethers.utils.parseEther("5550");
 
