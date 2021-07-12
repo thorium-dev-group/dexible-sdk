@@ -1,6 +1,6 @@
 {
   "name": "dexible-sdk-root",
-  "private": true,
+  "private": false,
   "scripts": {
     "build": "yarn workspaces foreach --topological --verbose run build",
     "clean": "yarn workspaces foreach --parallel --verbose run clean",
