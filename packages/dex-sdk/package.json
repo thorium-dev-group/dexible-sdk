@@ -1,5 +1,5 @@
 {
-  "name": "dex-sdk",
+  "name": "dexible-sdk",
   "version": "0.1.0",
   "main": "dist/index.js",
   "license": "UNLICENSED",
@@ -11,9 +11,8 @@
   "dependencies": {
     "dex-algos": "^0.1.0",
     "dex-common": "^0.1.0",
-    "dex-logger": "^0.1.0",
-    "dex-quote": "^0.1.0",
-    "dex-web3": "^0.1.0"
+    "dex-core": "^0.1.0",
+    "dex-policies": "^0.1.0"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",

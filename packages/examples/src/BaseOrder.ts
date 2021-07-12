@@ -1,4 +1,4 @@
-import {SDK} from 'dex-core';
+import {SDK} from 'dexible-sdk';
 import { BigNumber, ethers} from 'ethers';
 import { Token, Tag} from 'dex-common';
 

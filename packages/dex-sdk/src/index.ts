@@ -1,14 +1,14 @@
-import {SDK} from 'dex-core';
-export * from 'dex-algos';
-export * from 'dex-policies';
-export * from 'dex-quote';
-export * from 'dex-order';
-export * from 'dex-web3';
-export * from 'dex-token';
+import {SDK, OrderSpec} from 'dex-core';
+import * as Algos from 'dex-algos';
+import * as Policies from 'dex-policies';
+import { Token, Tag } from 'dex-common';
 
-const Dexible = {
+export {
+    Algos,
+    OrderSpec,
+    Policies,
     SDK,
-} as const;
-
-export default Dexible;
+    Tag,
+    Token
+}
 

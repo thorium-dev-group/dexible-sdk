@@ -8,8 +8,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "dex-common": "^0.1.0",
-    "dex-core": "^0.1.0",
+    "dexible-sdk": "^0.1.0",
     "ethers": "^5.3.1"
   },
   "devDependencies": {

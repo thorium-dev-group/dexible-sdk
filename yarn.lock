@@ -1298,7 +1298,6 @@ __metadata:
     axios: ^0.21.1
     chai: ^4.3.4
     dex-eth-http-signatures: ^0.1.0
-    dex-token: ^0.1.0
     ethers: ^5.1.4
     mocha: ^8.4.0
     rimraf: ^3.0.2
@@ -1452,26 +1451,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-sdk@workspace:packages/dex-sdk":
-  version: 0.0.0-use.local
-  resolution: "dex-sdk@workspace:packages/dex-sdk"
-  dependencies:
-    "@tsconfig/node14": ^1.0.1
-    "@types/mocha": ^8.2.2
-    "@types/node": ^16.0.0
-    dex-algos: ^0.1.0
-    dex-common: ^0.1.0
-    dex-logger: ^0.1.0
-    dex-quote: ^0.1.0
-    dex-web3: ^0.1.0
-    esbuild: ^0.12.14
-    mocha: ^8.4.0
-    rimraf: ^3.0.2
-    ts-node: ^9.1.1
-    typescript: 4.2.4
-  languageName: unknown
-  linkType: soft
-
 "dex-token@^0.1.0, dex-token@workspace:packages/dex-token":
   version: 0.0.0-use.local
   resolution: "dex-token@workspace:packages/dex-token"
@@ -1507,9 +1486,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-sdk@workspace:.":
+"dexible-sdk-root@workspace:.":
   version: 0.0.0-use.local
-  resolution: "dexible-sdk@workspace:."
+  resolution: "dexible-sdk-root@workspace:."
   dependencies:
     "@tsconfig/node12": ^1.0.8
     chai: ^4.2.0
@@ -1521,6 +1500,25 @@ __metadata:
     eslint-plugin-mocha: ^9.0.0
     eslint-plugin-prettier: ^3.4.0
     prettier: ^1.16.1
+    rimraf: ^3.0.2
+    ts-node: ^9.1.1
+    typescript: 4.2.4
+  languageName: unknown
+  linkType: soft
+
+"dexible-sdk@^0.1.0, dexible-sdk@workspace:packages/dex-sdk":
+  version: 0.0.0-use.local
+  resolution: "dexible-sdk@workspace:packages/dex-sdk"
+  dependencies:
+    "@tsconfig/node14": ^1.0.1
+    "@types/mocha": ^8.2.2
+    "@types/node": ^16.0.0
+    dex-algos: ^0.1.0
+    dex-common: ^0.1.0
+    dex-core: ^0.1.0
+    dex-policies: ^0.1.0
+    esbuild: ^0.12.14
+    mocha: ^8.4.0
     rimraf: ^3.0.2
     ts-node: ^9.1.1
     typescript: 4.2.4
@@ -2031,8 +2029,7 @@ __metadata:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     chai: ^4.3.4
-    dex-common: ^0.1.0
-    dex-core: ^0.1.0
+    dexible-sdk: ^0.1.0
     dotenv: ^10.0.0
     ethers: ^5.3.1
     mocha: ^8.4.0

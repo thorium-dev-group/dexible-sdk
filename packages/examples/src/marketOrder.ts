@@ -5,18 +5,18 @@ import * as TOKENS from './tokens';
 const dotenv = require('dotenv');
 dotenv.config();
 
-const WETH = TOKENS.WETH_MAINNET;
-const DAI = TOKENS.DAI_MAINNET;
+const WETH = TOKENS.WETH_KOVAN;
+const DAI = TOKENS.DAI_KOVAN;
 
 class Market extends BaseOrder {}
 
 const main = async () => {
 
-    let amountIn = ethers.utils.parseEther("100");
+    let amountIn = ethers.utils.parseEther("1");
     
     let market = new Market({
-        tokenIn: DAI,
-        tokenOut: WETH,
+        tokenIn: WETH,
+        tokenOut: DAI,
         amountIn,
         algoDetails: {
             type: "Market",
