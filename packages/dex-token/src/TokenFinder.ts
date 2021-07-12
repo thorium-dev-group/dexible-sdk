@@ -1,5 +1,5 @@
 import {BigNumber, ethers} from 'ethers';
-import {abi, chainConfig, Token, Multicall} from 'dex-common';
+import {abi, chainConfig, Token, Multicall} from 'dexible-common';
 
 export interface TokenFindProps {
     address: string;

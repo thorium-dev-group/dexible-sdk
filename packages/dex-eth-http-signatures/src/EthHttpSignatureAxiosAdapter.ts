@@ -2,7 +2,7 @@ import { default as axios, AxiosAdapter, AxiosRequestConfig } from 'axios';
 import { ethers } from 'ethers';
 import { EthHttpSignature, HttpDigest } from '.';
 import { URL } from 'url';
-import Logger from 'dex-logger';
+import Logger from 'dexible-logger';
 
 const log = new Logger({component: "EthHttpSignatureAxiosAdapter"});
 

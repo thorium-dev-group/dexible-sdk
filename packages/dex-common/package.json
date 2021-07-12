@@ -1,5 +1,5 @@
 {
-  "name": "dex-common",
+  "name": "dexible-common",
   "version": "0.1.0",
   "main": "dist/index.js",
   "license": "UNLICENSED",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dex-eth-http-signatures": "^0.1.0",
+    "dexible-eth-http-signatures": "^0.1.0",
     "ethers": "^5.1.4"
   },
   "devDependencies": {

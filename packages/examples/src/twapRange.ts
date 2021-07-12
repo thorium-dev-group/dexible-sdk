@@ -1,6 +1,6 @@
-import {SDK} from 'dex-core';
+import {SDK} from 'dexible-core';
 import {ethers} from 'ethers';
-import { Price } from 'dex-common';
+import { Price } from 'dexible-common';
 import BaseOrder from './BaseOrder';
 import * as TOKENS from './tokens';
 

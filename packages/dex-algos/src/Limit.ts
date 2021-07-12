@@ -1,5 +1,5 @@
 import Base, {BaseParams} from './Base';
-import { LimitPrice } from 'dex-policies';
+import { LimitPrice } from 'dexible-policies';
 
 export interface LimitParams extends BaseParams {
     

@@ -1,4 +1,4 @@
-import {abi, chainConfig} from 'dex-common';
+import {abi, chainConfig} from 'dexible-common';
 import {BigNumberish, ethers} from 'ethers';
 
 export interface GetBalanceRequest {

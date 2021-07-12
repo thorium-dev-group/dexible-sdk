@@ -1,4 +1,4 @@
-import {Serializable, Verifiable} from 'dex-common';
+import {Serializable, Verifiable} from 'dexible-common';
 
 export default interface IPolicy  {
     name: string;

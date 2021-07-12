@@ -1,5 +1,5 @@
 import {ethers} from 'ethers';
-import Logger from 'dex-logger';
+import Logger from 'dexible-logger';
 
 const log = new Logger({component: "HttpSignature"});
 

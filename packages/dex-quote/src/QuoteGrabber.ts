@@ -1,6 +1,6 @@
 import { BigNumberish } from '@ethersproject/bignumber';
-import Logger from 'dex-logger';
-import {Services, Token} from 'dex-common';
+import Logger from 'dexible-logger';
+import {Services, Token} from 'dexible-common';
 
 const log = new Logger({
     component: "QuoteGrabber"

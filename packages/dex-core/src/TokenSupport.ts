@@ -1,5 +1,5 @@
-import * as TokenServices from 'dex-token';
-import {Token, Services} from 'dex-common';
+import * as TokenServices from 'dexible-token';
+import {Token, Services} from 'dexible-common';
 import {BigNumberish, ethers} from 'ethers';
 
 export interface ConstructorProps {

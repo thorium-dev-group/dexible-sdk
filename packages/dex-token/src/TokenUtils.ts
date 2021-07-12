@@ -1,5 +1,5 @@
 import { BigNumberish, ethers } from 'ethers';
-import {abi, Token, chainConfig} from 'dex-common';
+import {abi, Token, chainConfig} from 'dexible-common';
 
 
 export interface SpendingParams {

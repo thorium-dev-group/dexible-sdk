@@ -1,6 +1,6 @@
-import {IPolicy, GasCost, Slippage} from 'dex-policies';
-import { Verifiable, Serializable } from 'dex-common';
-import Logger from 'dex-logger';
+import {IPolicy, GasCost, Slippage} from 'dexible-policies';
+import { Verifiable, Serializable } from 'dexible-common';
+import Logger from 'dexible-logger';
 import IAlgo from './IAlgo';
 
 const log = new Logger({component: "BaseAlgo"});

@@ -1,7 +1,7 @@
-import {SDK, OrderSpec} from 'dex-core';
-import * as Algos from 'dex-algos';
-import * as Policies from 'dex-policies';
-import { Token, Tag } from 'dex-common';
+import {SDK, OrderSpec} from 'dexible-core';
+import * as Algos from 'dexible-algos';
+import * as Policies from 'dexible-policies';
+import { Token, Tag } from 'dexible-common';
 
 export {
     Algos,

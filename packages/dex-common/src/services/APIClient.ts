@@ -1,7 +1,7 @@
 import axios, {AxiosAdapter} from 'axios';
-import { EthHttpSignatureAxiosAdapter } from 'dex-eth-http-signatures';
+import { EthHttpSignatureAxiosAdapter } from 'dexible-eth-http-signatures';
 import {ethers} from 'ethers';
-import Logger from 'dex-logger';
+import Logger from 'dexible-logger';
 import chainToName from '../chainToName';
 
 const log = new Logger({component: "APIClient"});

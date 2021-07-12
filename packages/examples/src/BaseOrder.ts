@@ -1,6 +1,6 @@
 import {SDK} from 'dexible-sdk';
 import { BigNumber, ethers} from 'ethers';
-import { Token, Tag} from 'dex-common';
+import { Token, Tag} from 'dexible-common';
 
 export interface OrderProps {
     tokenIn: Token|string;

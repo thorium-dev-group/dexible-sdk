@@ -1,6 +1,6 @@
 
 import Factory, {CommonProps, LimitProps, StopLossProps, TWAPProps} from './Factory';
-import * as Algos from 'dex-algos';
+import * as Algos from 'dexible-algos';
 
 export default class AlgoWrapper {
     types: {

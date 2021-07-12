@@ -1,4 +1,4 @@
-import { BoundedDelay } from 'dex-policies';
+import { BoundedDelay } from 'dexible-policies';
 import Base, {BaseParams} from './Base';
 
 export interface TWAPParams extends BaseParams {

@@ -2,7 +2,7 @@ import {ethers, Signer} from 'ethers';
 import { AlgoWrapper} from './algos';
 import TokenSupport from './TokenSupport';
 import OrderWrapper from './OrderWrapper';
-import {Services} from 'dex-common';
+import {Services} from 'dexible-common';
 import QuoteWrapper from './QuoteWrapper';
 
 export interface WalletConnection {

@@ -1268,18 +1268,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dex-algos@^0.1.0, dex-algos@workspace:packages/dex-algos":
+"dexible-algos@^0.1.0, dexible-algos@workspace:packages/dex-algos":
   version: 0.0.0-use.local
-  resolution: "dex-algos@workspace:packages/dex-algos"
+  resolution: "dexible-algos@workspace:packages/dex-algos"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dex-common: ^0.1.0
-    dex-logger: ^0.1.0
-    dex-policies: ^0.1.0
-    dex-web3: ^0.1.0
+    dexible-common: ^0.1.0
+    dexible-logger: ^0.1.0
+    dexible-policies: ^0.1.0
+    dexible-web3: ^0.1.0
     dotenv: ^10.0.0
     ethers: ^5.3.1
     mocha: ^8.4.0
@@ -1289,15 +1289,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-common@^0.1.0, dex-common@workspace:packages/dex-common":
+"dexible-common@^0.1.0, dexible-common@workspace:packages/dex-common":
   version: 0.0.0-use.local
-  resolution: "dex-common@workspace:packages/dex-common"
+  resolution: "dexible-common@workspace:packages/dex-common"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dex-eth-http-signatures: ^0.1.0
+    dexible-eth-http-signatures: ^0.1.0
     ethers: ^5.1.4
     mocha: ^8.4.0
     rimraf: ^3.0.2
@@ -1306,23 +1306,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-core@^0.1.0, dex-core@workspace:packages/dex-core":
+"dexible-core@^0.1.0, dexible-core@workspace:packages/dex-core":
   version: 0.0.0-use.local
-  resolution: "dex-core@workspace:packages/dex-core"
+  resolution: "dexible-core@workspace:packages/dex-core"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dex-algos: ^0.1.0
-    dex-common: ^0.1.0
-    dex-gastank: ^0.1.0
-    dex-logger: ^0.1.0
-    dex-order: ^0.1.0
-    dex-policies: ^0.1.0
-    dex-quote: ^0.1.0
-    dex-token: ^0.1.0
-    dex-web3: ^0.1.0
+    dexible-algos: ^0.1.0
+    dexible-common: ^0.1.0
+    dexible-logger: ^0.1.0
+    dexible-order: ^0.1.0
+    dexible-policies: ^0.1.0
+    dexible-quote: ^0.1.0
+    dexible-token: ^0.1.0
+    dexible-web3: ^0.1.0
     dotenv: ^10.0.0
     ethers: ^5.3.1
     mocha: ^8.4.0
@@ -1333,16 +1332,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-eth-http-signatures@^0.1.0, dex-eth-http-signatures@workspace:packages/dex-eth-http-signatures":
+"dexible-eth-http-signatures@^0.1.0, dexible-eth-http-signatures@workspace:packages/dex-eth-http-signatures":
   version: 0.0.0-use.local
-  resolution: "dex-eth-http-signatures@workspace:packages/dex-eth-http-signatures"
+  resolution: "dexible-eth-http-signatures@workspace:packages/dex-eth-http-signatures"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     "@types/node": ^15.12.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dex-logger: ^0.1.0
+    dexible-logger: ^0.1.0
     ethers: ^5.1.0
     mocha: ^7.2.0
     rimraf: ^3.0.2
@@ -1351,17 +1350,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-gastank@^0.1.0, dex-gastank@workspace:packages/dex-gastank":
+"dexible-gastank@workspace:packages/dex-gastank":
   version: 0.0.0-use.local
-  resolution: "dex-gastank@workspace:packages/dex-gastank"
+  resolution: "dexible-gastank@workspace:packages/dex-gastank"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dex-common: ^0.1.0
-    dex-logger: ^0.1.0
-    dex-web3: ^0.1.0
+    dexible-common: ^0.1.0
+    dexible-logger: ^0.1.0
+    dexible-web3: ^0.1.0
     dotenv: ^10.0.0
     ethers: ^5.3.1
     mocha: ^8.4.0
@@ -1371,9 +1370,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-logger@^0.1.0, dex-logger@workspace:packages/dex-logger":
+"dexible-logger@^0.1.0, dexible-logger@workspace:packages/dex-logger":
   version: 0.0.0-use.local
-  resolution: "dex-logger@workspace:packages/dex-logger"
+  resolution: "dexible-logger@workspace:packages/dex-logger"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
@@ -1387,19 +1386,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-order@^0.1.0, dex-order@workspace:packages/dex-order":
+"dexible-order@^0.1.0, dexible-order@workspace:packages/dex-order":
   version: 0.0.0-use.local
-  resolution: "dex-order@workspace:packages/dex-order"
+  resolution: "dexible-order@workspace:packages/dex-order"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dex-algos: ^0.1.0
-    dex-common: ^0.1.0
-    dex-logger: ^0.1.0
-    dex-quote: ^0.1.0
-    dex-web3: ^0.1.0
+    dexible-algos: ^0.1.0
+    dexible-common: ^0.1.0
+    dexible-logger: ^0.1.0
+    dexible-quote: ^0.1.0
+    dexible-web3: ^0.1.0
     dotenv: ^10.0.0
     ethers: ^5.3.1
     mocha: ^8.4.0
@@ -1409,17 +1408,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-policies@^0.1.0, dex-policies@workspace:packages/dex-policies":
+"dexible-policies@^0.1.0, dexible-policies@workspace:packages/dex-policies":
   version: 0.0.0-use.local
-  resolution: "dex-policies@workspace:packages/dex-policies"
+  resolution: "dexible-policies@workspace:packages/dex-policies"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dex-common: ^0.1.0
-    dex-logger: ^0.1.0
-    dex-web3: ^0.1.0
+    dexible-common: ^0.1.0
+    dexible-logger: ^0.1.0
+    dexible-web3: ^0.1.0
     dotenv: ^10.0.0
     ethers: ^5.3.1
     mocha: ^8.4.0
@@ -1429,55 +1428,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dex-quote@^0.1.0, dex-quote@workspace:packages/dex-quote":
+"dexible-quote@^0.1.0, dexible-quote@workspace:packages/dex-quote":
   version: 0.0.0-use.local
-  resolution: "dex-quote@workspace:packages/dex-quote"
+  resolution: "dexible-quote@workspace:packages/dex-quote"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dex-common: ^0.1.0
-    dex-eth-http-signatures: ^0.1.0
-    dex-logger: ^0.1.0
-    dex-token: ^0.1.0
-    dex-web3: ^0.1.0
+    dexible-common: ^0.1.0
+    dexible-eth-http-signatures: ^0.1.0
+    dexible-logger: ^0.1.0
+    dexible-token: ^0.1.0
+    dexible-web3: ^0.1.0
     dotenv: ^10.0.0
-    ethers: ^5.3.1
-    mocha: ^8.4.0
-    rimraf: ^3.0.2
-    ts-node: ^9.1.1
-    typescript: 4.2.4
-  languageName: unknown
-  linkType: soft
-
-"dex-token@^0.1.0, dex-token@workspace:packages/dex-token":
-  version: 0.0.0-use.local
-  resolution: "dex-token@workspace:packages/dex-token"
-  dependencies:
-    "@tsconfig/node14": ^1.0.1
-    "@types/mocha": ^8.2.2
-    axios: ^0.21.1
-    chai: ^4.3.4
-    dex-common: ^0.1.0
-    dex-web3: ^0.1.0
-    dotenv: ^10.0.0
-    ethers: ^5.3.1
-    mocha: ^8.4.0
-    rimraf: ^3.0.2
-    ts-node: ^9.1.1
-    typescript: 4.2.4
-  languageName: unknown
-  linkType: soft
-
-"dex-web3@^0.1.0, dex-web3@workspace:packages/dex-web3":
-  version: 0.0.0-use.local
-  resolution: "dex-web3@workspace:packages/dex-web3"
-  dependencies:
-    "@tsconfig/node14": ^1.0.1
-    "@types/mocha": ^8.2.2
-    axios: ^0.21.1
-    chai: ^4.3.4
     ethers: ^5.3.1
     mocha: ^8.4.0
     rimraf: ^3.0.2
@@ -1513,11 +1477,46 @@ __metadata:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     "@types/node": ^16.0.0
-    dex-algos: ^0.1.0
-    dex-common: ^0.1.0
-    dex-core: ^0.1.0
-    dex-policies: ^0.1.0
+    dexible-algos: ^0.1.0
+    dexible-common: ^0.1.0
+    dexible-core: ^0.1.0
+    dexible-policies: ^0.1.0
     esbuild: ^0.12.14
+    mocha: ^8.4.0
+    rimraf: ^3.0.2
+    ts-node: ^9.1.1
+    typescript: 4.2.4
+  languageName: unknown
+  linkType: soft
+
+"dexible-token@^0.1.0, dexible-token@workspace:packages/dex-token":
+  version: 0.0.0-use.local
+  resolution: "dexible-token@workspace:packages/dex-token"
+  dependencies:
+    "@tsconfig/node14": ^1.0.1
+    "@types/mocha": ^8.2.2
+    axios: ^0.21.1
+    chai: ^4.3.4
+    dexible-common: ^0.1.0
+    dexible-web3: ^0.1.0
+    dotenv: ^10.0.0
+    ethers: ^5.3.1
+    mocha: ^8.4.0
+    rimraf: ^3.0.2
+    ts-node: ^9.1.1
+    typescript: 4.2.4
+  languageName: unknown
+  linkType: soft
+
+"dexible-web3@^0.1.0, dexible-web3@workspace:packages/dex-web3":
+  version: 0.0.0-use.local
+  resolution: "dexible-web3@workspace:packages/dex-web3"
+  dependencies:
+    "@tsconfig/node14": ^1.0.1
+    "@types/mocha": ^8.2.2
+    axios: ^0.21.1
+    chai: ^4.3.4
+    ethers: ^5.3.1
     mocha: ^8.4.0
     rimraf: ^3.0.2
     ts-node: ^9.1.1

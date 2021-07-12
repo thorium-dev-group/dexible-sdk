@@ -1,9 +1,9 @@
 import {BigNumberish } from 'ethers';
-import {IAlgo} from 'dex-algos';
+import {IAlgo} from 'dexible-algos';
 import {ethers} from 'ethers';
-import {QuoteGrabber, QuoteRequest} from 'dex-quote';
-import {Services, Tag, Token} from 'dex-common';
-import Logger from 'dex-logger';
+import {QuoteGrabber, QuoteRequest} from 'dexible-quote';
+import {Services, Tag, Token} from 'dexible-common';
+import Logger from 'dexible-logger';
 
 const bn = ethers.BigNumber.from;
 const log = new Logger({component: "DexOrder"});

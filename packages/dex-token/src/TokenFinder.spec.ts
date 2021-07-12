@@ -1,5 +1,5 @@
 import Finder from './TokenFinder';
-import {Web3Factory} from 'dex-web3';
+import {Web3Factory} from 'dexible-web3';
 
 const dotenv = require('dotenv');
 dotenv.config();

@@ -1,4 +1,4 @@
-import { StopPrice } from 'dex-policies';
+import { StopPrice } from 'dexible-policies';
 import Base, {BaseParams} from './Base';
 
 export interface StopLossParams extends BaseParams {

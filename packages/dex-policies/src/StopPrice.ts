@@ -1,5 +1,5 @@
 import Base from './Base';
-import {Price} from 'dex-common';
+import {Price} from 'dexible-common';
 
 export interface StopPriceParams {
     trigger: Price;

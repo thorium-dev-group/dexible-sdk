@@ -1,5 +1,5 @@
 {
-  "name": "dex-eth-http-signatures",
+  "name": "dexible-eth-http-signatures",
   "types": "./dist/index.d.ts",
   "version": "0.1.0",
   "main": "./dist/index.js",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dex-logger": "^0.1.0",
+    "dexible-logger": "^0.1.0",
     "ethers": "^5.1.0"
   },
   "devDependencies": {

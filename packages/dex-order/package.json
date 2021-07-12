@@ -1,5 +1,5 @@
 {
-  "name": "dex-order",
+  "name": "dexible-order",
   "version": "0.1.0",
   "main": "dist/index.js",
   "license": "UNLICENSED",
@@ -10,11 +10,11 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dex-algos": "^0.1.0",
-    "dex-common": "^0.1.0",
-    "dex-logger": "^0.1.0",
-    "dex-quote": "^0.1.0",
-    "dex-web3": "^0.1.0",
+    "dexible-algos": "^0.1.0",
+    "dexible-common": "^0.1.0",
+    "dexible-logger": "^0.1.0",
+    "dexible-quote": "^0.1.0",
+    "dexible-web3": "^0.1.0",
     "ethers": "^5.3.1"
   },
   "devDependencies": {

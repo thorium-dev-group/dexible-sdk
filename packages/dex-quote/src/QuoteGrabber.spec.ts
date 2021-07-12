@@ -1,8 +1,8 @@
 import Quote, {QuoteRequest} from './QuoteGrabber';
 import {ethers} from 'ethers';
-import {TokenFinder} from 'dex-token';
-import {Web3Factory} from 'dex-web3';
-import {Services} from 'dex-common';
+import {TokenFinder} from 'dexible-token';
+import {Web3Factory} from 'dexible-web3';
+import {Services} from 'dexible-common';
 
 const dotenv = require('dotenv');
 dotenv.config();

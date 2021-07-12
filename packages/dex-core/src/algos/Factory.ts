@@ -1,8 +1,8 @@
-import * as Algos from 'dex-algos';
-import * as Policies from 'dex-policies';
+import * as Algos from 'dexible-algos';
+import * as Policies from 'dexible-policies';
 import moment from 'moment';
-import Logger from 'dex-logger';
-import {Price} from 'dex-common';
+import Logger from 'dexible-logger';
+import {Price} from 'dexible-common';
 
 const log = new Logger({component: "AlgoFactory"});
 

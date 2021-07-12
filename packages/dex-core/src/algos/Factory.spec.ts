@@ -1,5 +1,5 @@
 import Factory, {LimitProps, StopLossProps} from './Factory';
-import * as Algos from 'dex-algos';
+import * as Algos from 'dexible-algos';
 
 describe("AlgoFactory", function() {
 

@@ -1,5 +1,5 @@
-import {QuoteGrabber,QuoteRequest} from 'dex-quote';
-import {Services, Token} from 'dex-common';
+import {QuoteGrabber,QuoteRequest} from 'dexible-quote';
+import {Services, Token} from 'dexible-common';
 import { BigNumber } from 'ethers';
 
 export interface QuoteParams {
