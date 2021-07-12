@@ -48,6 +48,10 @@ export default class TokenSupport {
     }
 
     increaseSpending = async (props:SpendIncreaseProps): Promise<any> => {
+        let network = await this.signer.provider?.getNetwork();
+        if(network?.chainId !== this.chainId) {
+            throw new Error("Provided signer's chainId does not match SDK's chainId");
+        }
         let txn = await TokenServices.TokenUtils.increaseSpending({
             signer: this.signer,
             token: props.token,
