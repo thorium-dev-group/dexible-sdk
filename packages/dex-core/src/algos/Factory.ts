@@ -97,13 +97,13 @@ export default class Factory {
     createTWAP = (props:TWAPProps): Algos.TWAP => {
         //let duration = moment.duration('PT' + props.timeWindow.toUpperCase()).asSeconds();
         let d = dayjs.duration(props.timeWindow);
-        log.debug("Parsed TWAP duration in seconds", d.seconds());
+        log.debug("Parsed TWAP duration in seconds", Math.ceil(d.asSeconds()));
        
         let policies = [
             ...this._buildBasePolicies(props),
             new Policies.BoundedDelay({
                 randomizeDelay: props.randomizeDelay || false,
-                timeWindowSeconds: d.seconds()
+                timeWindowSeconds: Math.ceil(d.asSeconds())
             })
         ];
         if(props.priceRange) {

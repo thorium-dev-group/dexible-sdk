@@ -53,18 +53,20 @@ const main = async () => {
     } else {
         let order = r.order;
         //could check the quote estimate and make sure it's good
-        console.log("Order Quote", order.quote);
+        console.log("Order", JSON.stringify(order));
 
         if(order.quote.rounds === 1) {
             console.log("Single-round order quote so will not submit");
         } else {
             //then submit for execution
+            /*
             console.log("Submitting order...");
             r = await order.submit();
             if(r.error) {
                 throw new Error(r.error);
             } 
             console.log("Order result", r);
+            */
         }
     }
 }
