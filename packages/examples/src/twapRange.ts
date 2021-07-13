@@ -32,7 +32,9 @@ const main = async () => {
         algoDetails: {
             type: "TWAP",
             params: {
-                timeWindow: "10m",
+                timeWindow: {
+                    minutes: 10
+                },
                 priceRange: {
                     basePrice: Price.unitsToPrice({
                         inToken: tokenIn,

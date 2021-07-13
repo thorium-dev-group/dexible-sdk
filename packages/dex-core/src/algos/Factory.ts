@@ -1,10 +1,12 @@
 import * as Algos from 'dexible-algos';
 import * as Policies from 'dexible-policies';
-import moment from 'moment';
 import Logger from 'dexible-logger';
 import {Price} from 'dexible-common';
 
 const log = new Logger({component: "AlgoFactory"});
+const dur = require("dayjs/plugin/duration");
+const dayjs = require("dayjs");
+dayjs.extend(dur);
 
 export interface GasPolicyProps {
     type: "relative" | "fixed";
@@ -35,9 +37,17 @@ export interface LimitProps extends CommonProps {
     price: Price;
 }
 
+export interface Duration {
+    seconds?: number;
+    minutes?: number;
+    hours?: number;
+    days?: number;
+    weeks?: number;
+    months?: number;
+}
 
 export interface TWAPProps extends CommonProps {
-    timeWindow: string;
+    timeWindow: Duration;
     randomizeDelay?: boolean;
     priceRange?: PriceRangeProps;
 }
@@ -85,18 +95,15 @@ export default class Factory {
     }
 
     createTWAP = (props:TWAPProps): Algos.TWAP => {
-        let duration = moment.duration('PT' + props.timeWindow.toUpperCase()).asSeconds();
-        
-        log.debug("Parsed TWAP duration in seconds", duration);
-        if(!duration) {
-            throw new Error("Invalid timeWindow duration. Using something like 24h");
-        }
-
+        //let duration = moment.duration('PT' + props.timeWindow.toUpperCase()).asSeconds();
+        let d = dayjs.duration(props.timeWindow);
+        log.debug("Parsed TWAP duration in seconds", d.seconds());
+       
         let policies = [
             ...this._buildBasePolicies(props),
             new Policies.BoundedDelay({
                 randomizeDelay: props.randomizeDelay || false,
-                timeWindowSeconds: duration
+                timeWindowSeconds: d.seconds()
             })
         ];
         if(props.priceRange) {

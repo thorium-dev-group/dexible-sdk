@@ -21,7 +21,9 @@ const main = async () => {
         algoDetails: {
             type: "TWAP",
             params: {
-                timeWindow: "10m",
+                timeWindow: {
+                    minutes: 10
+                },
                 //maxRounds: 10, //min per round is 3 input tokens (30 in/10 rounds)
                 gasPolicy: {
                     type: "relative",
