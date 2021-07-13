@@ -1,6 +1,6 @@
 {
   "name": "dexible-common",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-eth-http-signatures": "^0.1.0",
+    "dexible-eth-http-signatures": "^0.1.2",
     "ethers": "^5.1.4"
   },
   "devDependencies": {
