@@ -4,6 +4,7 @@ import TokenSupport from './TokenSupport';
 import OrderWrapper from './OrderWrapper';
 import {Services} from 'dexible-common';
 import QuoteWrapper from './QuoteWrapper';
+import Contact from './Contact';
 
 export interface WalletConnection {
     network: 'ethereum'; //for now only ethereum
@@ -24,6 +25,7 @@ export default class SDK {
     order: OrderWrapper;
     apiClient: Services.APIClient;
     quote: QuoteWrapper;
+    contact: Contact;
 
     constructor(props:WalletConnection) {
         this.signer = props.signer;
@@ -47,6 +49,7 @@ export default class SDK {
         
         this.order = new OrderWrapper(this.apiClient);
         this.quote = new QuoteWrapper(this.apiClient);
+        this.contact = new Contact({apiClient: this.apiClient});
         
         this.gasPolicyTypes = {
             RELATIVE: "relative",
