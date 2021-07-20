@@ -1283,7 +1283,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.4
+    dexible-common: ^0.1.5
     dexible-logger: ^0.1.1
     dexible-policies: ^0.1.3
     dexible-web3: ^0.1.1
@@ -1296,7 +1296,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-common@^0.1.4, dexible-common@workspace:packages/dex-common":
+"dexible-common@^0.1.5, dexible-common@workspace:packages/dex-common":
   version: 0.0.0-use.local
   resolution: "dexible-common@workspace:packages/dex-common"
   dependencies:
@@ -1323,7 +1323,7 @@ __metadata:
     chai: ^4.3.4
     dayjs: ^1.10.6
     dexible-algos: ^0.1.3
-    dexible-common: ^0.1.4
+    dexible-common: ^0.1.5
     dexible-logger: ^0.1.1
     dexible-order: ^0.1.3
     dexible-policies: ^0.1.3
@@ -1365,7 +1365,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.4
+    dexible-common: ^0.1.5
     dexible-logger: ^0.1.0
     dexible-web3: ^0.1.0
     dotenv: ^10.0.0
@@ -1402,7 +1402,7 @@ __metadata:
     axios: ^0.21.1
     chai: ^4.3.4
     dexible-algos: ^0.1.3
-    dexible-common: ^0.1.4
+    dexible-common: ^0.1.5
     dexible-logger: ^0.1.1
     dexible-quote: ^0.1.3
     dexible-web3: ^0.1.1
@@ -1423,7 +1423,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.4
+    dexible-common: ^0.1.5
     dexible-logger: ^0.1.1
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
@@ -1443,7 +1443,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.4
+    dexible-common: ^0.1.5
     dexible-eth-http-signatures: ^0.1.0
     dexible-logger: ^0.1.1
     dexible-token: ^0.1.3
@@ -1485,7 +1485,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     "@types/node": ^16.0.0
     dexible-algos: ^0.1.3
-    dexible-common: ^0.1.4
+    dexible-common: ^0.1.5
     dexible-core: ^0.1.4
     dexible-policies: ^0.1.3
     esbuild: ^0.12.14
@@ -1504,7 +1504,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.4
+    dexible-common: ^0.1.5
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
     ethers: ^5.3.1

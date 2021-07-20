@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "dexible-algos": "^0.1.3",
-    "dexible-common": "^0.1.4",
+    "dexible-common": "^0.1.5",
     "dexible-core": "^0.1.4",
     "dexible-policies": "^0.1.3"
   },
