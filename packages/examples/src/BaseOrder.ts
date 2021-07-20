@@ -1,6 +1,6 @@
 import {SDK} from 'dexible-sdk';
 import { BigNumber, ethers} from 'ethers';
-import { Token, Tag} from 'dexible-common';
+import { IJWTHandler, Token, Tag} from 'dexible-common';
 
 export interface OrderProps {
     tokenIn: Token|string;
@@ -13,6 +13,21 @@ export interface OrderProps {
     tags?: Array<Tag>;
 }
 
+class JWTHolder implements IJWTHandler {
+    token: string | null;
+
+    constructor() {
+        this.token = null;
+    }
+
+    readToken = async ():Promise<string|null>  => {
+        return this.token;
+    }
+
+    storeToken = async (token: string, expiration: number):Promise<void> => {
+        this.token = token;
+    }
+}
 
 export default class BaseOrder {
     dexible: SDK;
@@ -48,7 +63,8 @@ export default class BaseOrder {
         return new SDK({
             network: "ethereum",
             chainId: NETWORK,
-            signer: new ethers.Wallet(key, p)
+            signer: new ethers.Wallet(key, p),
+            jwtHandler: new JWTHolder()
         });
     }
 

@@ -41,6 +41,10 @@ export default class OrderWrapper {
         return this.apiClient.get(`orders?limit=${params.limit?params.limit:100}&offset=${params.offset?params.offset:0}&state=${params.state?params.state:'all'}`)
     }
 
+    getOne = async (id:number): Promise<any> => {
+        return this.apiClient.get(`orders/${id}`);
+    }
+
     cancel = async (orderId:number): Promise<any> => {
         return this.apiClient.post(`orders/${orderId}/actions/cancel`, {orderId});
     }

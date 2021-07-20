@@ -6,19 +6,17 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 
-const WETH = TOKENS.WETH_KOVAN;
-const DAI = TOKENS.DAI_KOVAN;
+const WETH = TOKENS.WETH_MAINNET;
+const DAI = TOKENS.DAI_MAINNET;
 
-const TOKEN_IN = DAI;
-const TOKEN_OUT = WETH;
-const AMT = ethers.utils.parseEther("6500");
+const AMT = ethers.utils.parseEther("200");
 
 const main = async () => {
 
     try {
         let sdk = BaseOrder.createDexibleSDK();
-        let tokenIn = await sdk.token.lookup(TOKEN_IN);
-        let tokenOut = await sdk.token.lookup(TOKEN_OUT);
+        let tokenIn = await sdk.token.lookup(WETH);
+        let tokenOut = await sdk.token.lookup(DAI);
 
         let r = await sdk.quote.getQuote({
             tokenIn,

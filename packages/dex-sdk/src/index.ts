@@ -1,7 +1,7 @@
 import {SDK, OrderSpec} from 'dexible-core';
 import * as Algos from 'dexible-algos';
 import * as Policies from 'dexible-policies';
-import { Token, Price, Tag } from 'dexible-common';
+import { IJWTHandler, Token, Price, Tag } from 'dexible-common';
 
 export {
     Algos,
@@ -10,6 +10,7 @@ export {
     Price,
     SDK,
     Tag,
-    Token
+    Token,
+    IJWTHandler
 }
 

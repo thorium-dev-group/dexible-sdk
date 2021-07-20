@@ -5,6 +5,7 @@ import { Serializable } from './ISerializable';
 import {Verifiable} from './IVerifiable';
 import chainToName from './chainToName';
 import * as Services from './services';
+import IJWTHandler from './services/IJWTHandler';
 import {default as Price} from './Price';
 import {default as Token} from './Token';
 
@@ -16,6 +17,7 @@ interface Tag {
 export {
     abi,
     chainConfig,
+    IJWTHandler,
     Multicall,
     Serializable,
     Verifiable,

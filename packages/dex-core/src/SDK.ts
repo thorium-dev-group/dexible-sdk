@@ -2,14 +2,16 @@ import {ethers, Signer} from 'ethers';
 import { AlgoWrapper} from './algos';
 import TokenSupport from './TokenSupport';
 import OrderWrapper from './OrderWrapper';
-import {Services} from 'dexible-common';
+import {IJWTHandler, Services} from 'dexible-common';
 import QuoteWrapper from './QuoteWrapper';
 import Contact from './Contact';
+
 
 export interface WalletConnection {
     network: 'ethereum'; //for now only ethereum
     chainId: number;
     signer: Signer;
+    jwtHandler?:IJWTHandler;
 }
 
 export default class SDK {
@@ -36,7 +38,8 @@ export default class SDK {
         this.apiClient = new Services.APIClient({
             chainId: props.chainId,
             network: props.network,
-            signer: this.signer
+            signer: this.signer,
+            jwtHandler: props.jwtHandler
         });
        
         this.algo = new AlgoWrapper();

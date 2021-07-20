@@ -8,15 +8,18 @@ dotenv.config();
 const WETH = TOKENS.WETH_KOVAN;
 const DAI = TOKENS.DAI_KOVAN;
 
+const TOKEN_IN = DAI;
+const TOKEN_OUT = WETH;
+const IN_AMT = ethers.utils.parseEther("50");
 class Market extends BaseOrder {}
 
 const main = async () => {
 
-    let amountIn = ethers.utils.parseEther("1");
+    let amountIn = IN_AMT;
     
     let market = new Market({
-        tokenIn: WETH,
-        tokenOut: DAI,
+        tokenIn: TOKEN_IN,
+        tokenOut: TOKEN_OUT,
         amountIn,
         algoDetails: {
             type: "Market",
