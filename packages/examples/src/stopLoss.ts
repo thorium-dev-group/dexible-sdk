@@ -1,4 +1,3 @@
-import {SDK} from 'dexible-core';
 import {ethers} from 'ethers';
 import { Price } from 'dexible-common';
 import BaseOrder from './BaseOrder';
@@ -12,9 +11,9 @@ const WETH = TOKENS.WETH_KOVAN;
 
 const TOKEN_IN = WETH;
 const TOKEN_OUT = DAI;
-const AMT_IN = ethers.utils.parseEther("5.193");
+const AMT_IN = ethers.utils.parseEther("5.175");
 
-class TWAP extends BaseOrder {};
+class StopLoss extends BaseOrder {};
 
 const main = async () => {
 
@@ -29,27 +28,20 @@ const main = async () => {
     let amountIn = AMT_IN;
     
 
-    let twap = new TWAP({
+    let stop = new StopLoss({
         tokenIn,
         tokenOut,
         amountIn,
         algoDetails: {
-            type: "TWAP",
+            type: "StopLoss",
             params: {
-                timeWindow: {
-                    minutes: 10
-                },
-                priceRange: {
-                    basePrice: Price.unitsToPrice({
-                        inToken: tokenIn,
-                        outToken: tokenOut,
-                        inUnits: 1, //1 weth
-                        outUnits: 1675 //for this amount of dai
-                    }),
-                    lowerBoundPercent: 1,
-                    upperBoundPercent: 1
-                },
-                //maxRounds: 20,
+                isAbove: false,
+                triggerPrice: Price.unitsToPrice({
+                    inToken: tokenIn,
+                    outToken: tokenOut,
+                    inUnits: 1, //1 weth
+                    outUnits: 1375 //for this amount of dai
+                }),
                 gasPolicy: {
                     type: "relative",
                     deviation: 0
@@ -59,7 +51,7 @@ const main = async () => {
         }
     });
     
-    let r = await twap.createOrder();
+    let r = await stop.createOrder();
     if(r.error) {
         console.log("Problem with order", r.error);
         throw new Error(r.error);

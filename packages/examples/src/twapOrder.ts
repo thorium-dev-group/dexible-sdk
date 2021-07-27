@@ -8,21 +8,23 @@ dotenv.config();
 const WETH = TOKENS.WETH_KOVAN;
 const DAI = TOKENS.DAI_KOVAN;
 
+const TOKEN_IN = DAI;
+const TOKEN_OUT = WETH;
+const AMT_IN = ethers.utils.parseEther("6500");
+
 class TWAP extends BaseOrder {}
 
 const main = async () => {
-
-    let amountIn = ethers.utils.parseEther("9");
     
     let twap = new TWAP({
-        tokenIn: WETH,
-        tokenOut: DAI,
-        amountIn,
+        tokenIn: TOKEN_IN,
+        tokenOut: TOKEN_OUT,
+        amountIn: AMT_IN,
         algoDetails: {
             type: "TWAP",
             params: {
                 timeWindow: {
-                    minutes: 10
+                    minutes: 7
                 },
                 //maxRounds: 10, //min per round is 3 input tokens (30 in/10 rounds)
                 gasPolicy: {
@@ -53,20 +55,21 @@ const main = async () => {
     } else {
         let order = r.order;
         //could check the quote estimate and make sure it's good
-        console.log("Order", JSON.stringify(order));
+        console.log("Order", JSON.stringify(order, null, 2));
 
         if(order.quote.rounds === 1) {
             console.log("Single-round order quote so will not submit");
         } else {
             //then submit for execution
-            /*
+            console.log("Quote", JSON.stringify(order.quote, null, 2));
+            
             console.log("Submitting order...");
             r = await order.submit();
             if(r.error) {
                 throw new Error(r.error);
             } 
             console.log("Order result", r);
-            */
+            
         }
     }
 }

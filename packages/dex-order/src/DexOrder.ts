@@ -21,6 +21,7 @@ export interface DexOrderParams {
     algo: IAlgo;
     maxRounds: number;
     tags?: Array<Tag>;
+    gnosisSafe?: string;
 }
 
 export default class DexOrder {
@@ -34,6 +35,7 @@ export default class DexOrder {
     quote: any;
     maxRounds: number;
     tags?: Array<Tag>;
+    gnosisSafe?: string;
 
     constructor(params:DexOrderParams) {
         this.tokenIn = params.tokenIn;
@@ -46,6 +48,7 @@ export default class DexOrder {
         this.quoteId = 0;
         this.quote = null;
         this.tags = params.tags;
+        this.gnosisSafe = params.gnosisSafe;
     }
 
     serialize = () => {
@@ -62,7 +65,8 @@ export default class DexOrder {
             networkId: this.apiClient.chainId,
             policies: algoSer.policies,
             algorithm: algoSer.algorithm,
-            tags: this.tags
+            tags: this.tags,
+            gnosisSafe: this.gnosisSafe
         }
     }
 

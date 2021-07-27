@@ -8,9 +8,9 @@ dotenv.config();
 const WETH = TOKENS.WETH_KOVAN;
 const DAI = TOKENS.DAI_KOVAN;
 
-const TOKEN_IN = DAI;
-const TOKEN_OUT = WETH;
-const IN_AMT = ethers.utils.parseEther("50");
+const TOKEN_IN = WETH;
+const TOKEN_OUT = DAI;
+const IN_AMT = ethers.utils.parseEther("1");
 class Market extends BaseOrder {}
 
 const main = async () => {
@@ -24,7 +24,7 @@ const main = async () => {
         algoDetails: {
             type: "Market",
             params: {
-                maxRounds: 10, //min per round is 3 input tokens (30 in/10 rounds)
+                //maxRounds: 10, //min per round is 3 input tokens (30 in/10 rounds)
                 gasPolicy: {
                     type: "relative",
                     deviation: 0

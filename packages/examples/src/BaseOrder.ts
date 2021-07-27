@@ -33,7 +33,7 @@ export default class BaseOrder {
     dexible: SDK;
     orderProps: OrderProps;
 
-    static createDexibleSDK = () => {
+    static createDexibleSDK = (gnosisSafe?:string) => {
 
         const NETWORK = +(process.env.NET_ID || 42);
 
@@ -64,7 +64,8 @@ export default class BaseOrder {
             network: "ethereum",
             chainId: NETWORK,
             signer: new ethers.Wallet(key, p),
-            jwtHandler: new JWTHolder()
+            jwtHandler: new JWTHolder(),
+            gnosisSafe
         });
     }
 

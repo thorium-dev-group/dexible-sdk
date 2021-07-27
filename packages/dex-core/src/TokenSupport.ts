@@ -7,6 +7,7 @@ export interface ConstructorProps {
     provider: ethers.providers.Provider;
     apiClient: Services.APIClient;
     chainId: number;
+    gnosisSafe?: string;
 }
 
 export interface SpendIncreaseProps {
@@ -24,12 +25,14 @@ export default class TokenSupport {
     address: string | undefined;
     apiClient: Services.APIClient;
     chainId: number;
+    gnsosisSafe?: string;
 
     constructor(props:ConstructorProps) {
         this.signer = props.signer;
         this.provider = props.provider;
         this.apiClient = props.apiClient;
         this.chainId = props.chainId;
+        this.gnsosisSafe = props.gnosisSafe;
     }
 
     lookup = async (address:string): Promise<Token> => {
@@ -40,9 +43,10 @@ export default class TokenSupport {
         if(!this.address) {
             this.address = await this.signer.getAddress();
         }
+        let addr = this.gnsosisSafe || this.address;
         return TokenServices.TokenFinder({
             address,
-            owner: this.address,
+            owner: addr,
             provider: this.provider
         });
     }
@@ -52,6 +56,10 @@ export default class TokenSupport {
         if(network?.chainId !== this.chainId) {
             throw new Error("Provided signer's chainId does not match SDK's chainId");
         }
+        if(this.gnsosisSafe) {
+            throw new Error("Cannot increase spending for a GnosisSafe. Must do that through GnosisSafe app with owner approvals");
+        }
+        
         let txn = await TokenServices.TokenUtils.increaseSpending({
             signer: this.signer,
             token: props.token,

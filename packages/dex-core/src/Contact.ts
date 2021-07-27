@@ -17,4 +17,12 @@ export default class Contact {
             contact_method: "email" //only support email for now
         });
     }
+
+    getAll = async () => {
+        return this.apiClient.get("contact-method/");
+    }
+
+    toggle = async (id) => {
+        return this.apiClient.post(`contact-method/toggle/${id}`, {id});
+    }
 }

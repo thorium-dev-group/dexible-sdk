@@ -6,7 +6,8 @@ dotenv.config();
 const main = async () => {
 
     try {
-        let sdk = BaseOrder.createDexibleSDK();
+        //gnosis safe address
+        let sdk = BaseOrder.createDexibleSDK( );
         let r = await sdk.order.getAll({
             state: 'all'
         });

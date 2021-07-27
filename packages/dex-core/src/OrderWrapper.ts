@@ -8,20 +8,22 @@ export interface OrderSpec {
     tokenOut: Token;
     amountIn: BigNumberish;
     algo: IAlgo;
-    tags?: Array<Tag>
+    tags?: Array<Tag>;
 }
 
 export interface OrderListParams {
     limit?: number;
     offset?: number;
-    state?: "all" | "active";
+    state?: "all" | "active" | 'delegated';
 }
 
 export default class OrderWrapper {
     apiClient: Services.APIClient;
+    gnosisSafe?: string;
 
-    constructor(apiClient: Services.APIClient) {
+    constructor(apiClient: Services.APIClient, gnosisSafe?: string) {
         this.apiClient = apiClient;
+        this.gnosisSafe = gnosisSafe;
     }
 
     prepare = async (params: OrderSpec): Promise<OrderSupport.PrepareResponse> => {
@@ -32,13 +34,28 @@ export default class OrderWrapper {
             amountIn: params.amountIn,
             maxRounds: params.algo.maxRounds(),
             algo: params.algo,
-            tags: params.tags
+            tags: params.tags,
+            gnosisSafe: this.gnosisSafe
         });
         return order.prepare();
     }
 
     getAll = async (params:OrderListParams): Promise<Array<any>> => {
-        return this.apiClient.get(`orders?limit=${params.limit?params.limit:100}&offset=${params.offset?params.offset:0}&state=${params.state?params.state:'all'}`)
+        let qs = Object.keys(params).reduce((s, k, i)=>{
+            let v = params[k];
+            if(typeof v !== 'undefined' && v !== null) {
+                if(i > 0) {
+                    s += `&${k}=${v}`;
+                } else {
+                    s += `${k}=${v}`;
+                }
+            }
+            return s;
+        }, "");
+        if(this.gnosisSafe && this.gnosisSafe.length > 0) {
+            qs += "&gnosisSafe=" + this.gnosisSafe;
+        }
+        return this.apiClient.get(`orders?${qs}`)
     }
 
     getOne = async (id:number): Promise<any> => {

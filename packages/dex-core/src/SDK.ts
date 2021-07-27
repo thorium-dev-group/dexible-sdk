@@ -12,6 +12,7 @@ export interface WalletConnection {
     chainId: number;
     signer: Signer;
     jwtHandler?:IJWTHandler;
+    gnosisSafe?:string;
 }
 
 export default class SDK {
@@ -28,10 +29,13 @@ export default class SDK {
     apiClient: Services.APIClient;
     quote: QuoteWrapper;
     contact: Contact;
+    gnosisSafe?: string;
 
     constructor(props:WalletConnection) {
         this.signer = props.signer;
         this.provider = this.signer.provider;
+        this.gnosisSafe = props.gnosisSafe;
+
         if(!this.provider) {
             throw new Error("Signer must have an ethers RPC provider");
         }
@@ -47,10 +51,11 @@ export default class SDK {
             provider: this.provider,
             signer: this.signer,
             apiClient: this.apiClient,
-            chainId: props.chainId
+            chainId: props.chainId,
+            gnosisSafe: this.gnosisSafe
         });
         
-        this.order = new OrderWrapper(this.apiClient);
+        this.order = new OrderWrapper(this.apiClient, this.gnosisSafe);
         this.quote = new QuoteWrapper(this.apiClient);
         this.contact = new Contact({apiClient: this.apiClient});
         

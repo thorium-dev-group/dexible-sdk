@@ -6,26 +6,59 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 
-const WETH = TOKENS.WETH_MAINNET;
-const DAI = TOKENS.DAI_MAINNET;
+const asUnits = (a, d) => {
+    return ethers.utils.parseUnits(a.toFixed(d), d);
+}
 
-const AMT = ethers.utils.parseEther("200");
+const INPUTS = [
+    TOKENS.WETH_MAINNET,
+    TOKENS.USDC_MAINNET,
+    TOKENS.DAI_MAINNET
+];
+
+const OUTPUTS = [
+    TOKENS.UNI_MAINNET,
+    TOKENS.IFUND_MAINNET,
+    TOKENS.UNI_MAINNET
+];
+
+const AMOUNTS = [
+    asUnits(300, 18),
+    asUnits(300000, 6),
+    asUnits(300000, 18)
+]
+
+const AMT = ethers.utils.parseEther("300");
+
+const CNT = 1;
 
 const main = async () => {
 
     try {
         let sdk = BaseOrder.createDexibleSDK();
-        let tokenIn = await sdk.token.lookup(WETH);
-        let tokenOut = await sdk.token.lookup(DAI);
+        let tokenCache = {};
 
-        let r = await sdk.quote.getQuote({
-            tokenIn,
-            tokenOut,
-            amountIn: AMT,
-            slippagePercent: .5
-        });
+        let calls:any[]= [];
+        for(let i=0;i<CNT;++i) {
+            let inT = INPUTS[i%3];
+            let outT = OUTPUTS[i%3];
+            let amountIn = AMOUNTS[i%3];
+            let tokenIn = tokenCache[inT] || await sdk.token.lookup(inT);
+            let tokenOut = tokenCache[outT] || await sdk.token.lookup(outT);
+            tokenCache[inT] = tokenIn;
+            tokenCache[outT] = tokenOut;
 
-        console.log("Quote", JSON.stringify(r, null, 2));
+            calls.push( sdk.quote.getQuote({
+                tokenIn,
+                tokenOut,
+                amountIn,
+                slippagePercent: .5
+            }));
+        }
+        
+        let res = await Promise.all(calls);
+
+        console.log("Quote", JSON.stringify(res[0], null, 2));
     } catch (e) {
         console.log(e);
     }
