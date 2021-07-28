@@ -6,7 +6,6 @@ export interface ConstructorProps {
     signer: ethers.Signer;
     provider: ethers.providers.Provider;
     apiClient: Services.APIClient;
-    chainId: number;
     gnosisSafe?: string;
 }
 
@@ -31,8 +30,8 @@ export default class TokenSupport {
         this.signer = props.signer;
         this.provider = props.provider;
         this.apiClient = props.apiClient;
-        this.chainId = props.chainId;
         this.gnsosisSafe = props.gnosisSafe;
+        this.chainId = 0;
     }
 
     lookup = async (address:string): Promise<Token> => {
@@ -53,9 +52,11 @@ export default class TokenSupport {
 
     increaseSpending = async (props:SpendIncreaseProps): Promise<any> => {
         let network = await this.signer.provider?.getNetwork();
-        if(network?.chainId !== this.chainId) {
-            throw new Error("Provided signer's chainId does not match SDK's chainId");
+        this.chainId = network?.chainId || 0;
+        if(!this.chainId) {
+            throw new Error("Signer does not have a web3 provider to supply network info");
         }
+        
         if(this.gnsosisSafe) {
             throw new Error("Cannot increase spending for a GnosisSafe. Must do that through GnosisSafe app with owner approvals");
         }

@@ -10,7 +10,7 @@ const DAI = TOKENS.DAI_KOVAN;
 
 const TOKEN_IN = DAI;
 const TOKEN_OUT = WETH;
-const AMT_IN = ethers.utils.parseEther("6500");
+const AMT_IN = ethers.utils.parseEther("3950");
 
 class TWAP extends BaseOrder {}
 

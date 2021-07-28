@@ -14,7 +14,6 @@ const DEFAULT_BASE_ENDPOINT = "api.dexible.io/v1";
 export interface APIProps {
     signer: ethers.Signer;
     network: "ethereum"; //for now only support one network
-    chainId: number;
     jwtHandler?: IJWTHandler
 }
 
@@ -23,17 +22,17 @@ export default class APIClient {
     adapter: AxiosAdapter|null;
     network: "ethereum";
     chainId: number;
-    chainName: string;
-    baseUrl: string;
+    chainName: string | null;
+    baseUrl: string | null;
     jwtHandler: IJWTHandler | undefined;
 
     constructor(props:APIProps) {
         this.signer = props.signer;
         this.adapter = null; 
         this.network = props.network;
-        this.chainId = props.chainId;
-        this.chainName = chainToName(this.network, this.chainId);
-        this.baseUrl = this._buildBaseUrl();
+        this.chainId = 0;
+        this.chainName = null; 
+        this.baseUrl = null; // this._buildBaseUrl();
         this.jwtHandler = props.jwtHandler;
         log.debug("Created api client for chain", 
                 this.chainName, 
@@ -41,7 +40,25 @@ export default class APIClient {
                 this.network);
     }
 
+    init = async () => {
+        let net = await this.signer.provider?.getNetwork();
+        if(!net) {
+            throw new Error("Signer does not have web3 provider to supply network chain info");
+        }
+        this.chainId = net.chainId;
+        if(this.chainId !== 1 && this.chainId !== 42) {
+            throw new Error("SDK currently only supports Kovan and Mainnet");
+        }
+
+        this.chainName = chainToName(this.network, this.chainId);
+        this.baseUrl = this._buildBaseUrl();
+    }
+
     get = async (endpoint:string): Promise<any> => {
+        if(this.baseUrl === null) {
+            await this.init();
+        }
+
         let url = `${this.baseUrl}/${endpoint}`;
         log.debug("GET call to", url);
         
@@ -101,6 +118,10 @@ export default class APIClient {
     }
 
     post = async (endpoint:string, data:object|undefined) => {
+        if(this.baseUrl === null) {
+            await this.init();
+        }
+
         let url = `${this.baseUrl}/${endpoint}`;
         log.debug("Posting to url", url);
         

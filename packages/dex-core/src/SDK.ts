@@ -9,7 +9,6 @@ import Contact from './Contact';
 
 export interface WalletConnection {
     network: 'ethereum'; //for now only ethereum
-    chainId: number;
     signer: Signer;
     jwtHandler?:IJWTHandler;
     gnosisSafe?:string;
@@ -36,11 +35,11 @@ export default class SDK {
         this.provider = this.signer.provider;
         this.gnosisSafe = props.gnosisSafe;
 
+        
         if(!this.provider) {
             throw new Error("Signer must have an ethers RPC provider");
         }
         this.apiClient = new Services.APIClient({
-            chainId: props.chainId,
             network: props.network,
             signer: this.signer,
             jwtHandler: props.jwtHandler
@@ -51,7 +50,6 @@ export default class SDK {
             provider: this.provider,
             signer: this.signer,
             apiClient: this.apiClient,
-            chainId: props.chainId,
             gnosisSafe: this.gnosisSafe
         });
         

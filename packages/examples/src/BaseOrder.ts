@@ -62,7 +62,6 @@ export default class BaseOrder {
 
         return new SDK({
             network: "ethereum",
-            chainId: NETWORK,
             signer: new ethers.Wallet(key, p),
             jwtHandler: new JWTHolder(),
             gnosisSafe
