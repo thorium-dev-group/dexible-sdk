@@ -80,6 +80,10 @@ export default class TokenSupport {
     }
 
     verify = async (address:string) => {
+        if(this.chainId === 0) {
+            let net = await this.provider.getNetwork();
+            this.chainId = net.chainId;
+        }
         return this.apiClient.get(`token/verify/${this.chainId}/${address}`);
     }
 }
