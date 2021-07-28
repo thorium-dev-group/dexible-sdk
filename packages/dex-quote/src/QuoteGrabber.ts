@@ -13,12 +13,18 @@ export interface QuoteRequest {
     slippagePercent: number;
     minOrderSize?:BigNumberish;
     apiClient: Services.APIClient;
+
 }
 
 export default async (request: QuoteRequest): Promise<any> => {
+    let net = await request.apiClient.signer.provider?.getNetwork();
+    if(!net) {
+        throw new Error("Missing provider in web3 signer");
+    }
+    let chainId = net?.chainId;
     const quoteBody = {
         amountIn: request.amountIn.toString(),
-        networkId: request.apiClient.chainId,
+        networkId: chainId-0,
         tokenIn: request.tokenIn.address,
         tokenOut: request.tokenOut.address,
         minOrderSize: request.minOrderSize,
