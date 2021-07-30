@@ -13,7 +13,7 @@ class LimitOrder extends BaseOrder { }
 
 const main = async () => {
 
-    let sdk = LimitOrder.createDexibleSDK();
+    let sdk = await LimitOrder.createDexibleSDK();
     let tokenIn = await sdk.token.lookup(DAI);
     let tokenOut = await sdk.token.lookup(WETH);
 
@@ -38,7 +38,7 @@ const main = async () => {
                 slippagePercent: .5
             }
         }
-    });
+    }, sdk);
 
     let r = await limit.createOrder( );
     

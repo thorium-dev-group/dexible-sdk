@@ -16,7 +16,7 @@ class Market extends BaseOrder {}
 const main = async () => {
 
     let amountIn = IN_AMT;
-    
+    let sdk = await BaseOrder.createDexibleSDK();
     let market = new Market({
         tokenIn: TOKEN_IN,
         tokenOut: TOKEN_OUT,
@@ -32,7 +32,7 @@ const main = async () => {
                 slippagePercent: .5
             }
         }
-    });
+    }, sdk);
 
     let r = await market.createOrder();
     if(r.error) {

@@ -16,7 +16,7 @@ const main = async () => {
     }
 
     try {
-        let sdk = BaseOrder.createDexibleSDK();
+        let sdk = await BaseOrder.createDexibleSDK();
         let r = await sdk.order.getOne(+args[0]);
 
         console.log("Order", JSON.stringify(r, null, 2));

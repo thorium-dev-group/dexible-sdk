@@ -16,7 +16,7 @@ const AMT = ethers.utils.parseEther("6500");
 const main = async () => {
 
     try {
-        let sdk = BaseOrder.createDexibleSDK();
+        let sdk = await BaseOrder.createDexibleSDK();
         let tokenIn = await sdk.token.lookup(TOKEN_IN);
         let tokenOut = await sdk.token.lookup(TOKEN_OUT);
 

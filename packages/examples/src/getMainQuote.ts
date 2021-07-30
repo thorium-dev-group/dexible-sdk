@@ -35,7 +35,7 @@ const CNT = 1;
 const main = async () => {
 
     try {
-        let sdk = BaseOrder.createDexibleSDK();
+        let sdk = await BaseOrder.createDexibleSDK();
         let tokenCache = {};
 
         let calls:any[]= [];

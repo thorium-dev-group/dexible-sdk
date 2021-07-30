@@ -33,7 +33,7 @@ export default class BaseOrder {
     dexible: SDK;
     orderProps: OrderProps;
 
-    static createDexibleSDK = (gnosisSafe?:string) => {
+    static createDexibleSDK = async (gnosisSafe?:string):Promise<SDK> => {
 
         const NETWORK = +(process.env.NET_ID || 42);
 
@@ -60,7 +60,7 @@ export default class BaseOrder {
             p = new ethers.providers.InfuraProvider(NETWORK, infura);
         }
 
-        return new SDK({
+        return SDK.instance({
             network: "ethereum",
             signer: new ethers.Wallet(key, p),
             jwtHandler: new JWTHolder(),
@@ -68,8 +68,8 @@ export default class BaseOrder {
         });
     }
 
-    constructor(props:OrderProps) {
-        this.dexible = BaseOrder.createDexibleSDK();
+    constructor(props:OrderProps, sdk:SDK) {
+        this.dexible = sdk;
         this.orderProps = props;
     }
 

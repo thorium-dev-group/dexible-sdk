@@ -18,7 +18,7 @@ class TWAP extends BaseOrder {};
 
 const main = async () => {
 
-    let sdk = BaseOrder.createDexibleSDK();
+    let sdk = await BaseOrder.createDexibleSDK();
     
     //tokens have to be resolved on-chain by address so we get token metadata
     console.log("Looking up in/out tokens...");
@@ -57,7 +57,7 @@ const main = async () => {
                 slippagePercent: .5
             }
         }
-    });
+    }, sdk);
     
     let r = await twap.createOrder();
     if(r.error) {

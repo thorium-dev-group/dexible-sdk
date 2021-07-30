@@ -15,7 +15,7 @@ const AMT_IN = ethers.utils.parseEther("3950");
 class TWAP extends BaseOrder {}
 
 const main = async () => {
-    
+    let sdk = await BaseOrder.createDexibleSDK();
     let twap = new TWAP({
         tokenIn: TOKEN_IN,
         tokenOut: TOKEN_OUT,
@@ -44,7 +44,7 @@ const main = async () => {
                 value: 'true'
             }
         ]
-    });
+    }, sdk);
 
     let r = await twap.createOrder();
     if(r.error) {

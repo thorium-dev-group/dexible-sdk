@@ -7,7 +7,7 @@ const main = async () => {
 
     try {
         //gnosis safe address
-        let sdk = BaseOrder.createDexibleSDK( );
+        let sdk = await BaseOrder.createDexibleSDK( );
         let r = await sdk.order.getAll({
             state: 'all'
         });

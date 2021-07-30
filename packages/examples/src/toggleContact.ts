@@ -14,7 +14,7 @@ const main = async () => {
     }
 
     try {
-        let sdk = BaseOrder.createDexibleSDK();
+        let sdk = await BaseOrder.createDexibleSDK();
         let r = await sdk.contact.toggle(+args[0]);
 
         console.log("Quote", JSON.stringify(r, null, 2));

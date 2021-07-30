@@ -13,7 +13,7 @@ const main = async () => {
         process.exit(1);
     }
     
-    let sdk = BaseOrder.createDexibleSDK();
+    let sdk = await BaseOrder.createDexibleSDK();
     let r = await sdk.order.resume(+args[0]);
 
     console.log("Resume Result", JSON.stringify(r, null, 2));

@@ -29,12 +29,22 @@ export default class SDK {
     quote: QuoteWrapper;
     contact: Contact;
     gnosisSafe?: string;
+    chainId: number;
 
-    constructor(props:WalletConnection) {
+    static async instance(props:WalletConnection):Promise<SDK> {
+        let {signer} = props;
+        let net = await signer.provider?.getNetwork();
+        if(!net) {
+            throw new Error("Signer does support a provider to retrieve network info");
+        }
+        return new SDK(props, net.chainId);
+    }
+
+    private constructor(props:WalletConnection, chainId: number) {
         this.signer = props.signer;
         this.provider = this.signer.provider;
         this.gnosisSafe = props.gnosisSafe;
-
+        this.chainId = chainId;
         
         if(!this.provider) {
             throw new Error("Signer must have an ethers RPC provider");
@@ -42,6 +52,7 @@ export default class SDK {
         this.apiClient = new Services.APIClient({
             network: props.network,
             signer: this.signer,
+            chainId,
             jwtHandler: props.jwtHandler
         });
        
