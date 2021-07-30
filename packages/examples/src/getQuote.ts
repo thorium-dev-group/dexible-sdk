@@ -24,6 +24,7 @@ const main = async () => {
             tokenIn,
             tokenOut,
             amountIn: AMT,
+            maxFixedGas: ethers.utils.parseUnits("10", 9).toString(),
             slippagePercent: .5
         });
 

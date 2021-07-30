@@ -31,7 +31,7 @@ export default class SDK {
     gnosisSafe?: string;
     chainId: number;
 
-    static async instance(props:WalletConnection):Promise<SDK> {
+    static async create(props:WalletConnection):Promise<SDK> {
         let {signer} = props;
         let net = await signer.provider?.getNetwork();
         if(!net) {

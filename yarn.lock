@@ -1313,7 +1313,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-core@^0.1.10, dexible-core@workspace:packages/dex-core":
+"dexible-core@^0.1.11, dexible-core@workspace:packages/dex-core":
   version: 0.0.0-use.local
   resolution: "dexible-core@workspace:packages/dex-core"
   dependencies:
@@ -1325,9 +1325,9 @@ __metadata:
     dexible-algos: ^0.1.7
     dexible-common: ^0.1.8
     dexible-logger: ^0.1.1
-    dexible-order: ^0.1.9
+    dexible-order: ^0.1.10
     dexible-policies: ^0.1.7
-    dexible-quote: ^0.1.8
+    dexible-quote: ^0.1.9
     dexible-token: ^0.1.7
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
@@ -1393,7 +1393,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-order@^0.1.9, dexible-order@workspace:packages/dex-order":
+"dexible-order@^0.1.10, dexible-order@workspace:packages/dex-order":
   version: 0.0.0-use.local
   resolution: "dexible-order@workspace:packages/dex-order"
   dependencies:
@@ -1404,7 +1404,7 @@ __metadata:
     dexible-algos: ^0.1.7
     dexible-common: ^0.1.8
     dexible-logger: ^0.1.1
-    dexible-quote: ^0.1.8
+    dexible-quote: ^0.1.9
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
     ethers: ^5.3.1
@@ -1435,7 +1435,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-quote@^0.1.8, dexible-quote@workspace:packages/dex-quote":
+"dexible-quote@^0.1.9, dexible-quote@workspace:packages/dex-quote":
   version: 0.0.0-use.local
   resolution: "dexible-quote@workspace:packages/dex-quote"
   dependencies:
@@ -1477,7 +1477,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-sdk@^0.1.11, dexible-sdk@workspace:packages/dex-sdk":
+"dexible-sdk@^0.1.12, dexible-sdk@workspace:packages/dex-sdk":
   version: 0.0.0-use.local
   resolution: "dexible-sdk@workspace:packages/dex-sdk"
   dependencies:
@@ -1486,7 +1486,7 @@ __metadata:
     "@types/node": ^16.0.0
     dexible-algos: ^0.1.7
     dexible-common: ^0.1.8
-    dexible-core: ^0.1.10
+    dexible-core: ^0.1.11
     dexible-policies: ^0.1.7
     esbuild: ^0.12.14
     mocha: ^8.4.0
@@ -2035,7 +2035,7 @@ __metadata:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     chai: ^4.3.4
-    dexible-sdk: ^0.1.11
+    dexible-sdk: ^0.1.12
     dotenv: ^10.0.0
     ethers: ^5.3.1
     mocha: ^8.4.0

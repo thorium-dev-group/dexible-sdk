@@ -60,7 +60,7 @@ export default class BaseOrder {
             p = new ethers.providers.InfuraProvider(NETWORK, infura);
         }
 
-        return SDK.instance({
+        return SDK.create({
             network: "ethereum",
             signer: new ethers.Wallet(key, p),
             jwtHandler: new JWTHolder(),

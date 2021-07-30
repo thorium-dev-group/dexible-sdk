@@ -1,6 +1,6 @@
 import {QuoteGrabber,QuoteRequest} from 'dexible-quote';
 import {Services, Token} from 'dexible-common';
-import { BigNumber } from 'ethers';
+import { BigNumber, BigNumberish } from 'ethers';
 
 export interface QuoteParams {
     tokenIn: Token;
@@ -8,6 +8,7 @@ export interface QuoteParams {
     amountIn: BigNumber;
     slippagePercent: number;
     maxRounds?: number;
+    maxFixedGas?: BigNumberish;
 }
 export default class QuoteWrapper {
     api: Services.APIClient;
@@ -30,6 +31,7 @@ export default class QuoteWrapper {
             amountIn: props.amountIn.toString(),
             slippagePercent: props.slippagePercent,
             apiClient: this.api,
+            maxFixedGas: props.maxFixedGas,
             minOrderSize: minAmount.toString()
         } as QuoteRequest;
         return QuoteGrabber(req);
