@@ -1,6 +1,6 @@
 import * as OrderSupport from 'dexible-order';
 import {Services, Tag, Token} from 'dexible-common';
-import { BigNumberish, ethers } from 'ethers';
+import { BigNumberish } from 'ethers';
 import { IAlgo } from 'dexible-algos';
 
 export interface OrderSpec {

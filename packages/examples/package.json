@@ -8,7 +8,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "dexible-sdk": "^0.1.12",
+    "dexible-sdk": "^0.1.13",
     "ethers": "^5.3.1"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ import OrderWrapper from './OrderWrapper';
 import {IJWTHandler, Services} from 'dexible-common';
 import QuoteWrapper from './QuoteWrapper';
 import Contact from './Contact';
-
+import Reports from './Reports';
 
 export interface WalletConnection {
     network: 'ethereum'; //for now only ethereum
@@ -30,6 +30,7 @@ export default class SDK {
     contact: Contact;
     gnosisSafe?: string;
     chainId: number;
+    reports: Reports;
 
     static async create(props:WalletConnection):Promise<SDK> {
         let {signer} = props;
@@ -72,5 +73,7 @@ export default class SDK {
             RELATIVE: "relative",
             FIXED: "fixed"
         }
+
+        this.reports = new Reports(this.apiClient);
     }
 }

@@ -15,7 +15,8 @@
     "rootDir": "src"
   },
   "include": [
-    "src/*"
+    "src/*",
+    "src/*/*"
   ],
   "exclude": [
     "./dist",

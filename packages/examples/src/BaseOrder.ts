@@ -35,7 +35,7 @@ export default class BaseOrder {
 
     static createDexibleSDK = async (gnosisSafe?:string):Promise<SDK> => {
 
-        const NETWORK = +(process.env.NET_ID || 42);
+        const NETWORK = +(process.env.NET_ID || 1);
 
         let key = process.env.WALLET_KEY;
         if(!key) {

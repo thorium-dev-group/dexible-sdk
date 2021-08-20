@@ -200,4 +200,17 @@ export default class DexOrder {
         return this.apiClient.post("orders", ser);
     }
 
+    toJSON() {
+        return {
+            tokenIn: this.tokenIn,
+            tokenOut: this.tokenOut,
+            amountIn: this.amountIn.toString(),
+            algo: this.algo,
+            quoteId: this.quoteId,
+            quote: this.quote,
+            maxRounds: this.maxRounds,
+            tags: this.tags
+        }
+    }
+
 }

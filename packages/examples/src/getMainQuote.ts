@@ -5,6 +5,7 @@ import * as TOKENS from './tokens';
 const dotenv = require('dotenv');
 dotenv.config();
 
+const sleep = ms => new Promise(done=>setTimeout(done, ms));
 
 const asUnits = (a, d) => {
     return ethers.utils.parseUnits(a.toFixed(d), d);
@@ -30,7 +31,7 @@ const AMOUNTS = [
 
 const AMT = ethers.utils.parseEther("300");
 
-const CNT = 1;
+const CNT = 2;
 
 const main = async () => {
 
@@ -48,17 +49,30 @@ const main = async () => {
             tokenCache[inT] = tokenIn;
             tokenCache[outT] = tokenOut;
 
+            /*
             calls.push( sdk.quote.getQuote({
                 tokenIn,
                 tokenOut,
                 amountIn,
                 slippagePercent: .5
             }));
+            */
+           let r = await sdk.quote.getQuote({
+                tokenIn,
+                tokenOut,
+                amountIn,
+                slippagePercent: .5
+            });
+            console.log("Quote", JSON.stringify(r, null, 2));
+
+            console.log("Waiting a while to force JWT timeout");
+            await sleep(65000);
+
         }
         
-        let res = await Promise.all(calls);
+       // let res = await Promise.all(calls);
 
-        console.log("Quote", JSON.stringify(res[0], null, 2));
+        //console.log("Quote", JSON.stringify(res[0], null, 2));
     } catch (e) {
         console.log(e);
     }

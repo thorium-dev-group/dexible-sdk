@@ -10,7 +10,7 @@ const DAI = TOKENS.DAI_KOVAN;
 
 const TOKEN_IN = DAI;
 const TOKEN_OUT = WETH;
-const AMT_IN = ethers.utils.parseEther("3950");
+const AMT_IN = ethers.utils.parseEther("5950");
 
 class TWAP extends BaseOrder {}
 
@@ -24,7 +24,7 @@ const main = async () => {
             type: "TWAP",
             params: {
                 timeWindow: {
-                    minutes: 7
+                    minutes: 6
                 },
                 //maxRounds: 10, //min per round is 3 input tokens (30 in/10 rounds)
                 gasPolicy: {

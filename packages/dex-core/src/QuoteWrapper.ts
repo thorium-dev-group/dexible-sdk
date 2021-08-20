@@ -9,6 +9,7 @@ export interface QuoteParams {
     slippagePercent: number;
     maxRounds?: number;
     maxFixedGas?: BigNumberish;
+    fixedPrice?: number;
 }
 export default class QuoteWrapper {
     api: Services.APIClient;
@@ -32,6 +33,7 @@ export default class QuoteWrapper {
             slippagePercent: props.slippagePercent,
             apiClient: this.api,
             maxFixedGas: props.maxFixedGas,
+            fixedPrice: props.fixedPrice,
             minOrderSize: minAmount.toString()
         } as QuoteRequest;
         return QuoteGrabber(req);

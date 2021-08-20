@@ -14,6 +14,7 @@ export interface QuoteRequest {
     minOrderSize?:BigNumberish;
     apiClient: Services.APIClient;
     maxFixedGas?: BigNumberish;
+    fixedPrice?: number;
 }
 
 export default async (request: QuoteRequest): Promise<any> => {
@@ -29,6 +30,7 @@ export default async (request: QuoteRequest): Promise<any> => {
         tokenOut: request.tokenOut.address,
         minOrderSize: request.minOrderSize,
         maxFixedGas: request.maxFixedGas,
+        fixedPrice: request.fixedPrice,
         slippagePercentage: request.slippagePercent/100
     };
 

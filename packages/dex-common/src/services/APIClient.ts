@@ -4,6 +4,7 @@ import {ethers} from 'ethers';
 import Logger from 'dexible-logger';
 import chainToName from '../chainToName';
 import IJWTHandler from './IJWTHandler';
+import SDKError from '../SDKError';
 
 const log = new Logger({component: "APIClient"});
 
@@ -62,6 +63,19 @@ export default class APIClient {
         
             let r:any = null;
             if(jwtToken) {
+                r = await axios({
+                    method: "GET",
+                    url: `${this.baseUrl}/auth/verify`,
+                    headers: {
+                        authorization: `Bearer ${jwtToken}`
+                    }
+                });
+                if(!r.data.valid) {
+                    log.debug("JWT no longer valid, generating new one");
+                    //token is no longer valid, replace
+                    jwtToken = await this._generateToken(0);
+                }
+                
                 log.debug("GET w/JWT token");
                 r = await axios({
                     method: "GET",
@@ -88,13 +102,21 @@ export default class APIClient {
                 if(!msg) {
                     msg = r.data.error;
                 }
-                throw new Error(msg);
+                throw new SDKError({
+                    message: msg,
+                    requestId: r.data.error.requestId
+                });
             }
             return r.data;
         } catch (e) {
             if(e.response && e.response.data) {
                 log.error("Problem from server", e.response.data);
-                throw new Error(e.response.data.message);
+                let msg = e.response.data.messsage;
+                let reqId = e.response.data.requestId;
+                throw new SDKError({
+                    message: msg,
+                    requestId: reqId
+                });
             }
             log.error("Problem in API client get request", e);
             throw e;
@@ -120,6 +142,21 @@ export default class APIClient {
             let r:any = null;
             if(jwtToken) {
                 log.debug("Posting w/JWT token");
+                
+                r = await axios({
+                    method: "GET",
+                    url: `${this.baseUrl}/auth/verify`,
+                    headers: {
+                        authorization: `Bearer ${jwtToken}`
+                    }
+                });
+
+                if(!r.data.valid) {
+                    log.debug("JWT is no longer valid, generating new one");
+                    //token is no longer valid, replace
+                    jwtToken = await this._generateToken(0);
+                }
+
                 r = await axios({
                     method: "POST",
                     url,
@@ -144,13 +181,21 @@ export default class APIClient {
                     msg = r.data.error;
                 }
                 log.error("Problem reported from server", r.data.error);
-                throw new Error(msg);
+                throw new SDKError({
+                    message: msg,
+                    requestId: r.data.requestId
+                });
             }
             return r.data;
         } catch (e) {
             if(e.response && e.response.data) {
                 log.error("Problem from server", e.response.data);
-                throw new Error(e.response.data.message);
+                let data = e.response.data;
+                let msg = data.data || data.message;
+                let reqId = data.requestId;
+                throw new SDKError({
+                    message: msg,
+                    requestId: reqId});
             }
             log.error({err: e}, "Problem in API post");
             throw e;
@@ -179,7 +224,10 @@ export default class APIClient {
             });
             if(r.data.error) {
                 log.error({err: r.data.error}, "Problem getting signing nonce");
-                throw new Error(r.data.error.message);
+                throw new SDKError({
+                    message: r.data.error.message,
+                    requestId: r.data.error.requestId
+                });
             }
             
             let data:any = r.data;
@@ -199,7 +247,10 @@ export default class APIClient {
                 });
                 if(r.data.error) {
                     log.error({err: r.data.error}, "Problem registering user");
-                    throw new Error(r.data.error.message);
+                    throw new SDKError({
+                        message: r.data.error.message,
+                        requestId: r.data.error.requestId
+                    });
                 }
                 data = r.data;
             }
@@ -227,7 +278,13 @@ export default class APIClient {
                 }
             });
             if(r.data.error) {
-                throw new Error(r.data.error);
+                let err = r.data.error;
+                let msg = err.message?err.message:err;
+                let reqId = err.requestId;
+                throw new SDKError({
+                    message: msg,
+                    requestId: reqId
+                });
             }
             log.debug("Received token", r.data.token);
             await this.jwtHandler?.storeToken(r.data.token, r.data.expiration);
@@ -235,7 +292,13 @@ export default class APIClient {
         } catch (e) {
             if(e.response && e.response.data) {
                 log.error("Problem from server", e.response.data);
-                throw new Error(e.response.data.message);
+                let data = e.response.data;
+                let msg = data.message;
+                let reqId = data.requestId;
+                throw new SDKError({
+                    message: msg,
+                    requestId: reqId 
+                });
             }
             throw e;
         }

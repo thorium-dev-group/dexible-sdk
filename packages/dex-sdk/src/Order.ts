@@ -1,9 +1,6 @@
-import * as Algos from 'dexible-algos';
-import * as Policies from 'dexible-policies';
-import Logger from 'dexible-logger';
-import {Price} from 'dexible-common';
+import { SDK, Token, Policies, Price, Tag, Algos } from "./";
+import {BigNumberish} from 'ethers';
 
-const log = new Logger({component: "AlgoFactory"});
 const dur = require("dayjs/plugin/duration");
 const dayjs = require("dayjs");
 dayjs.extend(dur);
@@ -15,12 +12,19 @@ export interface GasPolicyProps {
 }
 
 export interface CommonProps {
-    type: string;
+    sdk?: SDK;
+    type?: string;
     maxRounds?: number;
     expiration?: number;
     gasPolicy: GasPolicyProps;
     slippagePercent: number;
+    tags?: Array<Tag>;
+    tokenIn: Token;
+    tokenOut: Token;
+    amountIn: BigNumberish;
 }
+
+export interface MarketProps extends CommonProps{}
 
 export interface StopLossProps extends CommonProps {
     triggerPrice: Price;
@@ -53,20 +57,76 @@ export interface TWAPProps extends CommonProps {
     priceRange?: PriceRangeProps;
 }
 
-export default class Factory {
+export default class Order {
+
+    static async create(props:CommonProps) {
+        let o = new Order(props);
+        await o._prepare();
+        return o.order;
+    }
+
+    algo: Algos.IAlgo | null;
+    maxRounds?: number;
+    tags?: Array<Tag>;
+    sdk: SDK;
+    tokenIn: Token;
+    tokenOut: Token;
+    amountIn: BigNumberish;
+    order: any;
+    
+    private constructor(props:CommonProps) {
+        if(!props.sdk || !props.type) {
+            throw new Error("Invalid order properties");
+        }
+        this.tags = props.tags;
+        this.maxRounds = props.maxRounds;
+        this.sdk = props.sdk;
+        this.tokenIn = props.tokenIn;
+        this.tokenOut = props.tokenOut;
+        this.amountIn = props.amountIn;
+        this.algo = null;
+
+        switch(props.type) {
+            case Algos.types.Limit: {
+                this.createLimit(props as LimitProps);
+                break;
+            }
+            case Algos.types.Market: {
+                this.createMarket(props);
+                break;
+            }
+            case Algos.types.StopLoss: {
+                this.createStopLoss(props as StopLossProps);
+                break;
+            }
+            case Algos.types.TWAP: {
+                this.createTWAP(props as TWAPProps);
+                break;
+            }
+            default: throw new Error("Unsupported algo type: " + props.type);
+        }
+    }
 
     
 
-    createMarket = (props:CommonProps): Algos.Market => {
-        return new Algos.Market({
+    async submit():Promise<any> {
+        if(!this.order) {
+            await this._prepare();
+        }
+        return this.order.submit();
+    }
+
+
+    createMarket = (props:CommonProps)  => {
+        this.algo = new Algos.Market({
             maxRounds: props.maxRounds,
             policies: [
                 ...this._buildBasePolicies(props)
             ]
-        })
+        });
     }
 
-    createLimit = (props:LimitProps): Algos.Limit => {
+    createLimit = (props:LimitProps)  => {
         //invert price since quotes are in output tokens while prices are 
         //expressed in input tokens
         let policies = [
@@ -76,14 +136,14 @@ export default class Factory {
             })
         ];
 
-        return new Algos.Limit({
+        this.algo = new Algos.Limit({
             maxRounds: props.maxRounds,
             policies
-        })
+        });
     }
 
-    createStopLoss = (props:StopLossProps): Algos.StopLoss => {
-        return new Algos.StopLoss({
+    createStopLoss = (props:StopLossProps)  => {
+        this.algo = new Algos.StopLoss({
             maxRounds: props.maxRounds,
             policies: [
                 ...this._buildBasePolicies(props),
@@ -95,10 +155,8 @@ export default class Factory {
         })
     }
 
-    createTWAP = (props:TWAPProps): Algos.TWAP => {
-        //let duration = moment.duration('PT' + props.timeWindow.toUpperCase()).asSeconds();
+    createTWAP = (props:TWAPProps)  => {
         let d = dayjs.duration(props.timeWindow);
-        log.debug("Parsed TWAP duration in seconds", Math.ceil(d.asSeconds()));
        
         let policies = [
             ...this._buildBasePolicies(props),
@@ -117,7 +175,7 @@ export default class Factory {
             }));
         }
 
-        return new Algos.TWAP({
+        this.algo = new Algos.TWAP({
             maxRounds: props.maxRounds,
             policies
         });
@@ -133,7 +191,7 @@ export default class Factory {
             new Policies.Slippage({
                 amount: props.slippagePercent
             })
-        ]
+        ];
         if(props.expiration) {
             set = [
                 new Policies.Expiration({
@@ -142,8 +200,26 @@ export default class Factory {
                 ...set
             ]
         }
-
         return set;
     }
 
+    async _prepare() {
+        if(!this.algo) {
+            throw new Error("No algo in order");
+        }
+        let r = await this.sdk.order.prepare({
+            algo: this.algo,
+            amountIn: this.amountIn,
+            tokenIn: this.tokenIn,
+            tokenOut: this.tokenOut,
+            tags: this.tags
+        });
+        if(r.error) {
+            throw new Error(r.error||"Unknown problem with order");
+        }
+        if(!r.order) {
+            throw new Error("Could not prepare order for submission");
+        }
+        this.order = r.order;
+    }
 }
