@@ -191,10 +191,10 @@ export default class APIClient {
             if(e.response && e.response.data) {
                 log.error("Problem from server", e.response.data);
                 let data = e.response.data;
-                let msg = data.data || data.message;
                 let reqId = data.requestId;
                 throw new SDKError({
-                    message: msg,
+                    message: data.message,
+                    data: data.data,
                     requestId: reqId});
             }
             log.error({err: e}, "Problem in API post");
