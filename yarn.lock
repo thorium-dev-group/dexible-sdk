@@ -1313,7 +1313,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-core@^0.1.13, dexible-core@workspace:packages/dex-core":
+"dexible-core@^0.1.14, dexible-core@workspace:packages/dex-core":
   version: 0.0.0-use.local
   resolution: "dexible-core@workspace:packages/dex-core"
   dependencies:
@@ -1477,7 +1477,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-sdk@^0.1.15, dexible-sdk@workspace:packages/dex-sdk":
+"dexible-sdk@^0.1.16, dexible-sdk@workspace:packages/dex-sdk":
   version: 0.0.0-use.local
   resolution: "dexible-sdk@workspace:packages/dex-sdk"
   dependencies:
@@ -1486,7 +1486,7 @@ __metadata:
     "@types/node": ^16.0.0
     dexible-algos: ^0.1.9
     dexible-common: ^0.1.10
-    dexible-core: ^0.1.13
+    dexible-core: ^0.1.14
     dexible-policies: ^0.1.9
     esbuild: ^0.12.14
     mocha: ^8.4.0
@@ -2035,7 +2035,7 @@ __metadata:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     chai: ^4.3.4
-    dexible-sdk: ^0.1.15
+    dexible-sdk: ^0.1.16
     dotenv: ^10.0.0
     ethers: ^5.3.1
     mocha: ^8.4.0

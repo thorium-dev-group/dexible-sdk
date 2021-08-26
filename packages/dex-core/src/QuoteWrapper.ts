@@ -19,13 +19,14 @@ export default class QuoteWrapper {
     }
 
     getQuote = async (props:QuoteParams) => {
-        let minAmount = props.amountIn.mul(30).div(100);
+        let minAmount = BigNumber.from(-1);
         if(props.maxRounds) {
             minAmount = props.amountIn.div(props.maxRounds);
+            if(minAmount.lt(1)) {
+                minAmount = props.amountIn.mul(30).div(100);
+            }
         }
-        if(minAmount.lt(1)) {
-            minAmount = props.amountIn.mul(30).div(100);
-        }
+        
         let req = {
             tokenIn: props.tokenIn,
             tokenOut: props.tokenOut,
