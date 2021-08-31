@@ -107,15 +107,12 @@ export default class Order {
         }
     }
 
-    
-
     async submit():Promise<any> {
         if(!this.order) {
             await this._prepare();
         }
         return this.order.submit();
     }
-
 
     createMarket = (props:CommonProps)  => {
         this.algo = new Algos.Market({

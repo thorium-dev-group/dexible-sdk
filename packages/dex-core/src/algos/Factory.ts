@@ -50,6 +50,7 @@ export interface Duration {
 export interface TWAPProps extends CommonProps {
     timeWindow: Duration;
     randomizeDelay?: boolean;
+    expireAfterTimeWindow?: boolean;
     priceRange?: PriceRangeProps;
 }
 
@@ -104,7 +105,8 @@ export default class Factory {
             ...this._buildBasePolicies(props),
             new Policies.BoundedDelay({
                 randomizeDelay: props.randomizeDelay || false,
-                timeWindowSeconds: Math.ceil(d.asSeconds())
+                timeWindowSeconds: Math.ceil(d.asSeconds()),
+                expireAfterTimeWindow: props.expireAfterTimeWindow
             })
         ];
         if(props.priceRange) {

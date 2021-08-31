@@ -3,11 +3,13 @@ import Base from './Base';
 export interface BoundedDelayParams {
     timeWindowSeconds: number;
     randomizeDelay: boolean;
+    expireAfterTimeWindow?: boolean;
 }
 
 export default class BoundedDelay extends Base {
     timeWindowSeconds: number;
     randomizeDelay: boolean;
+    expireAfterTimeWindow?: boolean;
 
     static get tag() {
         return "BoundedDelay";
@@ -16,6 +18,7 @@ export default class BoundedDelay extends Base {
     constructor(props:BoundedDelayParams) {
         super(BoundedDelay.tag);
         this.timeWindowSeconds = props.timeWindowSeconds;
+        this.expireAfterTimeWindow = props.expireAfterTimeWindow;
         this.randomizeDelay = props.randomizeDelay;
     }
 
@@ -24,7 +27,8 @@ export default class BoundedDelay extends Base {
             type: this.name,
             params: {
                 timeWindow: this.timeWindowSeconds,
-                randomize: this.randomizeDelay
+                randomize: this.randomizeDelay,
+                expireAfterTimeWindow: this.expireAfterTimeWindow
             }
         }
     }
