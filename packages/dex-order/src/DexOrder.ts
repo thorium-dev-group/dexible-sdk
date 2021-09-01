@@ -17,6 +17,7 @@ export interface DexOrderParams {
     apiClient: Services.APIClient;
     tokenIn: Token;
     tokenOut: Token;
+    quoteId?: number;
     amountIn: BigNumberish;
     algo: IAlgo;
     maxRounds: number;
@@ -45,7 +46,7 @@ export default class DexOrder {
         this.fee = "0"; //replaced by out-token BPS
         this.apiClient = params.apiClient;
         this.maxRounds = params.maxRounds;
-        this.quoteId = 0;
+        this.quoteId = params.quoteId || 0;
         this.quote = null;
         this.tags = params.tags;
         this.gnosisSafe = params.gnosisSafe;
@@ -123,8 +124,14 @@ export default class DexOrder {
 
         try {
             
-            await this._generateQuote(slippage);
-
+            if(!this.quote) {
+                if(!this.quoteId) {
+                    await this._generateQuote(slippage);
+                } else {
+                    await this._getQuote();
+                }
+            }
+            
             let err = this.verify();
             if(err) {
                 return {
@@ -185,6 +192,15 @@ export default class DexOrder {
             throw new Error("Could not generate quote for order");
         }
         return quotes;
+    }
+
+    _getQuote = async () => {
+        try {
+            this.quote = await this.apiClient.get(`quotes/${this.quoteId}`);
+        } catch (e) {
+            log.error("Could not get quote by id", e.message);
+            throw e;
+        }
     }
 
     submit = async () => {

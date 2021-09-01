@@ -1,6 +1,6 @@
 {
   "name": "dexible-sdk",
-  "version": "0.1.17",
+  "version": "0.1.19",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -11,7 +11,7 @@
   "dependencies": {
     "dexible-algos": "^0.1.10",
     "dexible-common": "^0.1.10",
-    "dexible-core": "^0.1.15",
+    "dexible-core": "^0.1.16",
     "dexible-policies": "^0.1.10"
   },
   "devDependencies": {

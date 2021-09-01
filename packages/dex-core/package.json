@@ -1,6 +1,6 @@
 {
   "name": "dexible-core",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -14,7 +14,7 @@
     "dexible-algos": "^0.1.10",
     "dexible-common": "^0.1.10",
     "dexible-logger": "^0.1.1",
-    "dexible-order": "^0.1.13",
+    "dexible-order": "^0.1.14",
     "dexible-policies": "^0.1.10",
     "dexible-quote": "^0.1.11",
     "dexible-token": "^0.1.9",

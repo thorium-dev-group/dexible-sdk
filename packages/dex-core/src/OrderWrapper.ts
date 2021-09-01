@@ -7,6 +7,7 @@ export interface OrderSpec {
     tokenIn: Token;
     tokenOut: Token;
     amountIn: BigNumberish;
+    quoteId?: number;
     algo: IAlgo;
     tags?: Array<Tag>;
 }
@@ -29,6 +30,7 @@ export default class OrderWrapper {
     prepare = async (params: OrderSpec): Promise<OrderSupport.PrepareResponse> => {
         let order = new OrderSupport.DexOrder({
             apiClient: this.apiClient,
+            quoteId: params.quoteId,
             tokenIn: params.tokenIn,
             tokenOut: params.tokenOut,
             amountIn: params.amountIn,
