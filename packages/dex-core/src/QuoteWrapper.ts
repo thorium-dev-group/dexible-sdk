@@ -11,6 +11,12 @@ export interface QuoteParams {
     maxFixedGas?: BigNumberish;
     fixedPrice?: number;
 }
+
+export interface SpotParams {
+    tokenIn: Token;
+    tokenOut: Token;
+}
+
 export default class QuoteWrapper {
     api: Services.APIClient;
 
@@ -38,5 +44,9 @@ export default class QuoteWrapper {
             minOrderSize: minAmount.toString()
         } as QuoteRequest;
         return QuoteGrabber(req);
+    }
+
+    getSpot = async (props:SpotParams) => {
+        return this.api.get(`quotes/spot/${props.tokenIn.address.toLowerCase()}/${props.tokenOut.address.toLowerCase()}`);
     }
 }
