@@ -1,11 +1,12 @@
 {
   "name": "dexible-common",
-  "version": "0.1.11",
+  "version": "0.1.16",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
     "build": "yarn clean && tsc --build",
     "clean": "rimraf dist",
+    "do_publish": "npm publish",
     "test": "mocha"
   },
   "dependencies": {

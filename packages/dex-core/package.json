@@ -1,23 +1,24 @@
 {
   "name": "dexible-core",
-  "version": "0.1.18",
+  "version": "0.1.21",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
     "build": "yarn clean && tsc --build",
     "clean": "rimraf dist",
+    "do_publish": "npm publish",
     "test": "mocha"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "dayjs": "^1.10.6",
-    "dexible-algos": "^0.1.11",
-    "dexible-common": "^0.1.11",
+    "dexible-algos": "^0.1.20",
+    "dexible-common": "^0.1.16",
     "dexible-logger": "^0.1.1",
-    "dexible-order": "^0.1.19",
-    "dexible-policies": "^0.1.11",
-    "dexible-quote": "^0.1.13",
-    "dexible-token": "^0.1.11",
+    "dexible-order": "^0.1.22",
+    "dexible-policies": "^0.1.14",
+    "dexible-quote": "^0.1.16",
+    "dexible-token": "^0.1.14",
     "dexible-web3": "^0.1.1",
     "ethers": "^5.3.1"
   },

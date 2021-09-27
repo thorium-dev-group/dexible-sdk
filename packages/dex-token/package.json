@@ -1,16 +1,17 @@
 {
   "name": "dexible-token",
-  "version": "0.1.11",
+  "version": "0.1.14",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
     "build": "yarn clean && tsc --build",
     "clean": "rimraf dist",
+    "do_publish": "npm publish",
     "test": "mocha"
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-common": "^0.1.11",
+    "dexible-common": "^0.1.16",
     "dexible-web3": "^0.1.1",
     "ethers": "^5.3.1"
   },
