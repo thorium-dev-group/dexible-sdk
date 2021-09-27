@@ -13,7 +13,7 @@ const DAI = TOKENS.DAI_KOVAN;
 
 const TOKEN_IN = DAI;
 const TOKEN_OUT = WETH;
-const AMT = ethers.utils.parseEther("6500");
+const AMT = ethers.utils.parseEther("25000");
 
 const main = async () => {
 
@@ -27,7 +27,7 @@ const main = async () => {
             tokenIn,
             tokenOut,
             amountIn: AMT,
-            maxFixedGas: ethers.utils.parseUnits("10", 9).toString(),
+            //maxFixedGas: ethers.utils.parseUnits("10", 9).toString(),
             slippagePercent: .5
         });
 
@@ -41,7 +41,7 @@ const main = async () => {
             tokenIn,
             tokenOut,
             amountIn: AMT,
-            maxFixedGas: ethers.utils.parseUnits("10", 9).toString(),
+            //maxFixedGas: ethers.utils.parseUnits("10", 9).toString(),
             slippagePercent: .5
         });
         

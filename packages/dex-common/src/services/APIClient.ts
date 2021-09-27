@@ -110,10 +110,16 @@ export default class APIClient {
             return r.data;
         } catch (e) {
             if(e.response && e.response.data) {
-                log.error("Problem from server", e.response.data);
-                let msg = e.response.data.messsage;
-                let reqId = e.response.data.requestId;
+                let data = e.response.data;
+                if(typeof e.response.data === 'string') {
+                    data = JSON.parse(e.response.data);
+                }
+                log.error("Problem from server", data);
+                let msg = data.message;
+                let reqId = data.requestId;
+                let code = data.code;
                 throw new SDKError({
+                    code,
                     message: msg,
                     requestId: reqId
                 });

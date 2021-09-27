@@ -152,7 +152,7 @@ export default class DexOrder {
 
     _generateQuote = async (slippagePercent:number) => {
         log.debug("Generating a default quote...");
-        let minPerRound = bn(this.amountIn).mul(30).div(100);
+        let minPerRound = bn(-1);
         if(this.maxRounds) {
             let units = ethers.utils.formatUnits(this.amountIn, this.tokenIn.decimals);
             let inUnits = ((units as unknown)as number) / this.maxRounds;
