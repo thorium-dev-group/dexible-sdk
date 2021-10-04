@@ -1,6 +1,6 @@
 {
   "name": "dexible-core",
-  "version": "0.1.21",
+  "version": "0.1.23",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -12,13 +12,13 @@
   "dependencies": {
     "axios": "^0.21.1",
     "dayjs": "^1.10.6",
-    "dexible-algos": "^0.1.20",
-    "dexible-common": "^0.1.16",
+    "dexible-algos": "^0.1.21",
+    "dexible-common": "^0.1.17",
     "dexible-logger": "^0.1.1",
     "dexible-order": "^0.1.22",
-    "dexible-policies": "^0.1.14",
-    "dexible-quote": "^0.1.16",
-    "dexible-token": "^0.1.14",
+    "dexible-policies": "^0.1.15",
+    "dexible-quote": "^0.1.17",
+    "dexible-token": "^0.1.15",
     "dexible-web3": "^0.1.1",
     "ethers": "^5.3.1"
   },

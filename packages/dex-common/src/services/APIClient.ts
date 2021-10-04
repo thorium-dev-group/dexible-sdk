@@ -14,7 +14,7 @@ const DEFAULT_BASE_ENDPOINT = "api.dexible.io/v1";
 
 export interface APIProps {
     signer: ethers.Signer;
-    network: "ethereum"; //for now only support one network
+    network: "ethereum" | "polygon"; 
     jwtHandler?: IJWTHandler;
     chainId: number;
 }
@@ -22,7 +22,7 @@ export interface APIProps {
 export default class APIClient {
     signer: ethers.Signer;
     adapter: AxiosAdapter|null;
-    network: "ethereum";
+    network: "ethereum"|"polygon";
     chainId: number;
     chainName: string | null;
     baseUrl: string | null;

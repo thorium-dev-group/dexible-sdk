@@ -8,7 +8,7 @@ import Contact from './Contact';
 import Reports from './Reports';
 
 export interface WalletConnection {
-    network: 'ethereum'; //for now only ethereum
+    network: 'ethereum' | 'polygon';
     signer: Signer;
     jwtHandler?:IJWTHandler;
     gnosisSafe?:string;

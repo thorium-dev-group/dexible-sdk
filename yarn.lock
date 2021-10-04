@@ -1275,7 +1275,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexible-algos@^0.1.20, dexible-algos@workspace:packages/dex-algos":
+"dexible-algos@^0.1.21, dexible-algos@workspace:packages/dex-algos":
   version: 0.0.0-use.local
   resolution: "dexible-algos@workspace:packages/dex-algos"
   dependencies:
@@ -1283,9 +1283,9 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.16
+    dexible-common: ^0.1.17
     dexible-logger: ^0.1.1
-    dexible-policies: ^0.1.14
+    dexible-policies: ^0.1.15
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
     ethers: ^5.3.1
@@ -1296,7 +1296,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-common@^0.1.16, dexible-common@workspace:packages/dex-common":
+"dexible-common@^0.1.17, dexible-common@workspace:packages/dex-common":
   version: 0.0.0-use.local
   resolution: "dexible-common@workspace:packages/dex-common"
   dependencies:
@@ -1313,7 +1313,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-core@^0.1.21, dexible-core@workspace:packages/dex-core":
+"dexible-core@^0.1.23, dexible-core@workspace:packages/dex-core":
   version: 0.0.0-use.local
   resolution: "dexible-core@workspace:packages/dex-core"
   dependencies:
@@ -1322,13 +1322,13 @@ __metadata:
     axios: ^0.21.1
     chai: ^4.3.4
     dayjs: ^1.10.6
-    dexible-algos: ^0.1.20
-    dexible-common: ^0.1.16
+    dexible-algos: ^0.1.21
+    dexible-common: ^0.1.17
     dexible-logger: ^0.1.1
     dexible-order: ^0.1.22
-    dexible-policies: ^0.1.14
-    dexible-quote: ^0.1.16
-    dexible-token: ^0.1.14
+    dexible-policies: ^0.1.15
+    dexible-quote: ^0.1.17
+    dexible-token: ^0.1.15
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
     ethers: ^5.3.1
@@ -1365,7 +1365,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.16
+    dexible-common: ^0.1.17
     dexible-logger: ^0.1.0
     dexible-web3: ^0.1.0
     dotenv: ^10.0.0
@@ -1401,10 +1401,10 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-algos: ^0.1.20
-    dexible-common: ^0.1.16
+    dexible-algos: ^0.1.21
+    dexible-common: ^0.1.17
     dexible-logger: ^0.1.1
-    dexible-quote: ^0.1.16
+    dexible-quote: ^0.1.17
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
     ethers: ^5.3.1
@@ -1415,7 +1415,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-policies@^0.1.14, dexible-policies@workspace:packages/dex-policies":
+"dexible-policies@^0.1.15, dexible-policies@workspace:packages/dex-policies":
   version: 0.0.0-use.local
   resolution: "dexible-policies@workspace:packages/dex-policies"
   dependencies:
@@ -1423,7 +1423,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.16
+    dexible-common: ^0.1.17
     dexible-logger: ^0.1.1
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
@@ -1435,7 +1435,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-quote@^0.1.16, dexible-quote@workspace:packages/dex-quote":
+"dexible-quote@^0.1.17, dexible-quote@workspace:packages/dex-quote":
   version: 0.0.0-use.local
   resolution: "dexible-quote@workspace:packages/dex-quote"
   dependencies:
@@ -1443,10 +1443,10 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.16
+    dexible-common: ^0.1.17
     dexible-eth-http-signatures: ^0.1.0
     dexible-logger: ^0.1.1
-    dexible-token: ^0.1.14
+    dexible-token: ^0.1.15
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
     ethers: ^5.3.1
@@ -1484,10 +1484,10 @@ __metadata:
     "@tsconfig/node14": ^1.0.1
     "@types/mocha": ^8.2.2
     "@types/node": ^16.0.0
-    dexible-algos: ^0.1.20
-    dexible-common: ^0.1.16
-    dexible-core: ^0.1.21
-    dexible-policies: ^0.1.14
+    dexible-algos: ^0.1.21
+    dexible-common: ^0.1.17
+    dexible-core: ^0.1.23
+    dexible-policies: ^0.1.15
     esbuild: ^0.12.14
     mocha: ^8.4.0
     rimraf: ^3.0.2
@@ -1496,7 +1496,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-token@^0.1.14, dexible-token@workspace:packages/dex-token":
+"dexible-token@^0.1.15, dexible-token@workspace:packages/dex-token":
   version: 0.0.0-use.local
   resolution: "dexible-token@workspace:packages/dex-token"
   dependencies:
@@ -1504,7 +1504,7 @@ __metadata:
     "@types/mocha": ^8.2.2
     axios: ^0.21.1
     chai: ^4.3.4
-    dexible-common: ^0.1.16
+    dexible-common: ^0.1.17
     dexible-web3: ^0.1.1
     dotenv: ^10.0.0
     ethers: ^5.3.1

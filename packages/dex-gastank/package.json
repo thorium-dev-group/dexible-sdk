@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-common": "^0.1.16",
+    "dexible-common": "^0.1.17",
     "dexible-logger": "^0.1.0",
     "dexible-web3": "^0.1.0",
     "ethers": "^5.3.1"

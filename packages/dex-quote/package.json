@@ -1,6 +1,6 @@
 {
   "name": "dexible-quote",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-common": "^0.1.16",
+    "dexible-common": "^0.1.17",
     "dexible-logger": "^0.1.1",
-    "dexible-token": "^0.1.14",
+    "dexible-token": "^0.1.15",
     "dexible-web3": "^0.1.1",
     "ethers": "^5.3.1"
   },

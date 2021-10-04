@@ -12,5 +12,10 @@ export default {
     42: {
         "Settlement": "0x147bFD9cEffcd58A2B2594932963F52B16d528b1",
         "Multicall": "0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a"
+    },
+    
+    137: {
+        "Multicall": "0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507",
+        "Settlement": "0x683927Eb874937a7B0b7c76fB7Ef4aD226D08785",
     }
 }
