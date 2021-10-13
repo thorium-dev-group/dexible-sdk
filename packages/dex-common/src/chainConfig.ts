@@ -21,6 +21,6 @@ export default {
 
     43114: {
         "Settlement": '0x46181db60480f137bbd6633b624cc0a7af2cfc76',
-        "MultiCall": '0xa00fb557aa68d2e98a830642dbbfa534e8512e5f',
+        "Multicall": '0xa00fb557aa68d2e98a830642dbbfa534e8512e5f',
     }
 }

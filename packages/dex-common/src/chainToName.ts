@@ -1,7 +1,7 @@
 
 export default function(network:string, chainId:number) {
-    if(network !== 'ethereum' && network !== 'polygon') {
-        throw new Error("Only support ethereum and polygon right now");
+    if(network !== 'ethereum' && network !== 'polygon' && network !== 'avalanche') {
+        throw new Error("Only support ethereum, polygon, and avalanche right now");
     }
     switch(chainId) {
         case 1: return "mainnet";
