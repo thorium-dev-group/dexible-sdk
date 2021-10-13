@@ -1,6 +1,6 @@
 {
   "name": "dexible-order",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-algos": "^0.1.21",
-    "dexible-common": "^0.1.17",
+    "dexible-algos": "^0.1.22",
+    "dexible-common": "^0.1.18",
     "dexible-logger": "^0.1.1",
-    "dexible-quote": "^0.1.17",
+    "dexible-quote": "^0.1.18",
     "dexible-web3": "^0.1.1",
     "ethers": "^5.3.1"
   },

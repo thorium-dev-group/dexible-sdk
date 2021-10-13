@@ -1,6 +1,6 @@
 {
   "name": "dexible-sdk",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -10,10 +10,10 @@
     "test": "mocha"
   },
   "dependencies": {
-    "dexible-algos": "^0.1.21",
-    "dexible-common": "^0.1.17",
-    "dexible-core": "^0.1.23",
-    "dexible-policies": "^0.1.15"
+    "dexible-algos": "^0.1.22",
+    "dexible-common": "^0.1.18",
+    "dexible-core": "^0.1.24",
+    "dexible-policies": "^0.1.16"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
