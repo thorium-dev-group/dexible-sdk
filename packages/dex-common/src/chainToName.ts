@@ -7,7 +7,7 @@ export default function(network:string, chainId:number) {
         case 1: return "mainnet";
         case 42: return "kovan";
         case 137: return 'mainnet';
-        case 43114: return 'avalanche';
+        case 43114: return 'mainnet';
         case 80001: return 'mumbai';
         default: throw new Error("Only mainnet, polygon, avalanche, and kovan are support right now");
     }
