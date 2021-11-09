@@ -1,6 +1,6 @@
 {
   "name": "dexible-token",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-common": "^0.1.22",
+    "dexible-common": "^0.1.23",
     "dexible-web3": "^0.1.1",
     "ethers": "^5.3.1"
   },

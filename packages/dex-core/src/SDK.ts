@@ -12,6 +12,7 @@ export interface WalletConnection {
     signer: Signer;
     jwtHandler?:IJWTHandler;
     gnosisSafe?:string;
+    isWalletConnect?:boolean;
 }
 
 export default class SDK {
@@ -54,7 +55,8 @@ export default class SDK {
             network: props.network,
             signer: this.signer,
             chainId,
-            jwtHandler: props.jwtHandler
+            jwtHandler: props.jwtHandler,
+            isWalletConnect: props.isWalletConnect
         });
        
         this.algo = new AlgoWrapper();

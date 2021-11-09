@@ -17,6 +17,7 @@ export interface APIProps {
     network: "ethereum" | "polygon" | "avalanche"; 
     jwtHandler?: IJWTHandler;
     chainId: number;
+    isWalletConnect?: boolean;
 }
 
 export default class APIClient {
@@ -27,6 +28,7 @@ export default class APIClient {
     chainName: string | null;
     baseUrl: string | null;
     jwtHandler: IJWTHandler | undefined;
+    isWalletConnect: boolean;
 
     constructor(props:APIProps) {
         this.signer = props.signer;
@@ -36,6 +38,7 @@ export default class APIClient {
         this.chainName = chainToName(this.network, this.chainId);
         this.baseUrl = this._buildBaseUrl();
         this.jwtHandler = props.jwtHandler;
+        this.isWalletConnect = props.isWalletConnect || false;
         log.debug("Created api client for chain", 
                 this.chainName, 
                 "on network", 
@@ -277,7 +280,14 @@ export default class APIClient {
                 throw new Error("Response missing signing nonce");
             }
             log.debug("Have signable nonce for login...");
-            let signature = await this.signer.signMessage(data.nonce);
+            let signature = '';
+            if(this.isWalletConnect) {
+                const p = this.signer.provider as any;
+                signature = await p.send('personal_sign', [ethers.utils.toUtf8Bytes(data.nonce), address.toLowerCase()]);
+            } else {
+                signature = await this.signer.signMessage(data.nonce);
+            }
+            
             log.debug("Signed nonce, submitting for login");
             r = await axios({
                 method: "POST",
