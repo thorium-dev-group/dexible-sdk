@@ -1,6 +1,6 @@
 {
   "name": "dexible-quote",
-  "version": "0.1.23",
+  "version": "0.1.32",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -11,17 +11,17 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-common": "^0.1.23",
-    "dexible-logger": "^0.1.1",
-    "dexible-token": "^0.1.21",
-    "dexible-web3": "^0.1.1",
+    "dexible-common": "^0.1.32",
+    "dexible-logger": "^0.1.32",
+    "dexible-token": "^0.1.32",
+    "dexible-web3": "^0.1.32",
     "ethers": "^5.3.1"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
     "@types/mocha": "^8.2.2",
     "chai": "^4.3.4",
-    "dexible-eth-http-signatures": "^0.1.0",
+    "dexible-eth-http-signatures": "^0.1.32",
     "dotenv": "^10.0.0",
     "mocha": "^8.4.0",
     "rimraf": "^3.0.2",

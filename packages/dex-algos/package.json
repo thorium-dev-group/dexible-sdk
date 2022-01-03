@@ -1,6 +1,6 @@
 {
   "name": "dexible-algos",
-  "version": "0.1.27",
+  "version": "0.1.32",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-common": "^0.1.23",
-    "dexible-logger": "^0.1.1",
-    "dexible-policies": "^0.1.21",
-    "dexible-web3": "^0.1.1",
+    "dexible-common": "^0.1.32",
+    "dexible-logger": "^0.1.32",
+    "dexible-policies": "^0.1.32",
+    "dexible-web3": "^0.1.32",
     "ethers": "^5.3.1"
   },
   "devDependencies": {
