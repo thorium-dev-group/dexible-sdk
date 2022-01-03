@@ -31,6 +31,11 @@ export interface StopLossProps extends CommonProps {
     isAbove: boolean;
 }
 
+export interface StopLimitProps extends CommonProps {
+    trigger: Price,
+    limitPrice: Price
+}
+
 export interface PriceRangeProps {
     basePrice: Price;
     upperBoundPercent: number;
@@ -99,6 +104,10 @@ export default class Order {
                 this.createStopLoss(props as StopLossProps);
                 break;
             }
+            case Algos.types.StopLimit: {
+                this.createStopLimit(props as StopLimitProps);
+                break;
+            }
             case Algos.types.TWAP: {
                 this.createTWAP(props as TWAPProps);
                 break;
@@ -147,6 +156,19 @@ export default class Order {
                 new Policies.StopPrice({
                     trigger: props.triggerPrice,
                     above: props.isAbove
+                })
+            ]
+        })
+    }
+
+    createStopLimit = (props:StopLimitProps) => {
+        this.algo = new Algos.StopLimit({
+            maxRounds: props.maxRounds,
+            policies: [
+                ...this._buildBasePolicies(props),
+                new Policies.StopLimit({
+                    trigger: props.trigger,
+                    limitPrice: props.limitPrice
                 })
             ]
         })

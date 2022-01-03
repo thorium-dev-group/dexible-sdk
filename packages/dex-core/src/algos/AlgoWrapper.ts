@@ -1,5 +1,5 @@
 
-import Factory, {CommonProps, LimitProps, StopLossProps, TWAPProps} from './Factory';
+import Factory, {CommonProps, LimitProps, StopLossProps, StopLimitProps, TWAPProps} from './Factory';
 import * as Algos from 'dexible-algos';
 
 export default class AlgoWrapper {
@@ -7,6 +7,7 @@ export default class AlgoWrapper {
         Market: string;
         Limit: string;
         StopLoss: string;
+        StopLimit: string;
         TWAP: string;
     };
     factory: Factory;
@@ -17,6 +18,7 @@ export default class AlgoWrapper {
             Market: Algos.Market.tag,
             Limit: Algos.Limit.tag,
             StopLoss: Algos.StopLoss.tag,
+            StopLimit: Algos.StopLimit.tag,
             TWAP: Algos.TWAP.tag
         }
         this.factory = new Factory();
@@ -32,6 +34,9 @@ export default class AlgoWrapper {
             }
             case this.types.StopLoss: {
                 return this.factory.createStopLoss(props as StopLossProps);
+            }
+            case this.types.StopLimit: {
+                return this.factory.createStopLimit(props as StopLimitProps);
             }
             case this.types.TWAP: {
                 return this.factory.createTWAP(props as TWAPProps);

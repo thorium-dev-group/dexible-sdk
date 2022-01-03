@@ -13,6 +13,7 @@ import {
     LimitProps,
     MarketProps,
     StopLossProps,
+    StopLimitProps,
     TWAPProps
 } from './Order';
 
@@ -35,6 +36,7 @@ export {
     LimitProps,
     MarketProps,
     StopLossProps,
+    StopLimitProps,
     TWAPProps
 }
 

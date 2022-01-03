@@ -7,6 +7,7 @@ import {default as PriceBounds, PriceBoundsParams} from './PriceBounds';
 import {default as Slippage, SlippageParams} from './Slippage';
 import {default as StopPrice, StopPriceParams} from './StopPrice';
 import {default as IPolicy} from './IPolicy';
+import {default as StopLimit, StopLimitParams} from './StopLimit';
 
 export {
     
@@ -26,5 +27,7 @@ export {
     Slippage,
     SlippageParams,
     StopPrice,
-    StopPriceParams
+    StopPriceParams,
+    StopLimit,
+    StopLimitParams,
 }

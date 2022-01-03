@@ -27,6 +27,11 @@ export interface StopLossProps extends CommonProps {
     isAbove: boolean;
 }
 
+export interface StopLimitProps extends CommonProps {
+    trigger: Price;
+    limitPrice: Price;
+}
+
 export interface PriceRangeProps {
     basePrice: Price;
     upperBoundPercent: number;
@@ -91,6 +96,19 @@ export default class Factory {
                 new Policies.StopPrice({
                     trigger: props.triggerPrice,
                     above: props.isAbove
+                })
+            ]
+        })
+    }
+
+    createStopLimit = (props:StopLimitProps): Algos.StopLimit => {
+        return new Algos.StopLimit({
+            maxRounds: props.maxRounds,
+            policies: [
+                ...this._buildBasePolicies(props),
+                new Policies.StopLimit({
+                    trigger: props.trigger,
+                    limitPrice: props.limitPrice
                 })
             ]
         })
