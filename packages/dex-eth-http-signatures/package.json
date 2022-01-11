@@ -7,6 +7,7 @@
   "scripts": {
     "build": "yarn clean && tsc --build",
     "clean": "rimraf dist",
+    "do_publish": "npm publish",
     "test": "mocha"
   },
   "dependencies": {

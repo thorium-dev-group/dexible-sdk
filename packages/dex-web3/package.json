@@ -6,7 +6,8 @@
   "scripts": {
     "build": "yarn clean && tsc --build",
     "clean": "rimraf dist",
-    "test": "mocha"
+    "test": "mocha",
+    "do_publish": "npm publish"
   },
   "dependencies": {
     "axios": "^0.21.1",
