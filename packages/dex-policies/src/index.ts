@@ -8,6 +8,8 @@ import {default as Slippage, SlippageParams} from './Slippage';
 import {default as StopPrice, StopPriceParams} from './StopPrice';
 import {default as IPolicy} from './IPolicy';
 import {default as StopLimit, StopLimitParams} from './StopLimit';
+import {default as TrailingStop, TrailingStopParams} from './TrailingStop';
+import {default as TakeProfit, TakeProfitParams} from './TakeProfit';
 
 export {
     
@@ -30,4 +32,8 @@ export {
     StopPriceParams,
     StopLimit,
     StopLimitParams,
+    TakeProfit,
+    TakeProfitParams,
+    TrailingStop,
+    TrailingStopParams
 }

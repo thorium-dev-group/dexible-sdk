@@ -32,6 +32,15 @@ export interface StopLimitProps extends CommonProps {
     limitPrice: Price;
 }
 
+export interface TakeProfitProps extends CommonProps {
+    profitPercentage: number;
+    startingPrice?: Price;
+}
+
+export interface TrailingStopProps extends CommonProps {
+    spotPercentage: number;
+}
+
 export interface PriceRangeProps {
     basePrice: Price;
     upperBoundPercent: number;
@@ -141,6 +150,39 @@ export default class Factory {
             maxRounds: props.maxRounds,
             policies
         });
+    }
+
+    createTakeProfit = (props:TakeProfitProps): Algos.TakeProfit => {
+        //invert price since quotes are in output tokens while prices are 
+        //expressed in input tokens
+        let policies = [
+            ...this._buildBasePolicies(props),
+            new Policies.TakeProfit({
+                profitPercentage: props.profitPercentage,
+                startingPrice: props.startingPrice
+            })
+        ];
+
+        return new Algos.TakeProfit({
+            maxRounds: props.maxRounds,
+            policies
+        })
+    }
+
+    createTrailingStop = (props:TrailingStopProps): Algos.TrailingStop => {
+        //invert price since quotes are in output tokens while prices are 
+        //expressed in input tokens
+        let policies = [
+            ...this._buildBasePolicies(props),
+            new Policies.TrailingStop({
+                spotPercentage: props.spotPercentage
+            })
+        ];
+
+        return new Algos.TrailingStop({
+            maxRounds: props.maxRounds,
+            policies
+        })
     }
 
     _buildBasePolicies = (props:CommonProps): Array<Policies.IPolicy> => {

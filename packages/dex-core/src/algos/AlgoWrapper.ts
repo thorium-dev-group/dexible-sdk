@@ -1,5 +1,12 @@
 
-import Factory, {CommonProps, LimitProps, StopLossProps, StopLimitProps, TWAPProps} from './Factory';
+import Factory, {
+    LimitProps, 
+    StopLossProps, 
+    StopLimitProps, 
+    TWAPProps,
+    TakeProfitProps,
+    TrailingStopProps
+} from './Factory';
 import * as Algos from 'dexible-algos';
 
 export default class AlgoWrapper {
@@ -9,6 +16,8 @@ export default class AlgoWrapper {
         StopLoss: string;
         StopLimit: string;
         TWAP: string;
+        TakeProfit: string;
+        TrailingStop: string;
     };
     factory: Factory;
 
@@ -19,7 +28,9 @@ export default class AlgoWrapper {
             Limit: Algos.Limit.tag,
             StopLoss: Algos.StopLoss.tag,
             StopLimit: Algos.StopLimit.tag,
-            TWAP: Algos.TWAP.tag
+            TWAP: Algos.TWAP.tag,
+            TakeProfit: Algos.TakeProfit.tag,
+            TrailingStop: Algos.TrailingStop.tag
         }
         this.factory = new Factory();
     }
@@ -40,6 +51,12 @@ export default class AlgoWrapper {
             }
             case this.types.TWAP: {
                 return this.factory.createTWAP(props as TWAPProps);
+            }
+            case this.types.TakeProfit: {
+                return this.factory.createTakeProfit(props as TakeProfitProps);
+            }
+            case this.types.TrailingStop: {
+                return this.factory.createTrailingStop(props as TrailingStopProps);
             }
             default: throw new Error("Unsupported algo type: " + props.type);
         }

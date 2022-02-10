@@ -1,6 +1,6 @@
 {
   "name": "examples",
-  "version": "0.1.32",
+  "version": "0.1.36",
   "license": "UNLICENSED",
   "scripts": {
     "build": "yarn clean && tsc --build",
@@ -8,7 +8,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "dexible-sdk": "^0.1.32",
+    "dexible-sdk": "^0.1.36",
     "ethers": "^5.3.1"
   },
   "devDependencies": {

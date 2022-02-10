@@ -13,10 +13,20 @@ export default {
         "Settlement": "0x147bFD9cEffcd58A2B2594932963F52B16d528b1",
         "Multicall": "0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a"
     },
+
+    56: {
+        "Settlement": "0x683927eb874937a7b0b7c76fb7ef4ad226d08785",
+        "Multicall": "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
+    },
     
     137: {
         "Multicall": "0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507",
         "Settlement": "0x683927Eb874937a7B0b7c76fB7Ef4aD226D08785",
+    },
+
+    250: {
+        "Settlement": "0x46181db60480f137bbd6633b624cc0a7af2cfc76",
+        "Multicall": "0x11473d6e641df17cd6331d45b135e35b49edbea8"
     },
 
     43114: {

@@ -1,6 +1,6 @@
 {
   "name": "dexible-policies",
-  "version": "0.1.32",
+  "version": "0.1.36",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-common": "^0.1.32",
-    "dexible-logger": "^0.1.32",
-    "dexible-web3": "^0.1.32",
+    "dexible-common": "^0.1.36",
+    "dexible-logger": "^0.1.36",
+    "dexible-web3": "^0.1.36",
     "ethers": "^5.3.1"
   },
   "devDependencies": {
