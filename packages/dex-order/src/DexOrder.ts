@@ -15,6 +15,7 @@ export interface PrepareResponse {
 
 export interface DexOrderParams {
     apiClient: Services.APIClient;
+    trader: string;
     tokenIn: Token;
     tokenOut: Token;
     quoteId?: number;
@@ -28,6 +29,7 @@ export interface DexOrderParams {
 export default class DexOrder {
     tokenIn: Token;
     tokenOut: Token;
+    trader: string;
     amountIn: BigNumberish;
     algo: IAlgo;
     fee: BigNumberish; //for future use
@@ -39,6 +41,7 @@ export default class DexOrder {
     gnosisSafe?: string;
 
     constructor(params:DexOrderParams) {
+        this.trader = params.trader;
         this.tokenIn = params.tokenIn;
         this.tokenOut = params.tokenOut;
         this.amountIn = params.amountIn;
@@ -59,6 +62,7 @@ export default class DexOrder {
 
         let algoSer = this.algo.serialize() as any;
         return {
+            trader: this.trader,
             tokenIn: this.tokenIn.address,
             tokenOut: this.tokenOut.address,
             quoteId: this.quoteId,
@@ -86,6 +90,10 @@ export default class DexOrder {
         if(!this.quoteId) {
             log.error("Missing quote id");
             return "Must prepare order before submitting";
+        }
+        if(!this.trader) {
+            log.error("Missing trader");
+            return "Missing trader in order";
         }
         if(!this.tokenIn.balance) {
             log.error("Input token has no balance");
@@ -218,6 +226,7 @@ export default class DexOrder {
 
     toJSON() {
         return {
+            trader: this.trader,
             tokenIn: this.tokenIn,
             tokenOut: this.tokenOut,
             amountIn: this.amountIn.toString(),

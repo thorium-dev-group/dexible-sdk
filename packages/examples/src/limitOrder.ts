@@ -18,6 +18,7 @@ const main = async () => {
     let tokenOut = await sdk.token.lookup(WETH);
 
     let limit = new LimitOrder({
+        trader: await sdk.apiClient.signer.getAddress(),
         tokenIn,
         tokenOut,
         amountIn: ethers.utils.parseUnits("5550", 18),

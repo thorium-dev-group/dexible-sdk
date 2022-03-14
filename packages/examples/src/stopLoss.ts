@@ -29,6 +29,7 @@ const main = async () => {
     
 
     let stop = new StopLoss({
+        trader: await sdk.apiClient.signer.getAddress(),
         tokenIn,
         tokenOut,
         amountIn,

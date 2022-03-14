@@ -19,6 +19,7 @@ export interface CommonProps {
     gasPolicy: GasPolicyProps;
     slippagePercent: number;
     tags?: Array<Tag>;
+    trader: string;
     tokenIn: Token;
     tokenOut: Token;
     amountIn: BigNumberish;
@@ -74,6 +75,7 @@ export default class Order {
     maxRounds?: number;
     tags?: Array<Tag>;
     sdk: SDK;
+    trader: string;
     tokenIn: Token;
     tokenOut: Token;
     amountIn: BigNumberish;
@@ -86,6 +88,7 @@ export default class Order {
         this.tags = props.tags;
         this.maxRounds = props.maxRounds;
         this.sdk = props.sdk;
+        this.trader = props.trader;
         this.tokenIn = props.tokenIn;
         this.tokenOut = props.tokenOut;
         this.amountIn = props.amountIn;
@@ -229,6 +232,7 @@ export default class Order {
         let r = await this.sdk.order.prepare({
             algo: this.algo,
             amountIn: this.amountIn,
+            trader: this.trader,
             tokenIn: this.tokenIn,
             tokenOut: this.tokenOut,
             tags: this.tags

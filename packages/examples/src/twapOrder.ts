@@ -17,6 +17,7 @@ class TWAP extends BaseOrder {}
 const main = async () => {
     let sdk = await BaseOrder.createDexibleSDK();
     let twap = new TWAP({
+        trader: await sdk.apiClient.signer.getAddress(),
         tokenIn: TOKEN_IN,
         tokenOut: TOKEN_OUT,
         amountIn: AMT_IN,

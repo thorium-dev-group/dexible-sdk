@@ -25,6 +25,7 @@ export default class APIClient {
     adapter: AxiosAdapter|null;
     network: "ethereum"|"polygon"|"avalanche"|"bsc"|"fantom";
     chainId: number;
+    groupId: number;
     chainName: string | null;
     baseUrl: string | null;
     jwtHandler: IJWTHandler | undefined;
@@ -35,6 +36,7 @@ export default class APIClient {
         this.adapter = null; 
         this.network = props.network;
         this.chainId = props.chainId;
+        this.groupId = 0;
         this.chainName = chainToName(this.network, this.chainId);
         this.baseUrl = this._buildBaseUrl();
         this.jwtHandler = props.jwtHandler;
@@ -43,6 +45,10 @@ export default class APIClient {
                 this.chainName, 
                 "on network", 
                 this.network);
+    }
+
+    setGroupId = (id:number )=> {
+        this.groupId = id;
     }
 
     get = async (endpoint:string): Promise<any> => {
@@ -147,6 +153,11 @@ export default class APIClient {
             } else if(!this.adapter) {
                 this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
             }
+
+            data = data ? {
+                ...data,
+                groupId: this.groupId
+            }: undefined;
 
             let r:any = null;
             if(jwtToken) {

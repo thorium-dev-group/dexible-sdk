@@ -18,7 +18,7 @@ const main = async () => {
     let amountIn = IN_AMT;
     let sdk = await BaseOrder.createDexibleSDK();
     let market = new Market({
-        
+        trader: await sdk.apiClient.signer.getAddress(),
         tokenIn: TOKEN_IN,
         tokenOut: TOKEN_OUT,
         amountIn,

@@ -22,6 +22,7 @@ const main = async () => {
     });
 
     let order = await dex.twap({
+        trader: await dex.sdk.apiClient.signer.getAddress(),
         amountIn: AMOUNT,
         gasPolicy: {
             type: "relative"

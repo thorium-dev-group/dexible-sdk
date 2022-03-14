@@ -6,6 +6,7 @@ import {IJWTHandler, Services} from 'dexible-common';
 import QuoteWrapper from './QuoteWrapper';
 import Contact from './Contact';
 import Reports from './Reports';
+import Groups from './GroupAccounts';
 
 export interface WalletConnection {
     network: 'ethereum' | 'polygon' | 'avalanche' | 'bsc' | 'fantom';
@@ -32,6 +33,7 @@ export default class SDK {
     gnosisSafe?: string;
     chainId: number;
     reports: Reports;
+    groups: Groups;
 
     static async create(props:WalletConnection):Promise<SDK> {
         let {signer} = props;
@@ -70,6 +72,7 @@ export default class SDK {
         this.order = new OrderWrapper(this.apiClient, this.gnosisSafe);
         this.quote = new QuoteWrapper(this.apiClient);
         this.contact = new Contact({apiClient: this.apiClient});
+        this.groups = new Groups(this.apiClient);
         
         this.gasPolicyTypes = {
             RELATIVE: "relative",
@@ -77,5 +80,9 @@ export default class SDK {
         }
 
         this.reports = new Reports(this.apiClient);
+    }
+
+    setGroupId(id:number) {
+        this.apiClient.setGroupId(id);
     }
 }

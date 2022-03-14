@@ -30,6 +30,7 @@ const main = async () => {
     
 
     let twap = new TWAP({
+        trader: await sdk.apiClient.signer.getAddress(),
         tokenIn,
         tokenOut,
         amountIn,

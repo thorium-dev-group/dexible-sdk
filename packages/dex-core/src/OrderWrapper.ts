@@ -4,6 +4,7 @@ import { BigNumberish } from 'ethers';
 import { IAlgo } from 'dexible-algos';
 
 export interface OrderSpec {
+    trader: string;
     tokenIn: Token;
     tokenOut: Token;
     amountIn: BigNumberish;
@@ -29,6 +30,7 @@ export default class OrderWrapper {
 
     prepare = async (params: OrderSpec): Promise<OrderSupport.PrepareResponse> => {
         let order = new OrderSupport.DexOrder({
+            trader: params.trader,
             apiClient: this.apiClient,
             quoteId: params.quoteId,
             tokenIn: params.tokenIn,

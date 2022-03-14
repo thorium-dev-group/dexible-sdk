@@ -3,6 +3,7 @@ import { BigNumber, ethers} from 'ethers';
 import { IJWTHandler, Token, Tag} from 'dexible-common';
 
 export interface OrderProps {
+    trader: string;
     tokenIn: Token|string;
     tokenOut: Token|string;
     amountIn: BigNumber;
@@ -77,6 +78,7 @@ export default class BaseOrder {
 
         //tokens have to be resolved on-chain by address so we get token metadata
         console.log("Looking up in/out tokens...");
+        let trader = this.orderProps.trader;
         let tokenIn = this.orderProps.tokenIn;
         let tokenOut = this.orderProps.tokenOut;
 
@@ -132,6 +134,7 @@ export default class BaseOrder {
         }
 
         let orderSpec = {
+            trader,
             tokenIn: tokenIn as Token,
             tokenOut: tokenOut as Token,
             amountIn,
