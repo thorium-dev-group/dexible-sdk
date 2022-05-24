@@ -1,0 +1,13 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+message GasPrices {
+  uint32 chainId = 1;
+  uint32 networkId = 2;
+  uint64 blockNumber = 3;
+  google.protobuf.Timestamp gasTimestamp = 4;
+  uint64 safe = 5;
+  uint64 recommended = 6;
+  uint64 fast = 7;
+  map<string, uint64> data = 8;
+}

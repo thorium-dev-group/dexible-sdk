@@ -1,0 +1,25 @@
+{
+  "name": "dexible-protobuf",
+  "version": "0.1.36",
+  "main": "dist/index.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "proto:generate": "protoc --ts_proto_out=src ./protocol/*.proto --ts_proto_opt=esModuleInterop=true --ts_proto_opt=env=node",
+    "build": "yarn clean && yarn proto:generate && tsc --build",
+    "clean": "rimraf dist",
+    "do_publish": "npm publish",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "ts-proto": "^1.112.2"
+  },
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.1",
+    "@types/mocha": "^8.2.3",
+    "chai": "^4.3.4",
+    "mocha": "^9.2.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.1.1",
+    "typescript": "4.2.4"
+  }
+}
