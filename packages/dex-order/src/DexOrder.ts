@@ -2,7 +2,12 @@ import {BigNumberish } from 'ethers';
 import {IAlgo} from 'dexible-algos';
 import {ethers} from 'ethers';
 import {QuoteGrabber, QuoteRequest} from 'dexible-quote';
-import {Services, Tag, Token} from 'dexible-common';
+import {
+    MarketingProps,
+    Services, 
+    Tag, 
+    Token
+} from 'dexible-common';
 import Logger from 'dexible-logger';
 
 const bn = ethers.BigNumber.from;
@@ -23,6 +28,7 @@ export interface DexOrderParams {
     maxRounds: number;
     tags?: Array<Tag>;
     gnosisSafe?: string;
+    marketing?: MarketingProps;
 }
 
 export default class DexOrder {
@@ -37,6 +43,7 @@ export default class DexOrder {
     maxRounds: number;
     tags?: Array<Tag>;
     gnosisSafe?: string;
+    marketing?: MarketingProps;
 
     constructor(params:DexOrderParams) {
         this.tokenIn = params.tokenIn;
@@ -50,6 +57,7 @@ export default class DexOrder {
         this.quote = null;
         this.tags = params.tags;
         this.gnosisSafe = params.gnosisSafe;
+        this.marketing = params.marketing;
     }
 
     serialize = () => {
@@ -59,15 +67,16 @@ export default class DexOrder {
 
         let algoSer = this.algo.serialize() as any;
         return {
-            tokenIn: this.tokenIn.address,
-            tokenOut: this.tokenOut.address,
-            quoteId: this.quoteId,
+            algorithm: algoSer.algorithm,
             amountIn: this.amountIn.toString(),
+            gnosisSafe: this.gnosisSafe,
+            marketing: this.marketing,
             networkId: this.apiClient.chainId,
             policies: algoSer.policies,
-            algorithm: algoSer.algorithm,
+            quoteId: this.quoteId,
             tags: this.tags,
-            gnosisSafe: this.gnosisSafe
+            tokenIn: this.tokenIn.address,
+            tokenOut: this.tokenOut.address,
         }
     }
 
@@ -225,7 +234,8 @@ export default class DexOrder {
             quoteId: this.quoteId,
             quote: this.quote,
             maxRounds: this.maxRounds,
-            tags: this.tags
+            tags: this.tags,
+            marketing: this.marketing || {},
         }
     }
 

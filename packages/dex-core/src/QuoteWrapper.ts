@@ -1,5 +1,9 @@
 import {QuoteGrabber,QuoteRequest} from 'dexible-quote';
-import {Services, Token} from 'dexible-common';
+import {
+    MarketingProps,
+    Services, 
+    Token
+} from 'dexible-common';
 import { BigNumber, BigNumberish } from 'ethers';
 
 export interface QuoteParams {
@@ -19,9 +23,11 @@ export interface SpotParams {
 
 export default class QuoteWrapper {
     api: Services.APIClient;
+    marketing?: MarketingProps;
 
-    constructor(apiClient:Services.APIClient) {
+    constructor(apiClient:Services.APIClient, marketing?: MarketingProps) {
         this.api = apiClient;
+        this.marketing = marketing;
     }
 
     getQuote = async (props:QuoteParams) => {
@@ -33,7 +39,7 @@ export default class QuoteWrapper {
             }
         }
         
-        let req = {
+        const req : QuoteRequest = {
             tokenIn: props.tokenIn,
             tokenOut: props.tokenOut,
             amountIn: props.amountIn.toString(),
@@ -41,12 +47,18 @@ export default class QuoteWrapper {
             apiClient: this.api,
             maxFixedGas: props.maxFixedGas,
             fixedPrice: props.fixedPrice,
-            minOrderSize: minAmount.toString()
-        } as QuoteRequest;
+            minOrderSize: minAmount.toString(),
+            marketing: this.marketing,
+        };
         return QuoteGrabber(req);
     }
 
     getSpot = async (props:SpotParams) => {
-        return this.api.get(`quotes/spot/${props.tokenIn.address.toLowerCase()}/${props.tokenOut.address.toLowerCase()}`);
+        const endpoint = `quotes/spot/${props.tokenIn.address.toLowerCase()}/${props.tokenOut.address.toLowerCase()}`;
+        
+        return this.api.get({
+            endpoint,
+            requiresAuthentication: false,
+        });
     }
 }

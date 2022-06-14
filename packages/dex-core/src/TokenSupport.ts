@@ -80,10 +80,17 @@ export default class TokenSupport {
     }
 
     verify = async (address:string) => {
-        if(this.chainId === 0) {
+
+        if (this.chainId === 0) {
             let net = await this.provider.getNetwork();
             this.chainId = net.chainId;
         }
-        return this.apiClient.get(`token/verify/${this.chainId}/${address}`);
+
+        const endpoint = `token/verify/${this.chainId}/${address}`;
+
+        return this.apiClient.get({
+            endpoint,
+            requiresAuthentication: false,
+        });
     }
 }

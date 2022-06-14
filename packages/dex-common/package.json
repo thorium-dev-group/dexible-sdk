@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-eth-http-signatures": "^0.1.36",
+    "axios-retry": "^3.2.5",
+    "dexible-logger": "^0.1.36",
     "ethers": "^5.1.4"
   },
   "devDependencies": {

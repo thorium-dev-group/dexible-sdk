@@ -1,6 +1,10 @@
 import { BigNumberish } from '@ethersproject/bignumber';
 import Logger from 'dexible-logger';
-import {Services, Token} from 'dexible-common';
+import {
+    MarketingProps,
+    Services, 
+    Token
+} from 'dexible-common';
 
 const log = new Logger({
     component: "QuoteGrabber"
@@ -15,26 +19,35 @@ export interface QuoteRequest {
     apiClient: Services.APIClient;
     maxFixedGas?: BigNumberish;
     fixedPrice?: number;
+    marketing?: MarketingProps;
 }
 
 export default async (request: QuoteRequest): Promise<any> => {
-    let net = await request.apiClient.signer.provider?.getNetwork();
+    let net = await request.apiClient.signer?.provider?.getNetwork();
     if(!net) {
         throw new Error("Missing provider in web3 signer");
     }
-    let chainId = net?.chainId;
+    
+    const networkId = net?.chainId - 0;
+    const slippagePercentage = request.slippagePercent/100;
+
     const quoteBody = {
         amountIn: request.amountIn.toString(),
-        networkId: chainId-0,
+        networkId,
         tokenIn: request.tokenIn.address,
         tokenOut: request.tokenOut.address,
         minOrderSize: request.minOrderSize,
         maxFixedGas: request.maxFixedGas,
         fixedPrice: request.fixedPrice,
-        slippagePercentage: request.slippagePercent/100
+        slippagePercentage,
+        marketing: request.marketing
     };
 
-    let r = await request.apiClient.post("quotes", quoteBody);
+    let r = await request.apiClient.post({
+        data: quoteBody,
+        endpoint: "/quotes", 
+        requiresAuthentication: false,
+    });
 
     if(!r) {
         throw new Error("No data in response");

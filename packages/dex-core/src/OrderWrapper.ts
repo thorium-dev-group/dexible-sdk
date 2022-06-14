@@ -1,5 +1,10 @@
 import * as OrderSupport from 'dexible-order';
-import {Services, Tag, Token} from 'dexible-common';
+import {
+    MarketingProps,
+    Services,
+    Tag, 
+    Token,
+} from 'dexible-common';
 import { BigNumberish } from 'ethers';
 import { IAlgo } from 'dexible-algos';
 
@@ -21,10 +26,12 @@ export interface OrderListParams {
 export default class OrderWrapper {
     apiClient: Services.APIClient;
     gnosisSafe?: string;
+    marketing?: MarketingProps;
 
-    constructor(apiClient: Services.APIClient, gnosisSafe?: string) {
+    constructor(apiClient: Services.APIClient, gnosisSafe?: string, marketing?: MarketingProps) {
         this.apiClient = apiClient;
         this.gnosisSafe = gnosisSafe;
+        this.marketing = marketing;
     }
 
     prepare = async (params: OrderSpec): Promise<OrderSupport.PrepareResponse> => {
@@ -37,7 +44,8 @@ export default class OrderWrapper {
             maxRounds: params.algo.maxRounds(),
             algo: params.algo,
             tags: params.tags,
-            gnosisSafe: this.gnosisSafe
+            gnosisSafe: this.gnosisSafe,
+            marketing: this.marketing,
         });
         return order.prepare();
     }
