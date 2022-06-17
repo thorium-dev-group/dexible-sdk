@@ -1,4 +1,4 @@
-import axios, { AxiosAdapter, AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosAdapter, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ethers } from 'ethers';
 import Logger from 'dexible-logger';
 import chainToName from '../chainToName';
@@ -10,29 +10,50 @@ const log = new Logger({ component: "APIClient" });
 
 const DEFAULT_BASE_ENDPOINT = "api.dexible.io/v1";
 
+export type HttpClientOptions = {
+    requiresAuthentication: boolean;
+    withRetrySupport: boolean;
+}
+
 export type NetworkName = "ethereum" | "polygon" | "avalanche" | "bsc" | "fantom";
 export interface APIProps {
-    chainId: number;
-    baseUrl?: string;
-    network: NetworkName;
-    signer?: ethers.Signer;
     authenticationHandler: IAuthenticationHandler;
+    baseUrl?: string;
+    chainId: number;
+    network: NetworkName;
+    retryCount?: number;
+    retryDelayBaseMs?: number;
+    signer?: ethers.Signer;
+    timeoutMs?: number;
+    customBackoff?: (retryCount: number) => number;
 }
 
 export interface RequestParams {
     data?: {
         [key: string]: any
     };
+    endpoint: string;
     headers?: {
         [key: string]: string
     };
-    endpoint: string;
+    params?: {
+        [key: string]: any
+    };
     requiresAuthentication: boolean;
+    withRetrySupport: boolean;
 };
 
 export type AuthenticationMode = 'jwt' | 'signature' | 'none';
 
+// FIXME: disable order submit retry
+
 export class APIClient {
+
+    static defaults = {
+        retryCount: 3,
+        retryDelayMs: 100,
+        timeout: 30_000,
+    };
 
     adapter: AxiosAdapter | null;
     baseUrl: string;
@@ -45,13 +66,16 @@ export class APIClient {
     network: NetworkName;
     signer?: ethers.Signer;
 
-    retryDelay = 100;
-    shouldResetTimeout = false;
+    retryDelayBaseMs = 100;
     retryCount = 3;
+
+    shouldResetTimeout = false;
 
     headers: any;
 
-    // TODO: Add Timeout
+    timeoutMs = 10_000;
+
+    customBackoff?: (retryCount: number) => number;
 
     constructor(props: APIProps) {
 
@@ -64,12 +88,34 @@ export class APIClient {
         this.authenticationHandler = props.authenticationHandler;
         this.headers = {};
 
+        this.retryCount = typeof props.retryCount === 'number'
+            ? props.retryCount
+            : APIClient.defaults.retryCount;
+
+        this.retryDelayBaseMs = typeof props.retryDelayBaseMs === 'number'
+            ? props.retryDelayBaseMs
+            : APIClient.defaults.retryDelayMs;
+
+        this.timeoutMs = typeof props.timeoutMs === 'number'
+            ? props.timeoutMs
+            : APIClient.defaults.timeout;
+
+        this.customBackoff = props.customBackoff;
+
+
         this.httpClients = {};
 
         log.debug("Created api client for chain",
             this.chainName,
             "on network",
             this.network);
+    }
+
+    protected calculateRetryDelay(retryCount: number): number {
+        const jitter = Math.random();
+        const exponentialBackoff = Math.pow(2, retryCount) * this.retryDelayBaseMs
+        const delay = Math.floor(jitter * exponentialBackoff);
+        return delay;
     }
 
     /**
@@ -84,9 +130,14 @@ export class APIClient {
         let url = `${this.baseUrl}/${params.endpoint}`;
         log.debug("GET call to", url);
 
-        const httpClient = await this.getHttpClient(params.requiresAuthentication);
+        const httpClient = await this.getHttpClient({
+            requiresAuthentication: params.requiresAuthentication,
+            withRetrySupport: params.withRetrySupport,
+        });
 
         const response = await httpClient.request({
+            data: params.data,
+            params: params.params,
             headers: params.headers,
             method: "GET",
             url,
@@ -109,7 +160,10 @@ export class APIClient {
         let url = `${this.baseUrl}/${params.endpoint}`;
         log.debug("Posting to url", url);
 
-        const httpClient = await this.getHttpClient(params.requiresAuthentication);
+        const httpClient = await this.getHttpClient({
+            requiresAuthentication: params.requiresAuthentication,
+            withRetrySupport: params.withRetrySupport,
+        });
 
         const response = await httpClient.request({
             data: params.data,
@@ -135,36 +189,43 @@ export class APIClient {
     }
 
 
-    protected async getHttpClient(requiresAuthentication: boolean): Promise<AxiosInstance> {
 
-        const key = requiresAuthentication
-            ? 'authenticated'
-            : 'unauthenticated';
+    protected async getHttpClient(props: HttpClientOptions): Promise<AxiosInstance> {
 
+        const {
+            requiresAuthentication,
+            withRetrySupport,
+        } = props;
+
+        const key = [
+            `requiresAuthentication:${Boolean(requiresAuthentication)}`,
+            `withRetrySupport:${Boolean(withRetrySupport)}`,
+        ].join(';');
 
         if (this.httpClients[key]) {
             return this.httpClients[key];
         }
 
         let httpClient: AxiosInstance;
+
+        const clientConfig: AxiosRequestConfig = {
+            baseURL: this.baseUrl,
+            headers: this.headers,
+            timeout: this.timeoutMs,
+        }
+
         if (requiresAuthentication) {
 
-            if (! this.authenticationHandler) {
+            if (!this.authenticationHandler) {
                 throw new Error(`AuthenticationHandler is required`);
             }
 
-            httpClient = this.authenticationHandler.buildClient({
-                baseURL: this.baseUrl,
-                headers: this.headers,
-            });
+            httpClient = this.authenticationHandler.buildClient(clientConfig);
 
             // handle registration & initial login
             await this.authenticationHandler.authenticate();
         } else {
-            httpClient = axios.create({
-                baseURL: this.baseUrl,
-                headers: this.headers,
-            });
+            httpClient = axios.create(clientConfig);
         }
 
         // error handling
@@ -193,20 +254,24 @@ export class APIClient {
         // });
 
         // retry support
-        axiosRetry(httpClient, {
-            retryDelay: (this.retryDelay as any),
-            shouldResetTimeout: this.shouldResetTimeout,
-            retries: this.retryCount,
-            retryCondition: (error) => {
-                const shouldRetry = axiosRetry.isNetworkOrIdempotentRequestError(error);
-                log.debug({
-                    err: error.message,
-                    msg: shouldRetry ? "retrying query" : "giving up on query",
-                });
-                return shouldRetry;
-            },
-        });
+        if (withRetrySupport) {
+            axiosRetry(httpClient, {
+                retryDelay: this.customBackoff || this.calculateRetryDelay,
+                shouldResetTimeout: this.shouldResetTimeout,
+                retries: this.retryCount,
+                retryCondition: (error: AxiosError) => {
+                    const shouldRetry = axiosRetry.isNetworkOrIdempotentRequestError(error);
+                    log.debug({
+                        err: error.message,
+                        msg: shouldRetry ? "retrying query" : "giving up on query",
+                    });
+                    return shouldRetry;
+                },
+            });
 
+        }
+
+        // cache client
         this.httpClients[key] = httpClient;
 
         return httpClient;
@@ -221,8 +286,18 @@ export class APIClient {
      */
     protected normalizeParams(endpointOrParams: string | RequestParams, data?: object): RequestParams {
         const normalized: RequestParams = typeof endpointOrParams === 'string'
-            ? { endpoint: endpointOrParams, data, requiresAuthentication: true, }
+            ? { 
+                endpoint: endpointOrParams, 
+                data, 
+                requiresAuthentication: true, 
+                withRetrySupport: true,
+            }
             : endpointOrParams;
+
+        // strip any preceding slash
+        normalized.endpoint = normalized.endpoint
+            .trim()
+            .replace(/^\/+/, '');
 
         return normalized;
     }
@@ -265,12 +340,6 @@ export class APIClient {
      */
     protected throwOnResponseErrorData(response: AxiosResponse): void {
         let data: any;
-
-        if (!response.data) {
-            throw new SDKError({
-                message: "Missing result in get request"
-            });
-        }
 
         if (typeof response.data === 'string') {
             try {
