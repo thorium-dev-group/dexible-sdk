@@ -91,6 +91,7 @@ export default class TokenSupport {
         return this.apiClient.get({
             endpoint,
             requiresAuthentication: false,
+            withRetrySupport: true,
         });
     }
 }
