@@ -47,6 +47,7 @@ export default async (request: QuoteRequest): Promise<any> => {
         data: quoteBody,
         endpoint: "/quotes", 
         requiresAuthentication: false,
+        withRetrySupport: true,
     });
 
     if(!r) {
