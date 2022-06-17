@@ -53,68 +53,66 @@ export type AuthVerifyResponse = {
 
 export class AuthenticationWrapper {
 
-    baseUrl: string;
     client: APIClient;
 
     constructor(client: APIClient) {
         this.client = client;
-        if (!client.baseUrl) {
-            throw new Error(``);
-        }
-        this.baseUrl = client.baseUrl;
     }
 
-    public async nonce(props: AuthNonceRequest): Promise<AuthNonceResponse> {
-        const url = `${this.baseUrl}/auth/nonce`;
-
-        const response = await this.client.post(
-            url,
-            props
-        );
-
-        return response.data;
-    }
-
-    public async register(props: AuthRegisterRequest): Promise<AuthRegisterResponse> {
-        const response = await this.client.post(
-            `${this.baseUrl}/auth/register`,
-            props
-        );
-
-        return response.data;
-    }
-
-    public async verify(props: AuthVerifyRequest): Promise<AuthVerifyResponse> {
-        const {
-            token
-        } = props;
-
-        const response = await this.client.get({
-            endpoint: `/auth/verify`,
-            // Special case - we don't want to use the cached JWT Token, instead we want to explicitly
-            // override with the supplied token. By setting requiresAuthentication == true, the built
-            // in auth logic would override our token.
-            requiresAuthentication: false,
-            headers: {
-                authorization: `Bearer ${token}`
-            }
+    public async nonce(data: AuthNonceRequest): Promise<AuthNonceResponse> {
+        const response = await this.client.post({
+            data,
+            endpoint: 'auth/nonce',
+            requiresAuthentication: true,
+            withRetrySupport: false,
         });
 
         return response.data;
     }
 
-    public async login(props: AuthLoginRequest): Promise<AuthLoginResponse> {
-        const response = await this.client.post(
-            `${this.baseUrl}/auth/login`,
-            props
-        );
+    public async register(data: AuthRegisterRequest): Promise<AuthRegisterResponse> {
+        const response = await this.client.post({
+            data,
+            endpoint: 'auth/register',
+            requiresAuthentication: true,
+            withRetrySupport: false,
+        });
+
+        return response.data;
+    }
+
+    public async verify(data: AuthVerifyRequest): Promise<AuthVerifyResponse> {
+        const response = await this.client.get({
+            endpoint: '/auth/verify',
+            headers: {
+                authorization: `Bearer ${data.token}`
+            },
+            // Special case - we don't want to use the cached JWT Token, instead we want to explicitly
+            // override with the supplied token. By setting requiresAuthentication == true, the built
+            // in auth logic would override our token.
+            requiresAuthentication: false,
+            withRetrySupport: true,
+        });
+
+        return response.data;
+    }
+
+    public async login(data: AuthLoginRequest): Promise<AuthLoginResponse> {
+        const response = await this.client.post({
+            data,
+            endpoint: 'auth/login',
+            requiresAuthentication: true,
+            withRetrySupport: true,
+        });
         return response.data;
     }
 
     public async status(): Promise<AuthStatusResponse> {
-        const response = await this.client.post(
-            `${this.baseUrl}/auth/status`,
-        );
+        const response = await this.client.post({
+            endpoint: 'auth/status',
+            requiresAuthentication: true,
+            withRetrySupport: true,
+        });
         return response.data;
     }
 }
