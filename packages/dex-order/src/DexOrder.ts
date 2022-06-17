@@ -3,6 +3,7 @@ import {IAlgo} from 'dexible-algos';
 import {ethers} from 'ethers';
 import {QuoteGrabber, QuoteRequest} from 'dexible-quote';
 import {
+    APIClient,
     MarketingProps,
     Services, 
     Tag, 
@@ -19,7 +20,7 @@ export interface PrepareResponse {
 }
 
 export interface DexOrderParams {
-    apiClient: Services.APIClient;
+    apiClient: APIClient;
     tokenIn: Token;
     tokenOut: Token;
     quoteId?: number;
@@ -222,7 +223,12 @@ export default class DexOrder {
         }
         let ser = this.serialize();
         log.debug("Sending raw order details", ser);
-        return this.apiClient.post("orders", ser);
+        return this.apiClient.post({
+            endpoint: "orders", 
+            data: ser,
+            requiresAuthentication: true,
+            withRetrySupport: false,
+        });
     }
 
     toJSON() {
