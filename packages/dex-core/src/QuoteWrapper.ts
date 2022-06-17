@@ -1,8 +1,9 @@
 import {QuoteGrabber,QuoteRequest} from 'dexible-quote';
 import {
+    APIClient,
     MarketingProps,
     Services, 
-    Token
+    Token,
 } from 'dexible-common';
 import { BigNumber, BigNumberish } from 'ethers';
 
@@ -22,7 +23,7 @@ export interface SpotParams {
 }
 
 export default class QuoteWrapper {
-    api: Services.APIClient;
+    api:  APIClient;
     marketing?: MarketingProps;
 
     constructor(apiClient:Services.APIClient, marketing?: MarketingProps) {
@@ -59,6 +60,7 @@ export default class QuoteWrapper {
         return this.api.get({
             endpoint,
             requiresAuthentication: false,
+            withRetrySupport: true,
         });
     }
 }
