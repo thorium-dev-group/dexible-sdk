@@ -35,7 +35,7 @@ export class MarketingUtils {
             MarketingUtils.validateReferralCode(referralCode);
         }
 
-        // TODO: can all 3 be set at the same time?
+        // TODO: can all affiliateId, promoCode and referralCode be set at the same time?
         return {
             affiliateId,
             promoCode,
@@ -44,14 +44,14 @@ export class MarketingUtils {
     }
 
     static validateAffiliateId(affiliateId: string) {
-        // TODO
+        // TODO: determine affiliateId validation rules
     }
 
     static validateReferralCode(referralCode: string) {
-        // TODO
+        // TODO: determine referralCode validation rules
     }
 
     static validatePromoCode(promoCode: string) {
-        // TODO
+        // TODO: determine promoCode validation rules
     }
 }
