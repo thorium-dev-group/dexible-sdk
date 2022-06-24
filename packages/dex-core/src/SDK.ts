@@ -49,19 +49,28 @@ type WalletConnectionBase = {
     jwtHandler?: IJWTHandler;
 
     /**
-     * 
+     * Gnosis Safe public address
      */
     gnosisSafe?: string;
 
     /**
-     * 
+     * WalletConnect support
      */
     isWalletConnect?: boolean;
 
+    /**
+     * Optional Custom session timeout (JWT only)
+     */
     sessionTimeoutSeconds?: number;
 
+    /**
+     * Support automatic account registration (default: true)
+     */
     autoRegisterUser?: boolean;
 
+    /**
+     * Marketing / Affiliate program data
+     */
     marketing?: MarketingProps;
 }
 
