@@ -5,12 +5,12 @@ import * as TOKENS from './tokens';
 const dotenv = require('dotenv');
 dotenv.config();
 
-const WETH = TOKENS.WETH_KOVAN;
-const DAI = TOKENS.DAI_KOVAN;
+const WETH = TOKENS.WETH_ROPSTEN;
+const DAI = TOKENS.DAI_ROPSTEN;
 
-const TOKEN_IN = DAI;
-const TOKEN_OUT = WETH;
-const IN_AMT = ethers.utils.parseEther("32660");
+const TOKEN_IN = WETH;
+const TOKEN_OUT = DAI;
+const IN_AMT = ethers.utils.parseEther(".1");
 class Market extends BaseOrder {}
 
 const main = async () => {

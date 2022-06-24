@@ -5,8 +5,8 @@ import * as TOKENS from './tokens';
 const dotenv = require('dotenv');
 dotenv.config();
 
-const WETH = TOKENS.WETH_KOVAN;
-const DAI = TOKENS.DAI_KOVAN;
+const WETH = TOKENS.WETH_ROPSTEN;
+const DAI = TOKENS.DAI_ROPSTEN;
 
 const TOKEN_IN = DAI;
 const TOKEN_OUT = WETH;

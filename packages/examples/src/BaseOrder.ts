@@ -63,7 +63,7 @@ export default class BaseOrder {
         return SDK.create({
             signer: new ethers.Wallet(key, p),
             jwtHandler: new JWTHolder(),
-            gnosisSafe
+            gnosisSafe,
         });
     }
 

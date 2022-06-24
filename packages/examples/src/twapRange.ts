@@ -7,8 +7,8 @@ import * as TOKENS from './tokens';
 const dotenv = require('dotenv');
 dotenv.config();
 
-const DAI = TOKENS.DAI_KOVAN;
-const WETH = TOKENS.WETH_KOVAN;
+const DAI = TOKENS.DAI_ROPSTEN;
+const WETH = TOKENS.WETH_ROPSTEN;
 
 const TOKEN_IN = WETH;
 const TOKEN_OUT = DAI;

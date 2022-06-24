@@ -9,9 +9,9 @@ dotenv.config();
 const DAI = TOKENS.DAI_ROPSTEN;
 const WETH = TOKENS.WETH_ROPSTEN;
 
-const TOKEN_IN = DAI;
-const TOKEN_OUT = WETH;
-const AMT_IN = ethers.utils.parseEther("1000");
+const TOKEN_IN = WETH;
+const TOKEN_OUT = DAI;
+const AMT_IN = ethers.utils.parseEther(".1");
 
 class StopLimit extends BaseOrder {};
 
