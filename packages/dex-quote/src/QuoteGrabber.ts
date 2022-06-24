@@ -41,7 +41,7 @@ export default async (request: QuoteRequest): Promise<any> => {
 
     let r = await request.apiClient.post({
         data: quoteBody,
-        endpoint: "/quotes", 
+        endpoint: "/quotes/public", 
         requiresAuthentication: false,
         withRetrySupport: true,
     });
