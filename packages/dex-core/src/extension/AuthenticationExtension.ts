@@ -55,6 +55,13 @@ export type AuthVerifyResponse = {
     valid: boolean;
 }
 
+/**
+ * IMPORTANT: Most methods below use the following settings:
+ * - requiresAuthentication: false,
+ * - withRetrySupport: false,
+ * 
+ * This is intentional, to prevent accidental recursion during login failures.
+ */
 export class AuthenticationExtension {
 
     client: APIClient;
@@ -67,22 +74,22 @@ export class AuthenticationExtension {
         const response = await this.client.post({
             data,
             endpoint: 'auth/nonce',
-            requiresAuthentication: true,
+            requiresAuthentication: false,
             withRetrySupport: false,
         });
 
-        return response.data;
+        return response;
     }
 
     public async register(data: AuthRegisterRequest): Promise<AuthRegisterResponse> {
         const response = await this.client.post({
             data,
             endpoint: 'auth/register',
-            requiresAuthentication: true,
+            requiresAuthentication: false,
             withRetrySupport: false,
         });
 
-        return response.data;
+        return response;
     }
 
     public async verify(data: AuthVerifyRequest): Promise<AuthVerifyResponse> {
@@ -95,28 +102,36 @@ export class AuthenticationExtension {
             // override with the supplied token. By setting requiresAuthentication == true, the built
             // in auth logic would override our token.
             requiresAuthentication: false,
-            withRetrySupport: true,
+            withRetrySupport: false,
         });
 
-        return response.data;
+        return response;
     }
 
+    /**
+     * Generate a new JWT session
+     * Note: this does not invoke any configured JwtHandler!
+     * @param data 
+     * @returns 
+     */
     public async login(data: AuthLoginRequest): Promise<AuthLoginResponse> {
         const response = await this.client.post({
             data,
             endpoint: 'auth/login',
-            requiresAuthentication: true,
-            withRetrySupport: true,
+            requiresAuthentication: false,
+            withRetrySupport: false,
         });
-        return response.data;
+        return response;
     }
 
     public async status(): Promise<AuthStatusResponse> {
         const response = await this.client.post({
             endpoint: 'auth/status',
+            // requiresAuthentication is true, otherwise we would not be able to
+            // validate the current authentication.
             requiresAuthentication: true,
-            withRetrySupport: true,
+            withRetrySupport: false,
         });
-        return response.data;
+        return response;
     }
 }
