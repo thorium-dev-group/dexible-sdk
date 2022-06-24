@@ -175,17 +175,18 @@ export default class DexOrder {
             minPerRound = ethers.utils.parseUnits(inUnits.toFixed(this.tokenIn.decimals), this.tokenIn.decimals);
         }
 
-        let req = {
+        const req : QuoteRequest = {
+            chainId: this.chainId,
             tokenIn: this.tokenIn,
             tokenOut: this.tokenOut,
             amountIn: this.amountIn.toString(),
             minOrderSize: minPerRound.toString(),
             apiClient: this.apiClient,
             slippagePercent,
-        } as QuoteRequest;
+        };
         log.debug("Using request", req);
 
-        let quotes = await QuoteGrabber(req);
+        const quotes = await QuoteGrabber(req);
         if(quotes && quotes.length > 0) {
             log.debug("Have quote result");
             //quotes array should have single-round and recommended quotes
