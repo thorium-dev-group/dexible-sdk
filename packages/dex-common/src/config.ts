@@ -140,46 +140,24 @@ const SupportedBlockchains = [
     PolygonMainnet,
 ] as const;
 
+
 /**
  * Exports
  */
-// NOTE: we shouldn't need to manually sync theses types. The following approach was
-// originally working, but stoped resolving for some reason. Maybe revisit after 
-// upgrading typescript.
-// type SupportedBlockchainIds = Extract<typeof SupportedBlockchains[number], { id }>["id"];
-// type SupportedBlockchainIdAliases = Extract<typeof SupportedBlockchains[number], { id }>["idAlias"];
-export type SupportedBlockchainIds =
-    'avalanche-mainnet' |
-    'bsc-mainnet' |
-    'ethereum-mainnet' |
-    'ethereum-ropsten' |
-    'fantom-mainnet' |
-    'polygon-mainnet';
-
-export type SupportedBlockchainIdAliases =
-    'avalanche' |
-    'bsc' |
-    'ethereum' |
-    'fantom' |
-    'polygon' |
-    'ropsten';
-
-export type SupportedBlockchainIdentifier = SupportedBlockchainIds | SupportedBlockchainIdAliases;
+export const chainConfig: ChainConfig = SupportedBlockchains.reduce((all, blockchain) => {
+    if (blockchain.contracts) {
+        all[blockchain.chainId] = blockchain.contracts;
+    }
+    return all;
+}, {});
 
 
-function findBlockchainConfig(ident: SupportedBlockchainIdentifier) {
-    const blockchain = AllBlockchains.find((it) => {
-        return it.id === ident || it.idAlias === ident;
-    });
-
+export function resolveApiEndpointByChainId(chainId: number): string {
+    const blockchain = AllBlockchains.find((it) => it.chainId === chainId);
     if (!blockchain) {
-        throw new Error(`Unsupported blockchain (${ident})`);
+        throw new Error(`Unsupported blockchain (${chainId})`);
     }
 
-    return blockchain;
-}
-
-function buildBaseUrl(blockchain: BlockchainDefinition): string {
     const apiDomain = blockchain.apiDomain;
     if (!apiDomain) {
         throw new Error(`Unsupported blockchain (${blockchain.id})`);
@@ -188,38 +166,4 @@ function buildBaseUrl(blockchain: BlockchainDefinition): string {
     const baseUrl = 'https://' + apiDomain + '/v1';
 
     return baseUrl;
-}
-
-
-export const chainConfig: ChainConfig = SupportedBlockchains.reduce((all, blockchain) => {
-    if (blockchain.contracts) {
-        all[blockchain.chainId] = blockchain.contracts;
-    }
-    return all;
-}, {});
-
-export function resolveApiEndpointByIdentifier(ident: SupportedBlockchainIdentifier): string {
-    const blockchain = findBlockchainConfig(ident);
-    return buildBaseUrl(blockchain);
 };
-
-export function resolveApiEndpointByChainId(chainId: number): string {
-    const blockchain = AllBlockchains.find((it) => it.chainId === chainId);
-    if (!blockchain) {
-        throw new Error(`Unsupported blockchain (${chainId})`);
-    }
-    return buildBaseUrl(blockchain);
-};
-
-// TODO: can we drop this function - it was previously exported, only used internally by APIClient
-// export function chainToName(ident: SupportedBlockchainIdentifier, chainId: number): string {
-//     const blockchain = findBlockchainConfig(ident);
-
-//     if (chainId !== blockchain.chainId) {
-//         throw new Error(`Unexpected chainId mismatch (${chainId}, ${blockchain.chainId})`);
-//     }
-
-//     const chainName = blockchain.chainName;
-
-//     return chainName;
-// };

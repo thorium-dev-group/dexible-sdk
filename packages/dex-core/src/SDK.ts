@@ -6,9 +6,7 @@ import {
     MarketingProps,
     IAuthenticationHandler,
     APIExtensionProps,
-    SupportedBlockchainIdentifier,
     resolveApiEndpointByChainId,
-    resolveApiEndpointByIdentifier,
 } from 'dexible-common';
 
 import { AlgoExtension } from './extension/algos';
@@ -31,12 +29,6 @@ type WalletConnectionBase = {
      * Network Chain ID
      */
     chainId?: number;
-
-
-    /**
-     * Human-readable network name
-     */
-    network: SupportedBlockchainIdentifier;
 
     /**
      * Optional API endpoint
@@ -165,8 +157,7 @@ export default class SDK {
         this.gnosisSafe = gnosisSafe;
 
         const baseUrl = props.baseUrl
-            || resolveApiEndpointByIdentifier(props.network);
-
+            || resolveApiEndpointByChainId(chainId);
 
         this.chainId = chainId;
 
@@ -282,9 +273,6 @@ export default class SDK {
         let signerChainId;
         if (signer) {
             signerChainId = (await signer.provider?.getNetwork())?.chainId;
-            // if (!net) {
-            //     throw new Error("Signer does support a provider to retrieve network info");
-            // }
         }
 
         if (providerChainId && signerChainId) {
