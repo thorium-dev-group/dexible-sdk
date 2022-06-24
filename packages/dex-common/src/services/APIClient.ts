@@ -1,14 +1,10 @@
 import axios, { AxiosAdapter, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ethers } from 'ethers';
 import Logger from 'dexible-logger';
-import chainToName from '../chainToName';
 import SDKError from '../SDKError';
 import { default as axiosRetry, isIdempotentRequestError, isNetworkError } from 'axios-retry';
 import { IAuthenticationHandler } from './IAuthenticationHandler';
 
 const log = new Logger({ component: "APIClient" });
-
-const DEFAULT_BASE_ENDPOINT = "api.dexible.io/v1";
 
 export type HttpClientOptions = {
     requiresAuthentication: boolean;
@@ -18,12 +14,11 @@ export type HttpClientOptions = {
 export type NetworkName = "ethereum" | "polygon" | "avalanche" | "bsc" | "fantom";
 export interface APIProps {
     authenticationHandler: IAuthenticationHandler;
-    baseUrl?: string;
-    chainId: number;
-    network: NetworkName;
+    baseUrl: string;
+    // chainId: number;
+    // network: NetworkName;
     retryCount?: number;
     retryDelayBaseMs?: number;
-    signer?: ethers.Signer;
     timeoutMs?: number;
     customBackoff?: (retryCount: number) => number;
 }
@@ -45,7 +40,6 @@ export interface RequestParams {
 
 export type AuthenticationMode = 'jwt' | 'signature' | 'none';
 
-// FIXME: disable order submit retry
 
 export class APIClient {
 
@@ -57,14 +51,11 @@ export class APIClient {
 
     adapter: AxiosAdapter | null;
     baseUrl: string;
-    chainId: number;
-    chainName: string | null;
 
     httpClients: Record<string, AxiosInstance>
 
     authenticationHandler?: IAuthenticationHandler;
-    network: NetworkName;
-    signer?: ethers.Signer;
+    // network: NetworkName;
 
     retryDelayBaseMs = 100;
     retryCount = 3;
@@ -79,12 +70,9 @@ export class APIClient {
 
     constructor(props: APIProps) {
 
-        this.signer = props.signer;
         this.adapter = null;
-        this.network = props.network;
-        this.chainId = props.chainId;
-        this.chainName = chainToName(this.network, this.chainId);
-        this.baseUrl = props.baseUrl || this.buildBaseUrl();
+        // this.network = props.network;
+        this.baseUrl = props.baseUrl;
         this.authenticationHandler = props.authenticationHandler;
         this.headers = {};
 
@@ -105,10 +93,7 @@ export class APIClient {
 
         this.httpClients = {};
 
-        log.debug("Created api client for chain",
-            this.chainName,
-            "on network",
-            this.network);
+        log.debug("Created api client for " + this.baseUrl);
     }
 
     protected calculateRetryDelay(retryCount: number): number {
@@ -175,21 +160,6 @@ export class APIClient {
         return response.data;
     }
 
-
-    /**
-     * 
-     * @returns 
-     */
-    protected buildBaseUrl() {
-        let base = process.env.API_BASE_URL;
-        if (!base) {
-            base = `https://${this.network}.${this.chainName}.${DEFAULT_BASE_ENDPOINT}`
-        }
-        return base;
-    }
-
-
-
     protected async getHttpClient(props: HttpClientOptions): Promise<AxiosInstance> {
 
         const {
@@ -217,7 +187,9 @@ export class APIClient {
         if (requiresAuthentication) {
 
             if (!this.authenticationHandler) {
-                throw new Error(`AuthenticationHandler is required`);
+                throw new SDKError({
+                    message: `AuthenticationHandler is required`,
+                });
             }
 
             httpClient = this.authenticationHandler.buildClient(clientConfig);
@@ -236,13 +208,12 @@ export class APIClient {
                 return response;
             },
             (err) => {
-                log.error({ err, msg: "Problem in API post" });
+                // log.error({ err, msg: "Problem in API post" });
                 this.throwOnAxiosError(err);
             }
         )
 
-        // TODO
-        // enable request limit support
+        // TODO: enable request limit support
         // httpClient.interceptors.request.use(async (config) => {
         //     if (this.limiter) {
         //         if (!this.limiter.tryRemoveTokens(1)) {
@@ -286,10 +257,10 @@ export class APIClient {
      */
     protected normalizeParams(endpointOrParams: string | RequestParams, data?: object): RequestParams {
         const normalized: RequestParams = typeof endpointOrParams === 'string'
-            ? { 
-                endpoint: endpointOrParams, 
-                data, 
-                requiresAuthentication: true, 
+            ? {
+                endpoint: endpointOrParams,
+                data,
+                requiresAuthentication: true,
                 withRetrySupport: true,
             }
             : endpointOrParams;

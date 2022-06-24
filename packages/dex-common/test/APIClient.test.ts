@@ -15,8 +15,6 @@ describe('APIClient', () => {
     const client = new APIClient({
         authenticationHandler,
         baseUrl,
-        chainId: 1,
-        network: 'ethereum',
     });
 
     let pollyContext = autoSetupPolly();
@@ -86,8 +84,6 @@ describe('APIClient', () => {
         await client.get(endpoint);
         await client.post(endpoint);
 
-        // TODO: validate body as well
-
         expect(requestCount).toEqual(2);
     });
 
@@ -132,8 +128,6 @@ describe('APIClient', () => {
         const customClient = new APIClient({
             authenticationHandler: new MockAuthenticationHandler(),
             baseUrl,
-            chainId: 1,
-            network: 'ethereum',
             retryCount,
         });
 
@@ -163,8 +157,6 @@ describe('APIClient', () => {
         const customClient = new APIClient({
             authenticationHandler: new MockAuthenticationHandler(),
             baseUrl,
-            chainId: 1,
-            network: 'ethereum',
             retryCount,
         });
 
@@ -200,8 +192,6 @@ describe('APIClient', () => {
         const customClient = new APIClient({
             authenticationHandler: new MockAuthenticationHandler(),
             baseUrl,
-            chainId: 1,
-            network: 'ethereum',
             timeoutMs,
         });
 
@@ -354,8 +344,6 @@ describe('APIClient', () => {
         const client = new APIClient({
             authenticationHandler,
             baseUrl,
-            chainId: 1,
-            network: 'ethereum',
         });
 
         await client.get({
