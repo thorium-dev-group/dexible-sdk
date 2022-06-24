@@ -18,6 +18,7 @@ export interface QuoteParams {
 }
 
 export interface SpotParams {
+    // chainId?: number;
     tokenIn: Token;
     tokenOut: Token;
 }
@@ -62,12 +63,24 @@ export class QuoteExtension {
         const tokenIn = props.tokenIn.address.toLowerCase();
         const tokenOut = props.tokenOut.address.toLowerCase();
 
+        // TODO: switch to generic endpoint to support single multi-chain api
+        // const chainId = props.chainId || this.chainId;
+        // const endpoint = `quotes/spot`;
+
         const endpoint = `quotes/spot/${encodeURIComponent(tokenIn)}/${encodeURIComponent(tokenOut)}`;
         
         return this.api.get({
             endpoint,
+            // params: {
+            //     tokenIn,
+            //     tokenOut,
+            //     chainId,
+            // },
             requiresAuthentication: false,
             withRetrySupport: true,
         });
+
+
+
     }
 }
