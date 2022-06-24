@@ -11,6 +11,8 @@ const log = new Logger({
 })
 
 export interface QuoteRequest {
+    // TODO: discuss with @mdcoon
+    chainId: number;
     tokenIn: Token;
     tokenOut: Token;
     amountIn: BigNumberish;
@@ -23,17 +25,11 @@ export interface QuoteRequest {
 }
 
 export default async (request: QuoteRequest): Promise<any> => {
-    let net = await request.apiClient.signer?.provider?.getNetwork();
-    if(!net) {
-        throw new Error("Missing provider in web3 signer");
-    }
-    
-    const networkId = net?.chainId - 0;
     const slippagePercentage = request.slippagePercent/100;
 
     const quoteBody = {
         amountIn: request.amountIn.toString(),
-        networkId,
+        networkId: request.chainId,
         tokenIn: request.tokenIn.address,
         tokenOut: request.tokenOut.address,
         minOrderSize: request.minOrderSize,
