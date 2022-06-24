@@ -1,9 +1,10 @@
-import { AuthNonceResponse } from "./AuthenticationWrapper";
+import { AuthNonceResponse } from "../extension/AuthenticationExtension";
 import Logger from "dexible-logger";
 import { IJWTHandler, IAuthenticationHandler } from 'dexible-common';
 import { BaseAuthenticationHandler, BaseAuthenticationHandlerProps } from "./BaseAuthenticationHandler";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import { ethers } from "ethers";
 
 
 const log = new Logger({ component: "JwtSessionHandler" });
@@ -11,20 +12,25 @@ const log = new Logger({ component: "JwtSessionHandler" });
 type LoginDetails = { token: string, expiration: number };
 
 export interface JwtSessionHandlerProps extends BaseAuthenticationHandlerProps {
+    signer: ethers.Signer;
     tokenHandler: IJWTHandler;
-}
+    sessionTimeoutSeconds?: number;
+};
 
 export class JwtAuthenticationHandler extends BaseAuthenticationHandler implements IAuthenticationHandler {
 
+    sessionTimeoutSeconds?: number;
     tokenHandler: IJWTHandler;
 
     constructor(props: JwtSessionHandlerProps) {
         super(props);
 
         const {
+            sessionTimeoutSeconds,
             tokenHandler,
         } = props;
 
+        this.sessionTimeoutSeconds = sessionTimeoutSeconds;
         this.tokenHandler = tokenHandler;
     }
 
@@ -71,21 +77,20 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
      * @returns 
      */
     protected async registerOrLogin(): Promise<LoginDetails> {
-        // FIXME: currently the api auto-registers new users, this needs to stop
-        //         at least for authcontroller, maybe all requests
-        // FIXME: add autoRegister constructor option
-        // FIXME: wire up session timeout
-        // FIXME: Consider old SDK compat changes w. auto-register
 
-        let response : LoginDetails;
+        let response: LoginDetails;
         try {
             response = await this.login();
-        } catch(e) {
+        } catch (e) {
             // attempt user registration
-            await this.register();
+            if (this.autoRegisterUser) {
+                await this.register();
 
-            // second login attempt
-            response = await this.login();
+                // second login attempt
+                response = await this.login();
+            } else {
+                throw e;
+            }
         }
 
         return response;
@@ -121,7 +126,8 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         const loginResponse = await this.sdk.authentication.login({
             signature,
             address,
-            nonce: nonceResponse.nonce
+            nonce: nonceResponse.nonce,
+            expiresInSeconds: this.sessionTimeoutSeconds,
         });
 
         log.debug("Received token", loginResponse.token);

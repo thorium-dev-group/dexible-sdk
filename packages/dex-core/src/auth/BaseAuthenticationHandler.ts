@@ -1,10 +1,11 @@
 import { ethers } from 'ethers';
 import { MarketingProps } from 'dexible-common';
-import SDK from "./SDK";
+import SDK from "../SDK";
 import { IAuthenticationHandler } from "dexible-common/src/services/IAuthenticationHandler";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
 
 export interface BaseAuthenticationHandlerProps {
+    autoRegisterUser: boolean;
     isWalletConnect: boolean;
     marketing?: MarketingProps;
     sdk: SDK;
@@ -13,6 +14,7 @@ export interface BaseAuthenticationHandlerProps {
 
 export abstract class BaseAuthenticationHandler implements IAuthenticationHandler {
 
+    autoRegisterUser: boolean;
     isWalletConnect: boolean;
     marketing?: MarketingProps;
     sdk: SDK;
@@ -21,12 +23,14 @@ export abstract class BaseAuthenticationHandler implements IAuthenticationHandle
 
     constructor(props: BaseAuthenticationHandlerProps) {
         const {
+            autoRegisterUser,
             isWalletConnect,
             marketing,
             sdk,
             signer,
         } = props;
 
+        this.autoRegisterUser = autoRegisterUser;
         this.isWalletConnect = isWalletConnect;
         this.marketing = marketing;
         this.sdk = sdk;

@@ -1,4 +1,8 @@
-import { APIClient, MarketingProps } from 'dexible-common';
+import { 
+    APIClient, 
+    APIExtensionProps,
+    MarketingProps
+} from 'dexible-common';
 
 // /auth/nonce
 export type AuthNonceRequest = {
@@ -51,12 +55,12 @@ export type AuthVerifyResponse = {
     valid: boolean;
 }
 
-export class AuthenticationWrapper {
+export class AuthenticationExtension {
 
     client: APIClient;
 
-    constructor(client: APIClient) {
-        this.client = client;
+    constructor(props: APIExtensionProps) {
+        this.client = props.apiClient;
     }
 
     public async nonce(data: AuthNonceRequest): Promise<AuthNonceResponse> {

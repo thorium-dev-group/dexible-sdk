@@ -33,16 +33,17 @@ export class SignatureAuthenticationHandler extends BaseAuthenticationHandler im
      */
     protected async registerOrLogin(): Promise<void> {
 
-        const hasExistingAccount = await this.login();
+        let loginSuccess = await this.login();
 
-        if (! hasExistingAccount) {
+        if (loginSuccess == false && this.autoRegisterUser) {
             await this.register();
+            
+            // second login attempt
+            loginSuccess = await this.login();
         }
 
-        const hasNewAccount = await this.login();
-
-        if (! hasNewAccount) {
-            throw new Error(`Failed to register new account`);
+        if (! loginSuccess) {
+            throw new Error(`Account registration is required`);
         }
     }
 

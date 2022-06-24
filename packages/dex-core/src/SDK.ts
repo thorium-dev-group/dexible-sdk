@@ -1,36 +1,48 @@
 import { ethers, Signer } from 'ethers';
-import { AlgoWrapper } from './algos';
-import TokenSupport from './TokenSupport';
-import OrderWrapper from './OrderWrapper';
 import {
     IJWTHandler,
     Services,
     MarketingUtils,
     MarketingProps,
+    IAuthenticationHandler,
+    APIExtensionProps,
+    SupportedBlockchainIdentifier,
+    resolveApiEndpointByChainId,
+    resolveApiEndpointByIdentifier,
 } from 'dexible-common';
-import QuoteWrapper from './QuoteWrapper';
-import Contact from './Contact';
-import Reports from './Reports';
-import { JwtAuthenticationHandler } from './JwtAuthenticationHandler'
-import { SignatureAuthenticationHandler } from './SignatureAuthenticationHandler';
 
-import { AuthenticationWrapper } from './AuthenticationWrapper';
+import { AlgoExtension } from './extension/algos';
+import { QuoteExtension } from './extension/QuoteExtension';
+import { ContactExtension } from './extension/ContactExtension';
+import { ReportExtension } from './extension/ReportExtension';
+import { GasPriceWrapper } from 'dexible-gas-prices';
+import { TokenExtension } from './extension/TokenExtension';
+import { OrderExtension } from './extension/OrderExtension';
 
-export interface WalletConnection {
+import { AuthenticationExtension } from './extension/AuthenticationExtension';
+import { JwtAuthenticationHandler } from './auth/JwtAuthenticationHandler'
+import { SignatureAuthenticationHandler } from './auth/SignatureAuthenticationHandler';
+import { NullAuthenticationHandler } from './auth/NullAuthenticationHandler';
+import { BaseAuthenticationHandlerProps } from './auth/BaseAuthenticationHandler';
+// import { networkChainIds, SupportedNetworks } from './config/networkChainIds';
+
+type WalletConnectionBase = {
+
+    /**
+     * Network Chain ID
+     */
+    chainId?: number;
+
+
     /**
      * Human-readable network name
      */
-    network: 'ethereum' | 'polygon' | 'avalanche' | 'bsc' | 'fantom';
+    network: SupportedBlockchainIdentifier;
 
     /**
      * Optional API endpoint
      */
     baseUrl?: string;
-
-    /**
-     * ethers.js Signer instance
-     */
-    signer: Signer;
 
     /**
      * Optional JWT handler instance
@@ -47,104 +59,233 @@ export interface WalletConnection {
      */
     isWalletConnect?: boolean;
 
-    sessionTimeout?: number;
+    sessionTimeoutSeconds?: number;
+
+    autoRegisterUser?: boolean;
 
     marketing?: MarketingProps;
 }
 
+export type WalletConnectionWithProvider = WalletConnectionBase & {
+    provider: ethers.providers.Provider;
+}
+
+export type WalletConnectionWithSigner = WalletConnectionBase & {
+    /**
+     * ethers.js Signer instance
+     */
+    signer?: Signer;
+
+}
+
+export type WalletConnection = WalletConnectionWithProvider | WalletConnectionWithSigner;
+
 
 export default class SDK {
 
-    provider: ethers.providers.Provider | undefined;
-    signer: ethers.Signer;
+    provider: ethers.providers.Provider;
+    signer?: ethers.Signer;
+
     gasPolicyTypes: {
         RELATIVE: string;
         FIXED: string;
     };
-    algo: AlgoWrapper;
-    authentication: AuthenticationWrapper;
-    token: TokenSupport;
-    order: OrderWrapper;
-    apiClient: Services.APIClient;
-    quote: QuoteWrapper;
-    contact: Contact;
-    gnosisSafe?: string;
-    chainId: number;
-    reports: Reports;
 
-    // Marketing Data
+    apiClient: Services.APIClient;
+
+    // configuration
+    chainId: number;
+    gnosisSafe?: string;
     marketing: MarketingProps;
 
+    // endpoint extensions
+    algo: AlgoExtension;
+    contact: ContactExtension;
+    authentication: AuthenticationExtension;
+    gas: GasPriceWrapper;
+    order: OrderExtension;
+    quote: QuoteExtension;
+    reports: ReportExtension;
+    token: TokenExtension;
+
+
     static async create(props: WalletConnection): Promise<SDK> {
-        let { signer } = props;
-        let net = await signer.provider?.getNetwork();
-        if (!net) {
-            throw new Error("Signer does support a provider to retrieve network info");
+        const provider = 'provider' in props
+            ? props.provider
+            : undefined;
+
+
+        const signer = 'signer' in props
+            ? props.signer
+            : undefined;
+
+        const specifiedChainId = props.chainId;
+
+        const resolvedChainId = await SDK.resolveChainId({
+            provider,
+            signer,
+        });
+
+        if (specifiedChainId && resolvedChainId) {
+            if (specifiedChainId !== resolvedChainId) {
+                throw new Error(`Chain ID Mismatch (resolved: ${resolvedChainId}; specified: ${specifiedChainId})`);
+            }
         }
-        return new SDK(props, net.chainId);
+
+        const chainId = specifiedChainId || resolvedChainId;
+
+        return new SDK(props, chainId);
     }
 
     private constructor(props: WalletConnection, chainId: number) {
-        this.signer = props.signer;
-        this.provider = this.signer.provider;
-        this.gnosisSafe = props.gnosisSafe;
+
+        const signer = 'signer' in props
+            ? props.signer
+            : undefined;
+        this.signer = signer;
+
+        const provider = 'provider' in props
+            ? props.provider
+            : signer?.provider;
+
+        if (!provider) {
+            throw new Error('provider is required');
+        }
+        this.provider = provider;
+
+        const gnosisSafe = props.gnosisSafe;
+        this.gnosisSafe = gnosisSafe;
+
+        const baseUrl = props.baseUrl
+            || resolveApiEndpointByIdentifier(props.network);
+
+
         this.chainId = chainId;
 
-        this.marketing = MarketingUtils.extractMarketingProps(props.marketing || {});
+        this.gasPolicyTypes = {
+            RELATIVE: "relative",
+            FIXED: "fixed"
+        };
 
-        if (!this.provider) {
-            throw new Error("Signer must have an ethers RPC provider");
-        }
+        const marketing = MarketingUtils.extractMarketingProps(props.marketing || {});
+        this.marketing = marketing;
+
+        const authenticationHandler = SDK.buildAuthenticationHandler({
+            sdk: this,
+            walletConnection: props,
+            marketing,
+            signer,
+        });
+
+        const apiClient = new Services.APIClient({
+            baseUrl,
+            authenticationHandler,
+        });
+        this.apiClient = apiClient;
+
+        const apiExtensionProps: APIExtensionProps = {
+            apiClient,
+            chainId,
+            gnosisSafe,
+            marketing,
+            provider,
+            signer,
+        };
+
+        // api extensions
+        this.algo = new AlgoExtension(apiExtensionProps);
+        this.authentication = new AuthenticationExtension(apiExtensionProps);
+        this.contact = new ContactExtension(apiExtensionProps);
+        this.gas = new GasPriceWrapper(this.apiClient);
+        this.order = new OrderExtension(apiExtensionProps);
+        this.quote = new QuoteExtension(apiExtensionProps);
+        this.reports = new ReportExtension(apiExtensionProps);
+        this.token = new TokenExtension(apiExtensionProps);
+    }
+
+    private static buildAuthenticationHandler(props: {
+        marketing: any,
+        sdk: SDK,
+        signer?: ethers.Signer
+        walletConnection: WalletConnection,
+    }): IAuthenticationHandler {
+
+        const {
+            marketing,
+            sdk,
+            signer,
+            walletConnection,
+        } = props;
 
         // NOTE: AuthenticationHandler needs a reference to the sdk / authentication wrapper to
         // handle the authentication flow. Currently there is a coupling between
         // APIClient <--> AuthenticationHandler <--> AuthenticationWrapper to manage
         // registering, logging in, and refreshing automatically jwt tokens.
         let authenticationHandler;
-        if (props.jwtHandler) {
-            authenticationHandler = new JwtAuthenticationHandler({
-                isWalletConnect: props.isWalletConnect || false,
-                sdk: this,
-                signer: this.signer,
-                tokenHandler: props.jwtHandler,
-                marketing: this.marketing,
-            })
+
+        if (signer) {
+            const authenticationHandlerProps: BaseAuthenticationHandlerProps = {
+                autoRegisterUser: walletConnection.autoRegisterUser || true,
+                isWalletConnect: walletConnection.isWalletConnect || false,
+                sdk,
+                signer,
+                marketing,
+            };
+
+            if (walletConnection.jwtHandler) {
+                authenticationHandler = new JwtAuthenticationHandler({
+                    ...authenticationHandlerProps,
+                    sessionTimeoutSeconds: walletConnection.sessionTimeoutSeconds,
+                    tokenHandler: walletConnection.jwtHandler,
+                });
+            } else {
+                authenticationHandler =
+                    new SignatureAuthenticationHandler(
+                        authenticationHandlerProps
+                    );
+            }
         } else {
-            authenticationHandler = new SignatureAuthenticationHandler({
-                isWalletConnect: props.isWalletConnect || false,
-                sdk: this,
-                signer: this.signer,
-                marketing: this.marketing,
-            })
+            authenticationHandler = new NullAuthenticationHandler();
         }
 
-        // jwtHandler: props.jwtHandler,
-
-        this.apiClient = new Services.APIClient({
-            baseUrl: props.baseUrl,
-            network: props.network,
-            chainId,
-            authenticationHandler,
-        });
-
-        this.algo = new AlgoWrapper();
-        this.token = new TokenSupport({
-            provider: this.provider,
-            signer: this.signer,
-            apiClient: this.apiClient,
-            gnosisSafe: this.gnosisSafe
-        });
-
-        this.authentication = new AuthenticationWrapper(this.apiClient);
-        this.order = new OrderWrapper(this.apiClient, this.gnosisSafe, this.marketing);
-        this.quote = new QuoteWrapper(this.apiClient, this.marketing);
-        this.contact = new Contact({ apiClient: this.apiClient });
-
-        this.gasPolicyTypes = {
-            RELATIVE: "relative",
-            FIXED: "fixed"
-        }
-
-        this.reports = new Reports(this.apiClient);
+        return authenticationHandler;
     }
+
+    private static async resolveChainId(props: {
+        provider?: ethers.providers.Provider,
+        signer?: ethers.Signer,
+    }): Promise<number> {
+
+        // resolve provider chainId
+        const provider = 'provider' in props
+            ? props.provider
+            : null;
+
+        let providerChainId;
+        if (provider) {
+            providerChainId = (await provider.getNetwork()).chainId;
+        }
+
+        // resolve signer chainId
+        const signer = 'signer' in props
+            ? props.signer
+            : null;
+
+        let signerChainId;
+        if (signer) {
+            signerChainId = (await signer.provider?.getNetwork())?.chainId;
+            // if (!net) {
+            //     throw new Error("Signer does support a provider to retrieve network info");
+            // }
+        }
+
+        if (providerChainId && signerChainId) {
+            if (providerChainId !== signerChainId) {
+                throw new Error(`Chain ID Mismatch (provider: ${providerChainId}; signer:${signerChainId})`);
+            }
+        }
+
+        return providerChainId || signerChainId;
+    }
+
 }
