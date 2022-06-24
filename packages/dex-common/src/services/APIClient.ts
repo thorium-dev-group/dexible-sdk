@@ -4,6 +4,7 @@ import SDKError from '../SDKError';
 import { default as axiosRetry, isIdempotentRequestError, isNetworkError } from 'axios-retry';
 import { IAuthenticationHandler } from './IAuthenticationHandler';
 
+
 const log = new Logger({ component: "APIClient" });
 
 export type HttpClientOptions = {
@@ -120,12 +121,23 @@ export class APIClient {
             withRetrySupport: params.withRetrySupport,
         });
 
+        log.debug({
+            msg: 'GET request',
+            url,
+            ...params,
+        });
+
         const response = await httpClient.request({
             data: params.data,
             params: params.params,
             headers: params.headers,
             method: "GET",
             url,
+        });
+
+        log.debug({
+            msg: 'GET response',
+            response,
         });
 
         return response.data;
@@ -143,11 +155,16 @@ export class APIClient {
         const params = this.normalizeParams(endpointOrParams, maybeData);
 
         let url = `${this.baseUrl}/${params.endpoint}`;
-        log.debug("Posting to url", url);
 
         const httpClient = await this.getHttpClient({
             requiresAuthentication: params.requiresAuthentication,
             withRetrySupport: params.withRetrySupport,
+        });
+
+        log.debug({
+            msg: 'POST request',
+            url,
+            ...params,
         });
 
         const response = await httpClient.request({
@@ -155,6 +172,11 @@ export class APIClient {
             headers: params.headers,
             method: "POST",
             url,
+        });
+
+        log.debug({
+            msg: 'POST response',
+            response,
         });
 
         return response.data;
@@ -194,8 +216,6 @@ export class APIClient {
 
             httpClient = this.authenticationHandler.buildClient(clientConfig);
 
-            // handle registration & initial login
-            await this.authenticationHandler.authenticate();
         } else {
             httpClient = axios.create(clientConfig);
         }
@@ -281,7 +301,11 @@ export class APIClient {
 
         const message = err.message;
         const response = err.response;
-        log.error("Problem from server", response?.data);
+        log.error({
+            msg: "request failed", 
+            request: err.request,
+            response: response,
+        });
 
         if (typeof response?.data === 'object') {
             this.throwOnResponseErrorData(response);
