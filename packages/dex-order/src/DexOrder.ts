@@ -3,11 +3,12 @@ import {IAlgo} from 'dexible-algos';
 import {ethers} from 'ethers';
 import {QuoteGrabber, QuoteRequest} from 'dexible-quote';
 import {
+    toErrorWithMessage,
     APIClient,
     MarketingProps,
     Services, 
     Tag, 
-    Token
+    Token,
 } from 'dexible-common';
 import Logger from 'dexible-logger';
 
@@ -21,6 +22,7 @@ export interface PrepareResponse {
 
 export interface DexOrderParams {
     apiClient: APIClient;
+    chainId: number;
     tokenIn: Token;
     tokenOut: Token;
     quoteId?: number;
@@ -33,6 +35,8 @@ export interface DexOrderParams {
 }
 
 export default class DexOrder {
+    // TODO: discuss with @mdcoon
+    chainId: number;
     tokenIn: Token;
     tokenOut: Token;
     amountIn: BigNumberish;
@@ -59,6 +63,7 @@ export default class DexOrder {
         this.tags = params.tags;
         this.gnosisSafe = params.gnosisSafe;
         this.marketing = params.marketing;
+        this.chainId = params.chainId;
     }
 
     serialize = () => {
@@ -72,7 +77,7 @@ export default class DexOrder {
             amountIn: this.amountIn.toString(),
             gnosisSafe: this.gnosisSafe,
             marketing: this.marketing,
-            networkId: this.apiClient.chainId,
+            networkId: this.chainId,
             policies: algoSer.policies,
             quoteId: this.quoteId,
             tags: this.tags,
@@ -153,8 +158,9 @@ export default class DexOrder {
                 order: this
             }
         } catch (e) {
+            const err = toErrorWithMessage(e);
             return {
-                error: e.message
+                error: err.message
             }
         } 
         
@@ -208,7 +214,8 @@ export default class DexOrder {
         try {
             this.quote = await this.apiClient.get(`quotes/${this.quoteId}`);
         } catch (e) {
-            log.error("Could not get quote by id", e.message);
+            const err = toErrorWithMessage(e);
+            log.error("Could not get quote by id", err.message);
             throw e;
         }
     }
