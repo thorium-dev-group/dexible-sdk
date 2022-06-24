@@ -24,7 +24,6 @@ import { JwtAuthenticationHandler } from './auth/JwtAuthenticationHandler'
 import { SignatureAuthenticationHandler } from './auth/SignatureAuthenticationHandler';
 import { NullAuthenticationHandler } from './auth/NullAuthenticationHandler';
 import { BaseAuthenticationHandlerProps } from './auth/BaseAuthenticationHandler';
-// import { networkChainIds, SupportedNetworks } from './config/networkChainIds';
 
 type WalletConnectionBase = {
 
