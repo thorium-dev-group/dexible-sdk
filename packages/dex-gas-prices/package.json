@@ -1,0 +1,26 @@
+{
+  "name": "dexible-gas-prices",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "yarn clean && tsc --build",
+    "clean": "rimraf dist",
+    "do_publish": "npm publish",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "dexible-common": "^0.1.36",
+    "dexible-logger": "^0.1.36"
+  },
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.1",
+    "@types/mocha": "^8.2.3",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
+    "mocha": "^9.2.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.1.1",
+    "typescript": "4.2.4"
+  }
+}

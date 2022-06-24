@@ -2591,6 +2591,7 @@ __metadata:
     dexible-algos: ^0.1.36
     dexible-common: ^0.1.36
     dexible-eth-http-signatures: ^0.1.36
+    dexible-gas-prices: ^0.1.0
     dexible-logger: ^0.1.36
     dexible-order: ^0.1.36
     dexible-policies: ^0.1.36
@@ -2617,6 +2618,23 @@ __metadata:
     chai: ^4.3.4
     dexible-logger: ^0.1.36
     ethers: ^5.1.0
+    mocha: ^9.2.0
+    rimraf: ^3.0.2
+    ts-node: ^9.1.1
+    typescript: 4.2.4
+  languageName: unknown
+  linkType: soft
+
+"dexible-gas-prices@^0.1.0, dexible-gas-prices@workspace:packages/dex-gas-prices":
+  version: 0.0.0-use.local
+  resolution: "dexible-gas-prices@workspace:packages/dex-gas-prices"
+  dependencies:
+    "@tsconfig/node14": ^1.0.1
+    "@types/mocha": ^8.2.3
+    chai: ^4.3.4
+    dexible-common: ^0.1.36
+    dexible-logger: ^0.1.36
+    dotenv: ^10.0.0
     mocha: ^9.2.0
     rimraf: ^3.0.2
     ts-node: ^9.1.1
