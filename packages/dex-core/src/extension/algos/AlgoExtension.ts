@@ -8,8 +8,9 @@ import Factory, {
     TrailingStopProps
 } from './Factory';
 import * as Algos from 'dexible-algos';
+import { APIExtensionProps } from 'dexible-common';
 
-export default class AlgoWrapper {
+export class AlgoExtension {
     types: {
         Market: string;
         Limit: string;
@@ -21,7 +22,7 @@ export default class AlgoWrapper {
     };
     factory: Factory;
 
-    constructor() {
+    constructor(_props: APIExtensionProps) {
 
         this.types = {
             Market: Algos.Market.tag,

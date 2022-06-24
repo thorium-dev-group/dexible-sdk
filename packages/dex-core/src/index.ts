@@ -1,5 +1,5 @@
 import SDK from './SDK';
-import {OrderSpec} from './OrderWrapper';
+import { OrderSpec } from './extension/OrderExtension';
 
 export {
     SDK,

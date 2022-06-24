@@ -1,8 +1,8 @@
 import {QuoteGrabber,QuoteRequest} from 'dexible-quote';
 import {
     APIClient,
+    APIExtensionProps,
     MarketingProps,
-    Services, 
     Token,
 } from 'dexible-common';
 import { BigNumber, BigNumberish } from 'ethers';
@@ -22,16 +22,18 @@ export interface SpotParams {
     tokenOut: Token;
 }
 
-export default class QuoteWrapper {
+export class QuoteExtension {
     api:  APIClient;
     marketing?: MarketingProps;
+    chainId: number;
 
-    constructor(apiClient:Services.APIClient, marketing?: MarketingProps) {
-        this.api = apiClient;
-        this.marketing = marketing;
+    constructor(props: APIExtensionProps) {
+        this.api = props.apiClient;
+        this.chainId = props.chainId;
+        this.marketing = props.marketing;
     }
 
-    getQuote = async (props:QuoteParams) => {
+    async getQuote(props:QuoteParams) {
         let minAmount = BigNumber.from(-1);
         if(props.maxRounds) {
             minAmount = props.amountIn.div(props.maxRounds);
@@ -41,6 +43,7 @@ export default class QuoteWrapper {
         }
         
         const req : QuoteRequest = {
+            chainId: this.chainId,
             tokenIn: props.tokenIn,
             tokenOut: props.tokenOut,
             amountIn: props.amountIn.toString(),
@@ -54,8 +57,12 @@ export default class QuoteWrapper {
         return QuoteGrabber(req);
     }
 
-    getSpot = async (props:SpotParams) => {
-        const endpoint = `quotes/spot/${props.tokenIn.address.toLowerCase()}/${props.tokenOut.address.toLowerCase()}`;
+    async getSpot(props:SpotParams) {
+
+        const tokenIn = props.tokenIn.address.toLowerCase();
+        const tokenOut = props.tokenOut.address.toLowerCase();
+
+        const endpoint = `quotes/spot/${encodeURIComponent(tokenIn)}/${encodeURIComponent(tokenOut)}`;
         
         return this.api.get({
             endpoint,

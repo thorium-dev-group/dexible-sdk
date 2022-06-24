@@ -1,7 +1,8 @@
 import * as OrderSupport from 'dexible-order';
 import {
+    APIClient,
+    APIExtensionProps,
     MarketingProps,
-    Services,
     Tag, 
     Token,
 } from 'dexible-common';
@@ -23,20 +24,24 @@ export interface OrderListParams {
     state?: "all" | "active" | 'delegated';
 }
 
-export default class OrderWrapper {
-    apiClient: Services.APIClient;
+export class OrderExtension {
+
+    apiClient: APIClient;
+    chainId: number;
     gnosisSafe?: string;
     marketing?: MarketingProps;
 
-    constructor(apiClient: Services.APIClient, gnosisSafe?: string, marketing?: MarketingProps) {
-        this.apiClient = apiClient;
-        this.gnosisSafe = gnosisSafe;
-        this.marketing = marketing;
+    constructor(props: APIExtensionProps) {
+        this.apiClient = props.apiClient;
+        this.chainId = props.chainId;
+        this.gnosisSafe = props.gnosisSafe;
+        this.marketing = props.marketing;
     }
 
-    prepare = async (params: OrderSpec): Promise<OrderSupport.PrepareResponse> => {
+    async prepare(params: OrderSpec): Promise<OrderSupport.PrepareResponse> {
         let order = new OrderSupport.DexOrder({
             apiClient: this.apiClient,
+            chainId: this.chainId,
             quoteId: params.quoteId,
             tokenIn: params.tokenIn,
             tokenOut: params.tokenOut,
@@ -50,7 +55,7 @@ export default class OrderWrapper {
         return order.prepare();
     }
 
-    getAll = async (params:OrderListParams): Promise<Array<any>> => {
+    async getAll(params:OrderListParams): Promise<Array<any>> {
         let qs = Object.keys(params).reduce((s, k, i)=>{
             let v = params[k];
             if(typeof v !== 'undefined' && v !== null) {
@@ -68,19 +73,19 @@ export default class OrderWrapper {
         return this.apiClient.get(`orders?${qs}`)
     }
 
-    getOne = async (id:number): Promise<any> => {
+    async getOne(id:number): Promise<any> {
         return this.apiClient.get(`orders/${id}`);
     }
 
-    cancel = async (orderId:number): Promise<any> => {
+    async cancel(orderId:number): Promise<any> {
         return this.apiClient.post(`orders/${orderId}/actions/cancel`, {orderId});
     }
 
-    pause = async (orderId:number): Promise<any> => {
+    async pause(orderId:number): Promise<any> {
         return this.apiClient.post(`orders/${orderId}/actions/pause`, {orderId});
     }
 
-    resume = async (orderId:number): Promise<any> => {
+    async resume(orderId:number): Promise<any> {
         return this.apiClient.post(`orders/${orderId}/actions/resume`, {orderId});
     }
 }
