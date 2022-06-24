@@ -11,7 +11,6 @@ const log = new Logger({
 })
 
 export interface QuoteRequest {
-    // TODO: discuss with @mdcoon
     chainId: number;
     tokenIn: Token;
     tokenOut: Token;

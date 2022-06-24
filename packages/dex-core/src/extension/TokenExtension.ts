@@ -94,7 +94,6 @@ export class TokenExtension {
             throw new Error("Allowance transaction failed");
         }
 
-        // TODO: discuss w. @mdcoon
         //we pause for at least a block to give the network time to sync 
         //since we've just increased spending. Otherwise, any subsequent
         //check could result in order failure because allowance may not 

@@ -35,7 +35,6 @@ export interface DexOrderParams {
 }
 
 export default class DexOrder {
-    // TODO: discuss with @mdcoon
     chainId: number;
     tokenIn: Token;
     tokenOut: Token;
