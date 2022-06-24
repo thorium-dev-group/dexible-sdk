@@ -26,24 +26,19 @@ export class SignatureAuthenticationHandler extends BaseAuthenticationHandler im
         await this.registerOrLogin();
     }
 
-    /**
-     * 
-     * @param attemptCount
-     * @returns 
-     */
     protected async registerOrLogin(): Promise<void> {
 
-        let loginSuccess = await this.login();
+        try {
+            await this.login();
+        } catch (e) {
+            if (this.autoRegisterUser) {
+                await this.register();
 
-        if (loginSuccess == false && this.autoRegisterUser) {
-            await this.register();
-            
-            // second login attempt
-            loginSuccess = await this.login();
-        }
-
-        if (! loginSuccess) {
-            throw new Error(`Account registration is required`);
+                // second login attempt
+                await this.login();
+            } else {
+                throw new Error(`Account registration is required`);
+            }
         }
     }
 

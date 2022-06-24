@@ -2,7 +2,7 @@ import { AuthNonceResponse } from "../extension/AuthenticationExtension";
 import Logger from "dexible-logger";
 import { IJWTHandler, IAuthenticationHandler } from 'dexible-common';
 import { BaseAuthenticationHandler, BaseAuthenticationHandlerProps } from "./BaseAuthenticationHandler";
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import { ethers } from "ethers";
 
@@ -43,13 +43,24 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         }
 
         // enable auth-token refresh support
-        createAuthRefreshInterceptor(httpClient, async (failedRequest) => {
-            await this.authenticate();
+        createAuthRefreshInterceptor(httpClient, async (failedRequest: AxiosError) => {
+            if (failedRequest?.response?.status === 401) {
+                log.debug('attempting to refresh JWT');
+                await this.authenticate();
+            }
+
         });
 
         // inject auth header
         httpClient.interceptors.request.use(async (request) => {
-            request.headers['Authorization'] = `Bearer ${this.getToken()}`;
+            const token = await this.getToken();
+            if (token) {
+                log.debug({
+                    msg: 'injecting Authorization header',
+                    token: token[0] + '*'.repeat(token.length - 2) + token[token.length - 1],
+                })
+                request.headers['Authorization'] = `Bearer ${token}`;
+            }
             return request;
         });
 
@@ -60,14 +71,8 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         await this.registerOrLogin();
     }
 
-    protected async getToken(): Promise<string> {
+    protected async getToken(): Promise<string | null> {
         let token = await this.tokenHandler.readToken();
-
-        if (!token) {
-            const response = await this.registerOrLogin();
-            token = response.token;
-        }
-
         return token;
     }
 
@@ -82,6 +87,9 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         try {
             response = await this.login();
         } catch (e) {
+            log.debug({
+                err: e
+            });
             // attempt user registration
             if (this.autoRegisterUser) {
                 await this.register();
@@ -106,15 +114,21 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
             nonceResponse = await this.sdk.authentication.nonce({
                 address,
             });
-
         } catch (e) {
-            log.error({ err: e }, "Problem getting signing nonce");
+            log.error({
+                err: e,
+                msg: "Problem getting signing nonce",
+            });
             throw e;
+        }
+
+        if (!nonceResponse) {
+            throw new Error(`Failed to get nonce response`);
         }
 
         // needs to register
         if (!nonceResponse.canLogin) {
-            throw new Error("Could not get nonce on second attempt");
+            throw new Error("User registration is required");
         }
 
         // sign nonce
@@ -131,7 +145,7 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         });
 
         log.debug("Received token", loginResponse.token);
-        await this.tokenHandler?.storeToken(loginResponse.token, loginResponse.expiration);
+        await this.tokenHandler.storeToken(loginResponse.token, loginResponse.expiration);
 
         return {
             token: loginResponse.token,
