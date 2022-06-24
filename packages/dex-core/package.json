@@ -16,6 +16,7 @@
     "dexible-algos": "^0.1.36",
     "dexible-common": "^0.1.36",
     "dexible-eth-http-signatures": "^0.1.36",
+    "dexible-gas-prices": "^0.1.0",
     "dexible-logger": "^0.1.36",
     "dexible-order": "^0.1.36",
     "dexible-policies": "^0.1.36",
