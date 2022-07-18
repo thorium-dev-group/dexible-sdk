@@ -19,9 +19,10 @@ import { OrderExtension } from './extension/OrderExtension';
 
 import { AuthenticationExtension } from './extension/AuthenticationExtension';
 import { JwtAuthenticationHandler } from './auth/JwtAuthenticationHandler'
+import { SignatureAuthenticationHandler } from './auth/SignatureAuthenticationHandler';
 import { NullAuthenticationHandler } from './auth/NullAuthenticationHandler';
 import { BaseAuthenticationHandlerProps } from './auth/BaseAuthenticationHandler';
-import { InMemoryJwtHandler } from './auth/InMemoryJwtHandler';
+
 type WalletConnectionBase = {
 
     /**
@@ -230,14 +231,18 @@ export default class SDK {
                 marketing,
             };
 
-            const tokenHandler = walletConnection.jwtHandler
-                || new InMemoryJwtHandler();
-
-            authenticationHandler = new JwtAuthenticationHandler({
-                ...authenticationHandlerProps,
-                sessionTimeoutSeconds: walletConnection.sessionTimeoutSeconds,
-                tokenHandler,
-            });
+            if (walletConnection.jwtHandler) {
+                authenticationHandler = new JwtAuthenticationHandler({
+                    ...authenticationHandlerProps,
+                    sessionTimeoutSeconds: walletConnection.sessionTimeoutSeconds,
+                    tokenHandler: walletConnection.jwtHandler,
+                });
+            } else {
+                authenticationHandler =
+                    new SignatureAuthenticationHandler(
+                        authenticationHandlerProps
+                    );
+            }
         } else {
             authenticationHandler = new NullAuthenticationHandler();
         }
