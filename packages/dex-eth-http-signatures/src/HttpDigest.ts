@@ -1,10 +1,12 @@
-import { ethers } from 'ethers';
+import crypto from 'crypto';
+
 export default class HttpDigest {
 
     static generateDigest(body) {
-        const bytes = ethers.utils.toUtf8Bytes(body);
-        const bodyDigest = ethers.utils.sha256(bytes);
-        return 'SHA-256=' + ethers.utils.base64.encode(bodyDigest);
+        const hash = crypto.createHash('sha256');
+        hash.update(body)
+        const bodyDigest = hash.digest('base64');
+        return 'SHA-256=' + bodyDigest
     }
 
 }
