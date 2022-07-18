@@ -44,8 +44,8 @@ const main = async () => {
             let inT = INPUTS[i%3];
             let outT = OUTPUTS[i%3];
             let amountIn = AMOUNTS[i%3];
-            let tokenIn = tokenCache[inT] || await sdk.token.lookup(inT);
-            let tokenOut = tokenCache[outT] || await sdk.token.lookup(outT);
+            let tokenIn = tokenCache[inT] || (await sdk.token.lookup(inT));
+            let tokenOut = tokenCache[outT] || (await sdk.token.lookup(outT));
             tokenCache[inT] = tokenIn;
             tokenCache[outT] = tokenOut;
 

@@ -3,7 +3,7 @@
   "scripts": {
     "build": "yarn workspaces foreach --parallel --topological --verbose run build",
     "clean": "yarn workspaces foreach --parallel --verbose run clean",
-    "test": "yarn workspaces foreach --parallel --verbose run test",
+    "test": "jest",
     "do_publish": "yarn workspaces foreach run do_publish"
   },
   "workspaces": [

@@ -1,13 +1,8 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+const baseConfig = require('./jest.base');
 module.exports = {
-    preset: 'ts-jest',
-    testEnvironment: 'node',
-    testPathIgnorePatterns: [
-      "/dist/",
-      "/node_modules/",
-    ],
-    passWithNoTests: true,
-    projects: [
+  ...baseConfig,
+  projects: [
       "packages/*",
     ]
   };  

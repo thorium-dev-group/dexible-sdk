@@ -18,7 +18,7 @@ import { TokenExtension } from './extension/TokenExtension';
 import { OrderExtension } from './extension/OrderExtension';
 
 import { AuthenticationExtension } from './extension/AuthenticationExtension';
-import { JwtAuthenticationHandler } from './auth/JwtAuthenticationHandler'
+import { JwtAuthenticationHandler } from './auth/JwtAuthenticationHandler';
 import { NullAuthenticationHandler } from './auth/NullAuthenticationHandler';
 import { BaseAuthenticationHandlerProps } from './auth/BaseAuthenticationHandler';
 import { InMemoryJwtHandler } from './auth/InMemoryJwtHandler';

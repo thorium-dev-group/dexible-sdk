@@ -5,11 +5,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 
-describe("TokenFinder", function() {
+describe("TokenFinder", () => {
 
-    this.timeout(30000);
-
-    it("Should find token info", async function() {
+    test("Should find token info", async () => {
 
         let provider = await Web3Factory({
             chainId: 1,
@@ -25,5 +23,5 @@ describe("TokenFinder", function() {
             throw new Error("Should have found token");
         }
         console.log(token);
-    });
+    }, 30_000);
 });

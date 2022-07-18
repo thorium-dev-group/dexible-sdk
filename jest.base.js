@@ -7,7 +7,4 @@ module.exports = {
       "/node_modules/",
     ],
     passWithNoTests: true,
-    projects: [
-      "packages/*",
-    ]
   };  
