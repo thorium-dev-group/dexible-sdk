@@ -7,7 +7,7 @@
     "build": "yarn clean && tsc --build",
     "clean": "rimraf dist",
     "do_publish": "npm publish",
-    "test": "mocha"
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -20,12 +20,12 @@
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
-    "@types/mocha": "^8.2.3",
-    "chai": "^4.3.4",
+    "@types/jest": "^28.1.4",
+    "@types/node": "^18.0.3",
     "dotenv": "^10.0.0",
-    "mocha": "^9.2.0",
+    "jest": "^28.1.2",
     "rimraf": "^3.0.2",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.8.2",
     "typescript": "4.2.4"
   }
 }
