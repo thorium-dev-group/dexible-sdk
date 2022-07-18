@@ -100,10 +100,13 @@ dist
 # DynamoDB Local files
 .dynamodb/
 
+# Yarn without zero-installs
+# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.pnp.*
 .yarn/*
 !.yarn/patches
-!.yarn/releases
 !.yarn/plugins
+!.yarn/releases
 !.yarn/sdks
 !.yarn/versions
 
