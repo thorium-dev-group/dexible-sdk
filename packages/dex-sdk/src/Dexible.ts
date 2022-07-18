@@ -55,8 +55,7 @@ export default class Dexible {
         }
 
         let sdk = await SDK.create({
-            network: "ethereum",
-            signer
+            signer,
         });
         return new Dexible(sdk);
     }

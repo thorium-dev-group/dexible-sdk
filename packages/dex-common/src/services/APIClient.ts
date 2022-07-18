@@ -1,329 +1,371 @@
-import axios, {AxiosAdapter} from 'axios';
-import { EthHttpSignatureAxiosAdapter } from 'dexible-eth-http-signatures';
-import {ethers} from 'ethers';
+import axios, { AxiosAdapter, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Logger from 'dexible-logger';
-import chainToName from '../chainToName';
-import IJWTHandler from './IJWTHandler';
 import SDKError from '../SDKError';
-
-const log = new Logger({component: "APIClient"});
-
-const DEFAULT_BASE_ENDPOINT = "api.dexible.io/v1";
+import { default as axiosRetry, isIdempotentRequestError, isNetworkError } from 'axios-retry';
+import { IAuthenticationHandler } from './IAuthenticationHandler';
 
 
+const log = new Logger({ component: "APIClient" });
 
+export type HttpClientOptions = {
+    requiresAuthentication: boolean;
+    withRetrySupport: boolean;
+}
+
+export type NetworkName = "ethereum" | "polygon" | "avalanche" | "bsc" | "fantom";
 export interface APIProps {
-    signer: ethers.Signer;
-    network: "ethereum" | "polygon" | "avalanche"|"bsc"|"fantom"; 
-    jwtHandler?: IJWTHandler;
-    chainId: number;
-    isWalletConnect?: boolean;
+    authenticationHandler: IAuthenticationHandler;
+    baseUrl: string;
+    // chainId: number;
+    // network: NetworkName;
+    retryCount?: number;
+    retryDelayBaseMs?: number;
+    timeoutMs?: number;
+    customBackoff?: (retryCount: number) => number;
 }
 
-export default class APIClient {
-    signer: ethers.Signer;
-    adapter: AxiosAdapter|null;
-    network: "ethereum"|"polygon"|"avalanche"|"bsc"|"fantom";
-    chainId: number;
-    chainName: string | null;
-    baseUrl: string | null;
-    jwtHandler: IJWTHandler | undefined;
-    isWalletConnect: boolean;
+export interface RequestParams {
+    data?: {
+        [key: string]: any
+    };
+    endpoint: string;
+    headers?: {
+        [key: string]: string
+    };
+    params?: {
+        [key: string]: any
+    };
+    requiresAuthentication: boolean;
+    withRetrySupport: boolean;
+};
 
-    constructor(props:APIProps) {
-        this.signer = props.signer;
-        this.adapter = null; 
-        this.network = props.network;
-        this.chainId = props.chainId;
-        this.chainName = chainToName(this.network, this.chainId);
-        this.baseUrl = this._buildBaseUrl();
-        this.jwtHandler = props.jwtHandler;
-        this.isWalletConnect = props.isWalletConnect || false;
-        log.debug("Created api client for chain", 
-                this.chainName, 
-                "on network", 
-                this.network);
+export type AuthenticationMode = 'jwt' | 'signature' | 'none';
+
+
+export class APIClient {
+
+    static defaults = {
+        retryCount: 3,
+        retryDelayMs: 100,
+        timeout: 30_000,
+    };
+
+    adapter: AxiosAdapter | null;
+    baseUrl: string;
+
+    httpClients: Record<string, AxiosInstance>
+
+    authenticationHandler?: IAuthenticationHandler;
+    // network: NetworkName;
+
+    retryDelayBaseMs = 100;
+    retryCount = 3;
+
+    shouldResetTimeout = false;
+
+    headers: any;
+
+    timeoutMs = 10_000;
+
+    customBackoff?: (retryCount: number) => number;
+
+    constructor(props: APIProps) {
+
+        this.adapter = null;
+        // this.network = props.network;
+        this.baseUrl = props.baseUrl;
+        this.authenticationHandler = props.authenticationHandler;
+        this.headers = {};
+
+        this.retryCount = typeof props.retryCount === 'number'
+            ? props.retryCount
+            : APIClient.defaults.retryCount;
+
+        this.retryDelayBaseMs = typeof props.retryDelayBaseMs === 'number'
+            ? props.retryDelayBaseMs
+            : APIClient.defaults.retryDelayMs;
+
+        this.timeoutMs = typeof props.timeoutMs === 'number'
+            ? props.timeoutMs
+            : APIClient.defaults.timeout;
+
+        this.customBackoff = props.customBackoff;
+
+
+        this.httpClients = {};
+
+        log.debug("Created api client for " + this.baseUrl);
     }
 
-    get = async (endpoint:string): Promise<any> => {
-       
-        let url = `${this.baseUrl}/${endpoint}`;
+    protected calculateRetryDelay(retryCount: number): number {
+        const jitter = Math.random();
+        const exponentialBackoff = Math.pow(2, retryCount) * this.retryDelayBaseMs
+        const delay = Math.floor(jitter * exponentialBackoff);
+        return delay;
+    }
+
+    /**
+     * 
+     * @param endpoint 
+     * @returns 
+     */
+    public async get(endpointOrParams: string | RequestParams): Promise<any> {
+
+        const params = this.normalizeParams(endpointOrParams);
+
+        let url = `${this.baseUrl}/${params.endpoint}`;
         log.debug("GET call to", url);
-        
-        try {
 
-            let jwtToken:string|null = null;
-            if(this.jwtHandler) {
-                
-                jwtToken = await this.jwtHandler.readToken();
-                if(!jwtToken) {
-                    
-                    jwtToken = await this._generateToken(0);
-                }
-            } else if(!this.adapter) {
-                this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
-            }
-        
-            let r:any = null;
-            if(jwtToken) {
-                r = await axios({
-                    method: "GET",
-                    url: `${this.baseUrl}/auth/verify`,
-                    headers: {
-                        authorization: `Bearer ${jwtToken}`
-                    }
-                });
-                if(!r.data.valid) {
-                    log.debug("JWT no longer valid, generating new one");
-                    //token is no longer valid, replace
-                    jwtToken = await this._generateToken(0);
-                }
-                
-                log.debug("GET w/JWT token");
-                r = await axios({
-                    method: "GET",
-                    url,
-                    headers: {
-                        authorization: `Bearer ${jwtToken}`
-                    }
-                });
-            } else {
-                log.debug("GET w/signed header")
-                r = await axios({
-                    method: "GET",
-                    url,
-                    adapter: this.adapter||undefined
-                });
-            }
+        const httpClient = await this.getHttpClient({
+            requiresAuthentication: params.requiresAuthentication,
+            withRetrySupport: params.withRetrySupport,
+        });
 
-            if(!r.data) {
-                throw new Error("Missing result in get request");
-            }
-            if(r.data.error) {
-                log.debug("Problem reported from server", r.data.error);
-                let msg = r.data.error.message;
-                if(!msg) {
-                    msg = r.data.error;
-                }
-                throw new SDKError({
-                    message: msg,
-                    requestId: r.data.error.requestId
-                });
-            }
-            return r.data;
-        } catch (e) {
-            if(e.response && e.response.data) {
-                let data = e.response.data;
-                if(typeof e.response.data === 'string') {
-                    data = JSON.parse(e.response.data);
-                }
-                log.error("Problem from server", data);
-                let msg = data.message;
-                let reqId = data.requestId;
-                let code = data.code;
-                throw new SDKError({
-                    code,
-                    message: msg,
-                    requestId: reqId
-                });
-            }
-            log.error("Problem in API client get request", e);
-            throw e;
-        }
+        log.debug({
+            msg: 'GET request',
+            url,
+            ...params,
+        });
+
+        const response = await httpClient.request({
+            data: params.data,
+            params: params.params,
+            headers: params.headers,
+            method: "GET",
+            url,
+        });
+
+        log.debug({
+            msg: 'GET response',
+            response,
+        });
+
+        return response.data;
     }
 
-    post = async (endpoint:string, data:object|undefined) => {
-       
-        let url = `${this.baseUrl}/${endpoint}`;
-        log.debug("Posting to url", url);
-        
-        try {
-            let jwtToken:string|null = null;
-            if(this.jwtHandler) {
-                jwtToken = await this.jwtHandler.readToken();
-                if(!jwtToken) {
-                    jwtToken = await this._generateToken(0);
-                }
-            } else if(!this.adapter) {
-                this.adapter = await EthHttpSignatureAxiosAdapter.build(this.signer);
-            }
 
-            let r:any = null;
-            if(jwtToken) {
-                log.debug("Posting w/JWT token");
-                
-                r = await axios({
-                    method: "GET",
-                    url: `${this.baseUrl}/auth/verify`,
-                    headers: {
-                        authorization: `Bearer ${jwtToken}`
-                    }
-                });
+    /**
+     * 
+     * @param endpoint 
+     * @param data 
+     * @returns 
+     */
+    public async post(endpointOrParams: string | RequestParams, maybeData?: object | undefined) {
 
-                if(!r.data.valid) {
-                    log.debug("JWT is no longer valid, generating new one");
-                    //token is no longer valid, replace
-                    jwtToken = await this._generateToken(0);
-                }
+        const params = this.normalizeParams(endpointOrParams, maybeData);
 
-                r = await axios({
-                    method: "POST",
-                    url,
-                    data,
-                    headers: {
-                        authorization: `Bearer ${jwtToken}`
-                    }
-                });
-            } else {
-                log.debug("Posting w/signed header");
-                r =  await axios({
-                    method: "POST",
-                    url,
-                    data,
-                    adapter: this.adapter||undefined
-                });
-            }
+        let url = `${this.baseUrl}/${params.endpoint}`;
 
-            if(r.data && r.data.error) {
-                let msg = r.data.error.message;
-                if(!msg) {
-                    msg = r.data.error;
-                }
-                log.error("Problem reported from server", r.data.error);
-                throw new SDKError({
-                    message: msg,
-                    requestId: r.data.requestId
-                });
-            }
-            return r.data;
-        } catch (e) {
-            if(e.response && e.response.data) {
-                log.error("Problem from server", e.response.data);
-                let data = e.response.data;
-                if(typeof data === 'string') {
-                    data = JSON.parse(data);
-                }
-                let reqId = data.requestId;
-                let code = data.code;
-                throw new SDKError({
-                    code,
-                    message: data.message,
-                    data: data.data,
-                    requestId: reqId});
-            }
-            log.error({err: e}, "Problem in API post");
-            throw e;
-        }
+        const httpClient = await this.getHttpClient({
+            requiresAuthentication: params.requiresAuthentication,
+            withRetrySupport: params.withRetrySupport,
+        });
+
+        log.debug({
+            msg: 'POST request',
+            url,
+            ...params,
+        });
+
+        const response = await httpClient.request({
+            data: params.data,
+            headers: params.headers,
+            method: "POST",
+            url,
+        });
+
+        log.debug({
+            msg: 'POST response',
+            response,
+        });
+
+        return response.data;
     }
 
-    _buildBaseUrl = () => {
-        let base = process.env.API_BASE_URL;
-        if(!base) {
-            base = `https://${this.network}.${this.chainName}.${DEFAULT_BASE_ENDPOINT}`
-        }
-        return base;
-    }
+    protected async getHttpClient(props: HttpClientOptions): Promise<AxiosInstance> {
 
-    _generateToken = async (count:number): Promise<string> => {
-        try {
-            log.debug("Generating JWTToken...");
-            let url = `${this.baseUrl}/auth/nonce`;
-            let address = await this.signer.getAddress();
-            let r = await axios({
-                method: "POST",
-                url,
-                data: {
-                    address
-                }
-            });
-            if(r.data.error) {
-                log.error({err: r.data.error}, "Problem getting signing nonce");
+        const {
+            requiresAuthentication,
+            withRetrySupport,
+        } = props;
+
+        const key = [
+            `requiresAuthentication:${Boolean(requiresAuthentication)}`,
+            `withRetrySupport:${Boolean(withRetrySupport)}`,
+        ].join(';');
+
+        if (this.httpClients[key]) {
+            return this.httpClients[key];
+        }
+
+        let httpClient: AxiosInstance;
+
+        const clientConfig: AxiosRequestConfig = {
+            baseURL: this.baseUrl,
+            headers: this.headers,
+            timeout: this.timeoutMs,
+        }
+
+        if (requiresAuthentication) {
+
+            if (!this.authenticationHandler) {
                 throw new SDKError({
-                    message: r.data.error.message,
-                    requestId: r.data.error.requestId
+                    message: `AuthenticationHandler is required`,
                 });
             }
-            
-            let data:any = r.data;
-            if(!data.canLogin) {
-                if(count > 0) {
-                    throw new Error("Could not get nonce on second attempt");
-                }
 
-                log.debug("Must first register wallet before login");
-                //means we have to register first
-                r = await axios({
-                    method: "POST",
-                    url: `${this.baseUrl}/auth/register`,
-                    data: {
-                        address
-                    }
-                });
-                if(r.data.error) {
-                    log.error({err: r.data.error}, "Problem registering user");
-                    throw new SDKError({
-                        message: r.data.error.message,
-                        requestId: r.data.error.requestId
+            httpClient = this.authenticationHandler.buildClient(clientConfig);
+
+        } else {
+            httpClient = axios.create(clientConfig);
+        }
+
+        // error handling
+        httpClient.interceptors.response.use(
+            (response) => {
+                // throw on API error response, regardless of status code
+                this.throwOnResponseErrorData(response);
+                return response;
+            },
+            (err) => {
+                // log.error({ err, msg: "Problem in API post" });
+                this.throwOnAxiosError(err);
+            }
+        )
+
+        // TODO: enable request limit support
+        // httpClient.interceptors.request.use(async (config) => {
+        //     if (this.limiter) {
+        //         if (!this.limiter.tryRemoveTokens(1)) {
+        //             this.log.warn("hit rate limit, waiting to make request");
+        //             await this.limiter.removeTokens(1);
+        //         }
+        //     }
+        //     return config;
+        // });
+
+        // retry support
+        if (withRetrySupport) {
+            axiosRetry(httpClient, {
+                retryDelay: this.customBackoff || this.calculateRetryDelay,
+                shouldResetTimeout: this.shouldResetTimeout,
+                retries: this.retryCount,
+                retryCondition: (error: AxiosError) => {
+                    const shouldRetry = axiosRetry.isNetworkOrIdempotentRequestError(error);
+                    log.debug({
+                        err: error.message,
+                        msg: shouldRetry ? "retrying query" : "giving up on query",
                     });
-                }
-                data = r.data;
-            }
-
-            if(!data.nonce || data.nonce.length === 0) {
-                if(data.canLogin) {
-                    log.debug("No nonce after nonce request, but can login, attempting to try again");
-                    //try getting nonce again
-                    return this._generateToken(1);
-                }
-
-                log.debug("Response w/out nonce", data);
-                throw new Error("Response missing signing nonce");
-            }
-            log.debug("Have signable nonce for login...");
-            let signature = '';
-            if(this.isWalletConnect) {
-                const p = this.signer.provider as any;
-                signature = await p.send('personal_sign', [ethers.utils.toUtf8Bytes(data.nonce), address.toLowerCase()]);
-            } else {
-                signature = await this.signer.signMessage(data.nonce);
-            }
-            
-            log.debug("Signed nonce, submitting for login");
-            r = await axios({
-                method: "POST",
-                url: `${this.baseUrl}/auth/login`,
-                data: {
-                    signature,
-                    address,
-                    nonce: data.nonce
-                }
+                    return shouldRetry;
+                },
             });
-            if(r.data.error) {
-                let err = r.data.error;
-                let msg = err.message?err.message:err;
-                let reqId = err.requestId;
-                throw new SDKError({
-                    message: msg,
-                    requestId: reqId
-                });
+
+        }
+
+        // cache client
+        this.httpClients[key] = httpClient;
+
+        return httpClient;
+    }
+
+
+    /**
+     * 
+     * @param endpointOrParams 
+     * @param data 
+     * @returns 
+     */
+    protected normalizeParams(endpointOrParams: string | RequestParams, data?: object): RequestParams {
+        const normalized: RequestParams = typeof endpointOrParams === 'string'
+            ? {
+                endpoint: endpointOrParams,
+                data,
+                requiresAuthentication: true,
+                withRetrySupport: true,
             }
-            log.debug("Received token", r.data.token);
-            await this.jwtHandler?.storeToken(r.data.token, r.data.expiration);
-            return r.data.token;
-        } catch (e) {
-            if(e.response && e.response.data) {
-                log.error("Problem from server", e.response.data);
-                let data = e.response.data;
-                let msg = data.message;
-                let reqId = data.requestId;
-                throw new SDKError({
-                    message: msg,
-                    requestId: reqId 
-                });
+            : endpointOrParams;
+
+        // strip any preceding slash
+        normalized.endpoint = normalized.endpoint
+            .trim()
+            .replace(/^\/+/, '');
+
+        return normalized;
+    }
+
+    /**
+     * 
+     * @param err 
+     */
+    protected throwOnAxiosError(err: AxiosError): void {
+
+        const message = err.message;
+        const response = err.response;
+        log.error({
+            msg: "request failed", 
+            request: err.request,
+            response: response,
+        });
+
+        if (typeof response?.data === 'object') {
+            this.throwOnResponseErrorData(response);
+        }
+
+        let data: any;
+        if (typeof data === 'string') {
+            try {
+                data = JSON.parse(response?.data);
+            } catch (e) {
+                data = response?.data;
             }
-            throw e;
+        }
+
+        const requestId = data?.requestId;
+
+        throw new SDKError({
+            data,
+            message,
+            requestId,
+        });
+    }
+
+    /**
+     * 
+     * @param response 
+     */
+    protected throwOnResponseErrorData(response: AxiosResponse): void {
+        let data: any;
+
+        if (typeof response.data === 'string') {
+            try {
+                data = JSON.parse(response.data);
+            } catch (e) {
+                data = response.data;
+            }
+        }
+
+        if (response.data.error) {
+            log.error("Problem reported from server", response.data.error);
+
+            const err = data.error;
+
+            const message = err.message
+                ? err.message
+                : err;
+
+            const code = err.code;
+
+            const requestId = err.requestId;
+
+            throw new SDKError({
+                code,
+                data,
+                message,
+                requestId,
+            });
         }
     }
 
-    
 }
+
+export default APIClient;

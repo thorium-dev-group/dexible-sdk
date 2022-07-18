@@ -1,13 +1,13 @@
-import {Services} from 'dexible-common';
+import {
+    APIExtensionProps,
+    Services
+} from 'dexible-common';
 
-export interface ContactProps {
+
+export class ContactExtension {
     apiClient: Services.APIClient;
-}
 
-export default class Contact {
-    apiClient: Services.APIClient;
-
-    constructor(props:ContactProps) {
+    constructor(props:APIExtensionProps) {
         this.apiClient = props.apiClient;
     }
 

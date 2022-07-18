@@ -1,6 +1,6 @@
 {
-  "name": "dexible-core",
-  "version": "0.1.36",
+  "name": "dexible-gas-prices",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -10,20 +10,8 @@
     "test": "mocha"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "axios-auth-refresh": "^3.3.1",
-    "dayjs": "^1.10.6",
-    "dexible-algos": "^0.1.36",
     "dexible-common": "^0.1.36",
-    "dexible-eth-http-signatures": "^0.1.36",
-    "dexible-gas-prices": "^0.1.0",
-    "dexible-logger": "^0.1.36",
-    "dexible-order": "^0.1.36",
-    "dexible-policies": "^0.1.36",
-    "dexible-quote": "^0.1.36",
-    "dexible-token": "^0.1.36",
-    "dexible-web3": "^0.1.36",
-    "ethers": "^5.3.1"
+    "dexible-logger": "^0.1.36"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",

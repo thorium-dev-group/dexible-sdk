@@ -1,13 +1,10 @@
 import * as TokenServices from 'dexible-token';
-import {Token, Services} from 'dexible-common';
+import {
+    APIClient,
+    APIExtensionProps,
+    Token
+} from 'dexible-common';
 import {BigNumberish, ethers} from 'ethers';
-
-export interface ConstructorProps {
-    signer: ethers.Signer;
-    provider: ethers.providers.Provider;
-    apiClient: Services.APIClient;
-    gnosisSafe?: string;
-}
 
 export interface SpendIncreaseProps {
     token: Token;
@@ -17,16 +14,16 @@ export interface SpendIncreaseProps {
 const sleep = ms => new Promise(done=>setTimeout(done, ms));
 const bn = ethers.BigNumber.from;
 
-export default class TokenSupport {
+export class TokenExtension {
 
-    signer: ethers.Signer;
-    provider: ethers.providers.Provider;
-    address: string | undefined;
-    apiClient: Services.APIClient;
+    apiClient: APIClient;
     chainId: number;
     gnsosisSafe?: string;
+    provider: ethers.providers.Provider;
+    signer?: ethers.Signer;
+    signerAddress: string | undefined;
 
-    constructor(props:ConstructorProps) {
+    constructor(props: APIExtensionProps) {
         this.signer = props.signer;
         this.provider = props.provider;
         this.apiClient = props.apiClient;
@@ -34,24 +31,50 @@ export default class TokenSupport {
         this.chainId = 0;
     }
 
-    lookup = async (address:string): Promise<Token> => {
+    protected getSigner() : ethers.Signer {
+        const signer = this.signer;
+        if (! signer) {
+            throw new Error('ethers.Signer is required');
+        }
+        return signer;
+    }
+
+    protected async getSignerAddress() : Promise<string> {
+        const signer = this.getSigner();
+        let signerAddress = this.gnsosisSafe || this.signerAddress;
+
+        if (! this.signerAddress) {
+            signerAddress = await signer.getAddress();
+            this.signerAddress = signerAddress;
+        }
+
+        if (! signerAddress) {
+            throw new Error('Failed to resolve Signer address');
+        }
+
+        this.signerAddress = signerAddress;
+
+        return signerAddress;
+    }
+
+    async lookup(address:string): Promise<Token> {
         let r = await this.verify(address);
         if(!r || r.error) {
             throw new Error("Unsupported token address:" + address);
         }
-        if(!this.address) {
-            this.address = await this.signer.getAddress();
-        }
-        let addr = this.gnsosisSafe || this.address;
+        const owner = await this.getSignerAddress();
+
         return TokenServices.TokenFinder({
             address,
-            owner: addr,
+            owner,
             provider: this.provider
         });
     }
 
-    increaseSpending = async (props:SpendIncreaseProps): Promise<any> => {
-        let network = await this.signer.provider?.getNetwork();
+    async increaseSpending(props:SpendIncreaseProps): Promise<any> {
+        const signer = await this.getSigner();
+
+        const network = await signer.provider?.getNetwork();
         this.chainId = network?.chainId || 0;
         if(!this.chainId) {
             throw new Error("Signer does not have a web3 provider to supply network info");
@@ -62,7 +85,7 @@ export default class TokenSupport {
         }
         
         let txn = await TokenServices.TokenUtils.increaseSpending({
-            signer: this.signer,
+            signer,
             token: props.token,
             amount: props.amount
         });
@@ -70,6 +93,7 @@ export default class TokenSupport {
         if(!r.status) {
             throw new Error("Allowance transaction failed");
         }
+
         //we pause for at least a block to give the network time to sync 
         //since we've just increased spending. Otherwise, any subsequent
         //check could result in order failure because allowance may not 
@@ -79,11 +103,19 @@ export default class TokenSupport {
         return txn;
     }
 
-    verify = async (address:string) => {
-        if(this.chainId === 0) {
+    async verify(address:string) {
+
+        if (this.chainId === 0) {
             let net = await this.provider.getNetwork();
             this.chainId = net.chainId;
         }
-        return this.apiClient.get(`token/verify/${this.chainId}/${address}`);
+
+        const endpoint = `token/verify/${this.chainId}/${address}`;
+
+        return this.apiClient.get({
+            endpoint,
+            requiresAuthentication: false,
+            withRetrySupport: true,
+        });
     }
 }

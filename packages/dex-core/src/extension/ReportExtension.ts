@@ -1,10 +1,13 @@
 
-import {Services, Tag, Token} from 'dexible-common';
-export default class Reports {
-    api: Services.APIClient;
+import {
+    APIClient,
+    APIExtensionProps,
+} from 'dexible-common';
+export class ReportExtension {
+    api: APIClient;
 
-    constructor(api:Services.APIClient) {
-        this.api = api;
+    constructor(props: APIExtensionProps) {
+        this.api = props.apiClient;
     }
 
     async getSummary(start:Date,end:Date) {

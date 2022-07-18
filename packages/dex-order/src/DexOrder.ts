@@ -2,7 +2,14 @@ import {BigNumberish } from 'ethers';
 import {IAlgo} from 'dexible-algos';
 import {ethers} from 'ethers';
 import {QuoteGrabber, QuoteRequest} from 'dexible-quote';
-import {Services, Tag, Token} from 'dexible-common';
+import {
+    toErrorWithMessage,
+    APIClient,
+    MarketingProps,
+    Services, 
+    Tag, 
+    Token,
+} from 'dexible-common';
 import Logger from 'dexible-logger';
 
 const bn = ethers.BigNumber.from;
@@ -14,7 +21,8 @@ export interface PrepareResponse {
 }
 
 export interface DexOrderParams {
-    apiClient: Services.APIClient;
+    apiClient: APIClient;
+    chainId: number;
     tokenIn: Token;
     tokenOut: Token;
     quoteId?: number;
@@ -23,9 +31,11 @@ export interface DexOrderParams {
     maxRounds: number;
     tags?: Array<Tag>;
     gnosisSafe?: string;
+    marketing?: MarketingProps;
 }
 
 export default class DexOrder {
+    chainId: number;
     tokenIn: Token;
     tokenOut: Token;
     amountIn: BigNumberish;
@@ -37,6 +47,7 @@ export default class DexOrder {
     maxRounds: number;
     tags?: Array<Tag>;
     gnosisSafe?: string;
+    marketing?: MarketingProps;
 
     constructor(params:DexOrderParams) {
         this.tokenIn = params.tokenIn;
@@ -50,6 +61,8 @@ export default class DexOrder {
         this.quote = null;
         this.tags = params.tags;
         this.gnosisSafe = params.gnosisSafe;
+        this.marketing = params.marketing;
+        this.chainId = params.chainId;
     }
 
     serialize = () => {
@@ -59,15 +72,16 @@ export default class DexOrder {
 
         let algoSer = this.algo.serialize() as any;
         return {
+            algorithm: algoSer.algorithm,
+            amountIn: this.amountIn.toString(),
+            gnosisSafe: this.gnosisSafe,
+            marketing: this.marketing,
+            networkId: this.chainId,
+            policies: algoSer.policies,
+            quoteId: this.quoteId,
+            tags: this.tags,
             tokenIn: this.tokenIn.address,
             tokenOut: this.tokenOut.address,
-            quoteId: this.quoteId,
-            amountIn: this.amountIn.toString(),
-            networkId: this.apiClient.chainId,
-            policies: algoSer.policies,
-            algorithm: algoSer.algorithm,
-            tags: this.tags,
-            gnosisSafe: this.gnosisSafe
         }
     }
 
@@ -143,8 +157,9 @@ export default class DexOrder {
                 order: this
             }
         } catch (e) {
+            const err = toErrorWithMessage(e);
             return {
-                error: e.message
+                error: err.message
             }
         } 
         
@@ -159,17 +174,18 @@ export default class DexOrder {
             minPerRound = ethers.utils.parseUnits(inUnits.toFixed(this.tokenIn.decimals), this.tokenIn.decimals);
         }
 
-        let req = {
+        const req : QuoteRequest = {
+            chainId: this.chainId,
             tokenIn: this.tokenIn,
             tokenOut: this.tokenOut,
             amountIn: this.amountIn.toString(),
             minOrderSize: minPerRound.toString(),
             apiClient: this.apiClient,
             slippagePercent,
-        } as QuoteRequest;
+        };
         log.debug("Using request", req);
 
-        let quotes = await QuoteGrabber(req);
+        const quotes = await QuoteGrabber(req);
         if(quotes && quotes.length > 0) {
             log.debug("Have quote result");
             //quotes array should have single-round and recommended quotes
@@ -198,7 +214,8 @@ export default class DexOrder {
         try {
             this.quote = await this.apiClient.get(`quotes/${this.quoteId}`);
         } catch (e) {
-            log.error("Could not get quote by id", e.message);
+            const err = toErrorWithMessage(e);
+            log.error("Could not get quote by id", err.message);
             throw e;
         }
     }
@@ -213,7 +230,12 @@ export default class DexOrder {
         }
         let ser = this.serialize();
         log.debug("Sending raw order details", ser);
-        return this.apiClient.post("orders", ser);
+        return this.apiClient.post({
+            endpoint: "orders", 
+            data: ser,
+            requiresAuthentication: true,
+            withRetrySupport: false,
+        });
     }
 
     toJSON() {
@@ -225,7 +247,8 @@ export default class DexOrder {
             quoteId: this.quoteId,
             quote: this.quote,
             maxRounds: this.maxRounds,
-            tags: this.tags
+            tags: this.tags,
+            marketing: this.marketing || {},
         }
     }
 

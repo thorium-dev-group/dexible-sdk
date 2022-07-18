@@ -100,6 +100,7 @@ dist
 # DynamoDB Local files
 .dynamodb/
 
+
 .yarn/*
 !.yarn/patches
 !.yarn/releases

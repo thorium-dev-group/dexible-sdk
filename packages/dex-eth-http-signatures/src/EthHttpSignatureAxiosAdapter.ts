@@ -8,7 +8,7 @@ const log = new Logger({component: "EthHttpSignatureAxiosAdapter"});
 
 export default class EthHttpSignatureAxiosAdapter {
 
-    static  build(signer: ethers.Signer): AxiosAdapter {
+    static build(signer: ethers.Signer): AxiosAdapter {
 
         const httpSignature = new EthHttpSignature();
 
