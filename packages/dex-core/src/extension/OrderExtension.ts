@@ -68,7 +68,7 @@ export class OrderExtension {
     }
 
     async getOne(id:number): Promise<any> {
-\        return this.apiClient.get({
+        return this.apiClient.get({
             endpoint: `orders/${id}`,
             requiresAuthentication: true,
             withRetrySupport: true,

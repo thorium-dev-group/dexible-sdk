@@ -297,14 +297,29 @@ export class APIClient {
      * 
      * @param err 
      */
-    protected throwOnAxiosError(err: AxiosError): void {
+    protected throwOnAxiosError(error: AxiosError): void {
 
-        const message = err.message;
-        const response = err.response;
+        const message = error.message;
+        const response = error.response;
+        const request = error.request;
+
+        // sanitize output
+        const err = {
+            ...error,
+            config: undefined,
+            request: undefined,
+            response: undefined,
+        }
+
         log.error({
             msg: "request failed", 
-            request: err.request,
-            response: response,
+            err,
+            request: request
+                ? APIClient.serializeAxiosRequest(request)
+                : undefined,
+            response: response
+                ? APIClient.serializeAxiosResponse(response)
+                : undefined,
         });
 
         if (typeof response?.data === 'object') {
@@ -364,6 +379,27 @@ export class APIClient {
                 requestId,
             });
         }
+    }
+
+    protected static serializeAxiosRequest(request: any) {
+        return {
+            method: request.method,
+            url: request.url,
+            path: request.path,
+            host: request.host || 'localhost',
+            headers: request.headers,
+            params: request.params,
+            data: request.data,
+        };
+    }
+
+    protected static serializeAxiosResponse(response: AxiosResponse) {
+        return {
+            status: response.status,
+            statusText: response.statusText,
+            headers: response.headers,
+            data: response.data,
+        };
     }
 
 }
