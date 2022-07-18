@@ -88,35 +88,38 @@ describe('APIClient', () => {
     });
 
 
-    it('call authenticationHandler.authenticate() 1x before request', async () => {
-        expect.assertions(1);
+    it(
+        'call authenticationHandler.authenticate() 1x before request',
+        async () => {
+            expect.assertions(1);
 
-        const endpoint = '/status-200';
-        const mockedAuthenicationHandler = jest.spyOn(authenticationHandler, 'authenticate');
+            const endpoint = '/status-200';
+            const mockedAuthenicationHandler = jest.spyOn(authenticationHandler, 'buildClient');
 
-        // should trigger authenticate call
-        await client.post({
-            endpoint,
-            requiresAuthentication: true,
-            withRetrySupport: false
-        });
+            // should trigger authenticate call
+            await client.post({
+                endpoint,
+                requiresAuthentication: true,
+                withRetrySupport: false
+            });
 
-        // should not trigger secondary authenticate call
-        await client.post({
-            endpoint,
-            requiresAuthentication: true,
-            withRetrySupport: false
-        });
+            // should not trigger secondary authenticate call
+            await client.post({
+                endpoint,
+                requiresAuthentication: true,
+                withRetrySupport: false
+            });
 
-        // also should not trigger authenticate
-        await client.post({
-            endpoint,
-            requiresAuthentication: false,
-            withRetrySupport: false
-        });
+            // also should not trigger authenticate
+            await client.post({
+                endpoint,
+                requiresAuthentication: false,
+                withRetrySupport: false
+            });
 
-        expect(mockedAuthenicationHandler).toBeCalledTimes(1);
-    });
+            expect(mockedAuthenicationHandler).toBeCalledTimes(1);
+        }
+    );
 
     it('retry request on failure', async () => {
         expect.assertions(1);

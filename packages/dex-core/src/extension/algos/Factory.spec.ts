@@ -1,9 +1,33 @@
-import Factory, {LimitProps, StopLossProps} from './Factory';
+import Factory, { LimitProps, StopLossProps } from './Factory';
 import * as Algos from 'dexible-algos';
+import {
+    Price,
+    Token,
+} from 'dexible-common';
+import { BigNumber } from 'ethers';
 
-describe("AlgoFactory", function() {
+const tokenIn: Token = {
+    address: '0x' + '0'.repeat(40),
+    decimals: 18,
+    symbol: 'TEST',
+    allowance: BigNumber.from(0),
+    balance: BigNumber.from(0),
+    name: 'TEST',
+};
 
-    it("Should generate market algo", async function() {
+const tokenOut = tokenIn;
+
+const price = Price.unitsToPrice({
+    inToken: tokenIn,
+    outToken: tokenOut,
+    inUnits: 1, //dai in
+    outUnits: .00133 //WETH out
+});
+
+
+describe("AlgoFactory", () => {
+
+    it("Should generate market algo", async () => {
         let factory = new Factory();
         let algo = factory.createMarket({
             maxRounds: 5,
@@ -14,17 +38,18 @@ describe("AlgoFactory", function() {
             },
             slippagePercent: .5
         });
-        if(!algo) {
+        if (!algo) {
             throw new Error("Expected a market algo");
         }
         let err = algo.verify();
-        if(err) {
+        if (err) {
             throw new Error(err);
         }
         console.log("Market", algo);
     });
 
-    it("Should generate limit algo", async function() {
+    it("Should generate limit algo", async () => {
+
         let factory = new Factory();
         let algo = factory.createLimit({
             type: Algos.Limit.tag,
@@ -33,20 +58,20 @@ describe("AlgoFactory", function() {
                 type: "relative"
             },
             slippagePercent: .5,
-            limitAction: "buy",
-            price: .0006
+            // limitAction: "buy",
+            price
         });
-        if(!algo) {
+        if (!algo) {
             throw new Error("Expected algo");
         }
         let err = algo.verify();
-        if(err) {
+        if (err) {
             throw new Error(err);
         }
         console.log("Limit", algo);
     });
 
-    it("Should fail to create limit with action and price", async function() {
+    it("Should fail to create limit with action and price", async () => {
         let factory = new Factory();
         let props = {
             type: Algos.Limit.tag,
@@ -55,15 +80,15 @@ describe("AlgoFactory", function() {
                 type: "relative"
             },
             slippagePercent: .5,
-            
+
         } as LimitProps;
 
         let algo = factory.createLimit(props);
-        if(!algo) {
+        if (!algo) {
             throw new Error("Expected algo");
         }
         let err = algo.verify();
-        if(!err) {
+        if (!err) {
             throw new Error("Expected verification to fail");
         }
         props = {
@@ -72,22 +97,22 @@ describe("AlgoFactory", function() {
         } as LimitProps;
         algo = factory.createLimit(props);
         err = algo.verify();
-        if(!err) {
+        if (!err) {
             throw new Error("Expected verification to fail");
         }
         props = {
             ...props,
-            price: .0006
+            price,
         } as LimitProps;
         algo = factory.createLimit(props);
         err = algo.verify();
-        if(err) {
+        if (err) {
             throw new Error(err);
         }
-        
+
     });
 
-    it("Should create a stop loss algo", async function() {
+    it("Should create a stop loss algo", async () => {
         let factory = new Factory();
         let algo = factory.createStopLoss({
             type: Algos.StopLoss.tag,
@@ -97,19 +122,19 @@ describe("AlgoFactory", function() {
             },
             slippagePercent: .5,
             isAbove: true,
-            triggerPrice: .006
+            triggerPrice: price,
         });
-        if(!algo) {
+        if (!algo) {
             throw new Error("Expected algo");
         }
         let err = algo.verify();
-        if(err) {
+        if (err) {
             throw new Error(err);
         }
         console.log("StopLoss", algo);
     })
 
-    it("Should fail if missing stop loss props", async function() {
+    it("Should fail if missing stop loss props", async () => {
         let factory = new Factory();
         let props = {
             type: Algos.StopLoss.tag,
@@ -117,32 +142,32 @@ describe("AlgoFactory", function() {
             gasPolicy: {
                 type: "relative"
             },
-            slippagePercent: .5            
+            slippagePercent: .5
         } as StopLossProps;
 
         let algo = factory.createStopLoss(props);
-        if(!algo) {
+        if (!algo) {
             throw new Error("Expected algo");
         }
         let err = algo.verify();
-        if(!err) {
+        if (!err) {
             throw new Error("Expected to fail");
         }
         props = {
             ...props,
-            triggerPrice: .006
+            triggerPrice: price,
         }
         algo = factory.createStopLoss(props);
-        if(!algo) {
+        if (!algo) {
             throw new Error("Expected algo");
         }
         err = algo.verify();
-        if(err) {
+        if (err) {
             throw new Error(err);
         }
     });
 
-    it("Should create a TWAP algo", async function() {
+    it("Should create a TWAP algo", async () => {
         let factory = new Factory();
         let algo = factory.createTWAP({
             type: Algos.StopLoss.tag,
@@ -151,18 +176,20 @@ describe("AlgoFactory", function() {
                 type: "relative"
             },
             slippagePercent: .5,
-            timeWindow: "24h",
+            timeWindow: {
+                hours: 24,
+            },
             priceRange: {
-                basePrice: .0006,
+                basePrice: price,
                 upperBoundPercent: 5,
                 lowerBoundPercent: 10
             }
         });
-        if(!algo) {
+        if (!algo) {
             throw new Error("Expected algo");
         }
         let err = algo.verify();
-        if(err) {
+        if (err) {
             throw new Error(err);
         }
         console.log("TWAP", algo);

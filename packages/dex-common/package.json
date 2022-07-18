@@ -21,15 +21,16 @@
     "@pollyjs/core": "^6.0.5",
     "@pollyjs/persister-fs": "^6.0.5",
     "@tsconfig/node14": "^1.0.1",
-    "@types/jest": "^28.1.1",
+    "@types/jest": "^28.1.4",
+    "@types/node": "^18.0.3",
     "@types/setup-polly-jest": "^0.5.1",
-    "jest": "^28.1.1",
+    "jest": "^28.1.2",
     "jest-jasmine2": "^28.1.1",
     "node-fetch": "^3.2.6",
     "rimraf": "^3.0.2",
     "setup-polly-jest": "^0.11.0",
     "ts-jest": "^28.0.5",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.8.2",
     "typescript": "4.3.5"
   }
 }
