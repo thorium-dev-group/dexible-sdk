@@ -74,18 +74,38 @@ export class OrderExtension {
     }
 
     async getOne(id:number): Promise<any> {
-        return this.apiClient.get(`orders/${id}`);
+        // return this.apiClient.get(`orders/${id}`);
+        return this.apiClient.get({
+            endpoint: `orders/${id}`,
+            requiresAuthentication: true,
+            withRetrySupport: true,
+        });
     }
 
     async cancel(orderId:number): Promise<any> {
-        return this.apiClient.post(`orders/${orderId}/actions/cancel`, {orderId});
+        return this.apiClient.post({
+            data: {orderId},
+            endpoint: `orders/${orderId}/actions/cancel`,
+            requiresAuthentication: true,
+            withRetrySupport: true,
+        });
     }
 
     async pause(orderId:number): Promise<any> {
-        return this.apiClient.post(`orders/${orderId}/actions/pause`, {orderId});
+        return this.apiClient.post({
+            data: {orderId},
+            endpoint: `orders/${orderId}/actions/pause`,
+            requiresAuthentication: true,
+            withRetrySupport: true,
+        });
     }
 
     async resume(orderId:number): Promise<any> {
-        return this.apiClient.post(`orders/${orderId}/actions/resume`, {orderId});
+        return this.apiClient.post({
+            data: {orderId},
+            endpoint: `orders/${orderId}/actions/resume`,
+            requiresAuthentication: true,
+            withRetrySupport: true,
+        });
     }
 }
