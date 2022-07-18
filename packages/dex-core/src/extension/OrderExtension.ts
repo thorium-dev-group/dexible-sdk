@@ -56,26 +56,19 @@ export class OrderExtension {
     }
 
     async getAll(params:OrderListParams): Promise<Array<any>> {
-        let qs = Object.keys(params).reduce((s, k, i)=>{
-            let v = params[k];
-            if(typeof v !== 'undefined' && v !== null) {
-                if(i > 0) {
-                    s += `&${k}=${v}`;
-                } else {
-                    s += `${k}=${v}`;
-                }
-            }
-            return s;
-        }, "");
-        if(this.gnosisSafe && this.gnosisSafe.length > 0) {
-            qs += "&gnosisSafe=" + this.gnosisSafe;
-        }
-        return this.apiClient.get(`orders?${qs}`)
+        return this.apiClient.get({
+            endpoint: 'orders',
+            requiresAuthentication: true,
+            withRetrySupport: true,
+            params: {
+                ...params,
+                gnosisSafe: this.gnosisSafe,
+            },
+        });
     }
 
     async getOne(id:number): Promise<any> {
-        // return this.apiClient.get(`orders/${id}`);
-        return this.apiClient.get({
+\        return this.apiClient.get({
             endpoint: `orders/${id}`,
             requiresAuthentication: true,
             withRetrySupport: true,
