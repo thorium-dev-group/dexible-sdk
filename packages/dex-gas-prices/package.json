@@ -1,6 +1,6 @@
 {
   "name": "dexible-gas-prices",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -10,8 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "dexible-common": "^0.1.36",
-    "dexible-logger": "^0.1.36"
+    "dexible-common": "^1.0.0",
+    "dexible-logger": "^1.0.0"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
