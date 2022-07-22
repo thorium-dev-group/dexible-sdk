@@ -15,6 +15,7 @@
     "dayjs": "^1.10.6",
     "dexible-algos": "^1.0.0",
     "dexible-common": "^1.0.0",
+    "dexible-eth-http-signatures": "^1.0.0",
     "dexible-gas-prices": "^1.0.0",
     "dexible-logger": "^1.0.0",
     "dexible-order": "^1.0.0",
