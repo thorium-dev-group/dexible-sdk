@@ -25,3 +25,5 @@ export * from './MarketingUtils';
 export * from './services/APIClient';
 export * from './services/IAuthenticationHandler';
 export * from './services/IJWTHandler';
+export * from './DexFilterType';
+export * from './DexFilters';

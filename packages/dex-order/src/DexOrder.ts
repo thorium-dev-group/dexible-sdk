@@ -9,6 +9,7 @@ import {
     Services, 
     Tag, 
     Token,
+    DexFilters
 } from 'dexible-common';
 import Logger from 'dexible-logger';
 
@@ -32,6 +33,7 @@ export interface DexOrderParams {
     tags?: Array<Tag>;
     gnosisSafe?: string;
     marketing?: MarketingProps;
+    dexFilters?: DexFilters;
 }
 
 export default class DexOrder {
@@ -48,6 +50,7 @@ export default class DexOrder {
     tags?: Array<Tag>;
     gnosisSafe?: string;
     marketing?: MarketingProps;
+    dexFilters?: DexFilters;
 
     constructor(params:DexOrderParams) {
         this.tokenIn = params.tokenIn;
@@ -63,6 +66,7 @@ export default class DexOrder {
         this.gnosisSafe = params.gnosisSafe;
         this.marketing = params.marketing;
         this.chainId = params.chainId;
+        this.dexFilters = params.dexFilters;
     }
 
     serialize = () => {
@@ -76,6 +80,7 @@ export default class DexOrder {
             amountIn: this.amountIn.toString(),
             gnosisSafe: this.gnosisSafe,
             marketing: this.marketing,
+            dexFilters: this.dexFilters,
             networkId: this.chainId,
             policies: algoSer.policies,
             quoteId: this.quoteId,

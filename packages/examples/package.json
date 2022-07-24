@@ -1,6 +1,6 @@
 {
   "name": "examples",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "UNLICENSED",
   "scripts": {
     "build": "yarn clean && tsc --build",
@@ -8,7 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "dexible-sdk": "^1.0.0",
+    "dexible-sdk": "^1.0.1",
     "ethers": "^5.3.1"
   },
   "devDependencies": {
