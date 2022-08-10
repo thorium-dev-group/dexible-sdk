@@ -9,23 +9,10 @@ export interface TokenFindProps {
 
 
 const bn = BigNumber.from;
-interface CacheInfo {
-    token: Token;
-    updated: number;
-}
 
-const cache:Map<string, CacheInfo> = new Map<string, CacheInfo>();
-const TTL = 60000;
+
 export default async (props:TokenFindProps):Promise<Token> => {
 
-    let info:CacheInfo = cache[props.address.toLowerCase()];
-    if(info) {
-        const diff = Date.now() - info.updated;
-        if(diff < TTL) {
-            return info.token;
-        }
-    }
-    
     let netInfo = await props.provider.getNetwork();
     let r:InfoResponse = await getInfo({
         token: props.address,
@@ -34,20 +21,15 @@ export default async (props:TokenFindProps):Promise<Token> => {
         owner: props.owner
     });
     if(r) {
-        const t = {
+        return {
             address: props.address.toLowerCase(),
             decimals: r.decimals,
             symbol: r.symbol, 
             balance: bn(r.balance||"0"),
             allowance: bn(r.allowance||"0")
         } as Token;
-        info = {
-            token: t,
-            updated: Date.now()
-        };
-        cache[props.address.toLowerCase()] = info;
     }
-    return info.token;
+    throw new Error(`Could not find token info for address ${props.address} on chain ${netInfo.chainId}`);
 }
 
 interface InfoProps {

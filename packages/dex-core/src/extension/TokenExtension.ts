@@ -14,6 +14,12 @@ export interface SpendIncreaseProps {
 const sleep = ms => new Promise(done=>setTimeout(done, ms));
 const bn = ethers.BigNumber.from;
 
+interface CacheInfo {
+    token: Token;
+    updated: number;
+}
+
+const TTL = 60000;
 export class TokenExtension {
 
     apiClient: APIClient;
@@ -22,6 +28,7 @@ export class TokenExtension {
     provider: ethers.providers.Provider;
     signer?: ethers.Signer;
     signerAddress: string | undefined;
+    private cache:Map<string, CacheInfo> = new Map<string, CacheInfo>();
 
     constructor(props: APIExtensionProps) {
         this.signer = props.signer;
@@ -64,11 +71,26 @@ export class TokenExtension {
         }
         const owner = await this.getSignerAddress();
 
-        return TokenServices.TokenFinder({
+        let info:CacheInfo = this.cache[address.toLowerCase()];
+        if(info) {
+            const diff = Date.now() - info.updated;
+            if(diff < TTL) {
+                return info.token;
+            }
+        }
+
+        const token = await TokenServices.TokenFinder({
             address,
             owner,
             provider: this.provider
         });
+        if(token) {
+            this.cache[address.toLowerCase()] = {
+                token,
+                updated: Date.now()
+            } as CacheInfo;
+        }
+        return token;
     }
 
     async increaseSpending(props:SpendIncreaseProps): Promise<any> {
