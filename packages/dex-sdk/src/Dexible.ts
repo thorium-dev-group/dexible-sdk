@@ -1,9 +1,9 @@
-import {Algos, SDK, Token} from './';
-import {BigNumberish, BigNumber, ethers} from 'ethers';
+import { Algos, SDK, Token } from './';
+import { BigNumberish, BigNumber, ethers } from 'ethers';
 import Order, * as OrderSupport from './Order';
 
 export interface Connection {
-    walletKey?: string; 
+    walletKey?: string;
     signer?: ethers.Signer;
     provider?: ethers.providers.Provider;
 }
@@ -11,7 +11,7 @@ export interface Connection {
 export interface SpendAllowance {
     token: Token;
     amount?: BigNumber;
-    infinite?:boolean;
+    infinite?: boolean;
 }
 
 export interface TokenRequest {
@@ -36,50 +36,59 @@ export interface QuoteRequest {
 
 export default class Dexible {
 
-    static async connect(props:Connection):Promise<Dexible> {
+    static async connect(props: Connection): Promise<Dexible> {
         let signer = props.signer;
-        if(!signer) {
-            if(!props.walletKey) {
+        let provider = props.provider;
+
+        if (signer) {
+            if (! provider) {
+                provider = signer.provider;
+            };
+
+        } else {
+            if (!props.walletKey) {
                 throw new Error("If not providing a signer implementation, must supply a wallet key");
             }
-            let p = props.provider;
-            if(!p) {
-                p = ethers.getDefaultProvider("homestead");
+
+            if (!provider ) {
+                // FIXME: this seems wonky
+                provider = ethers.getDefaultProvider("homestead");
             }
-            signer = new ethers.Wallet(props.walletKey, p);
-        } else {
-            let p = await signer.provider;
-            if(!p) {
-                throw new Error("If providing a Signer implementation, the signer must include a web3 provider");
-            }
+            signer = new ethers.Wallet(props.walletKey, provider);
+        }
+
+        if (!provider) {
+            throw new Error("If providing a Signer implementation, the signer must include a web3 provider");
         }
 
         let sdk = await SDK.create({
+            provider,
             signer,
         });
+        
         return new Dexible(sdk);
     }
 
     sdk: SDK;
 
-    private constructor(sdk:SDK) {
+    private constructor(sdk: SDK) {
         this.sdk = sdk;
     }
 
-    async resolveTokens(props:TokenRequest):Promise<TokenResponse> {
+    async resolveTokens(props: TokenRequest): Promise<TokenResponse> {
         let t1 = await this.sdk.token.lookup(props.tokenIn);
         let t2 = await this.sdk.token.lookup(props.tokenOut);
-        return {tokenIn: t1, tokenOut: t2};
+        return { tokenIn: t1, tokenOut: t2 };
     }
 
-    async getQuote(props:QuoteRequest):Promise<any> {
+    async getQuote(props: QuoteRequest): Promise<any> {
         return this.sdk.quote.getQuote(props);
     }
 
-    async approve(props:SpendAllowance) {
+    async approve(props: SpendAllowance) {
         let a = props.amount;
-        if(!a) {
-            if(!props.infinite) {
+        if (!a) {
+            if (!props.infinite) {
                 throw new Error("Must either provide a fixed spend allowance set the infinite flag for infinite approval");
             } else {
                 a = ethers.constants.MaxInt256;
@@ -92,7 +101,7 @@ export default class Dexible {
     }
 
 
-    async limit(props:OrderSupport.LimitProps) {
+    async limit(props: OrderSupport.LimitProps) {
         return Order.create({
             ...props,
             sdk: this.sdk,
@@ -100,7 +109,7 @@ export default class Dexible {
         });
     }
 
-    async market(props:OrderSupport.CommonProps) {
+    async market(props: OrderSupport.CommonProps) {
         return Order.create({
             ...props,
             sdk: this.sdk,
@@ -108,7 +117,7 @@ export default class Dexible {
         });
     }
 
-    async stopLoss(props:OrderSupport.StopLossProps) {
+    async stopLoss(props: OrderSupport.StopLossProps) {
         return Order.create({
             ...props,
             sdk: this.sdk,
@@ -116,7 +125,7 @@ export default class Dexible {
         })
     }
 
-    async twap(props:OrderSupport.TWAPProps) {
+    async twap(props: OrderSupport.TWAPProps) {
         return Order.create({
             ...props,
             sdk: this.sdk,
