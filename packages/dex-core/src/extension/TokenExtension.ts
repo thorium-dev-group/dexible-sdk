@@ -62,7 +62,13 @@ export class TokenExtension {
         if(!r || r.error) {
             throw new Error("Unsupported token address:" + address);
         }
-        const owner = await this.getSignerAddress();
+
+        let owner : string | undefined;
+        try {
+            owner = await this.getSignerAddress();
+        } catch(e) {
+            // allow lookup w/o owner (TokenFinder will return partial results)
+        }
 
         return TokenServices.TokenFinder({
             address,
