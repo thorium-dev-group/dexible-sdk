@@ -1,6 +1,6 @@
 {
     "name": "dexible-logger",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "description": "Simple logger for SDK client",
     "main": "dist/index.js",
     "scripts": {
