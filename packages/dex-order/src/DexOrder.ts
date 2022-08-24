@@ -128,6 +128,16 @@ export default class DexOrder {
             return "Insufficient token allowance for trade";
         }
 
+        if(this.dexFilters) {
+            if( this.dexFilters.include &&
+                this.dexFilters.include.length > 0 &&
+                this.dexFilters.exclude &&
+                this.dexFilters.exclude.length > 0
+            ) {
+                return "Must have an include or exclude list for filters, but not both"
+            }
+        }
+
         log.debug("Surface-level order verification looks ok");
     }
 
@@ -254,6 +264,7 @@ export default class DexOrder {
             maxRounds: this.maxRounds,
             tags: this.tags,
             marketing: this.marketing || {},
+            dexFilters: this.dexFilters || {}
         }
     }
 

@@ -2,6 +2,7 @@ import * as OrderSupport from 'dexible-order';
 import {
     APIClient,
     APIExtensionProps,
+    DexFilters,
     MarketingProps,
     Tag, 
     Token,
@@ -16,6 +17,7 @@ export interface OrderSpec {
     quoteId?: number;
     algo: IAlgo;
     tags?: Array<Tag>;
+    dexFilters?: DexFilters;
 }
 
 export interface OrderListParams {
@@ -51,6 +53,7 @@ export class OrderExtension {
             tags: params.tags,
             gnosisSafe: this.gnosisSafe,
             marketing: this.marketing,
+            dexFilters: params.dexFilters
         });
         return order.prepare();
     }
