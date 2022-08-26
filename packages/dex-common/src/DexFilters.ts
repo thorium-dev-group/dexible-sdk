@@ -1,6 +1,5 @@
-import { DexFilterType } from "./DexFilterType";
 
 export interface DexFilters {
-    include: Array<DexFilterType>;
-    exclude: Array<DexFilterType>;
+    include?: Array<string>;
+    exclude?: Array<string>;
 }

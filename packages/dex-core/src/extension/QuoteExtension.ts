@@ -4,6 +4,7 @@ import {
     APIExtensionProps,
     MarketingProps,
     Token,
+    DexFilters
 } from 'dexible-common';
 import { BigNumber, BigNumberish } from 'ethers';
 
@@ -15,6 +16,7 @@ export interface QuoteParams {
     maxRounds?: number;
     maxFixedGas?: BigNumberish;
     fixedPrice?: number;
+    dexFilters?: DexFilters;
 }
 
 export interface SpotParams {
@@ -54,6 +56,7 @@ export class QuoteExtension {
             fixedPrice: props.fixedPrice,
             minOrderSize: minAmount.toString(),
             marketing: this.marketing,
+            dexFilters: props.dexFilters
         };
         return QuoteGrabber(req);
     }

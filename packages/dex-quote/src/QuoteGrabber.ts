@@ -1,6 +1,7 @@
 import { BigNumberish } from '@ethersproject/bignumber';
 import Logger from 'dexible-logger';
 import {
+    DexFilters,
     MarketingProps,
     Services, 
     Token
@@ -21,6 +22,7 @@ export interface QuoteRequest {
     maxFixedGas?: BigNumberish;
     fixedPrice?: number;
     marketing?: MarketingProps;
+    dexFilters?: DexFilters;
 }
 
 export default async (request: QuoteRequest): Promise<any> => {
@@ -35,7 +37,8 @@ export default async (request: QuoteRequest): Promise<any> => {
         maxFixedGas: request.maxFixedGas,
         fixedPrice: request.fixedPrice,
         slippagePercentage,
-        marketing: request.marketing
+        marketing: request.marketing,
+        dexFilters: request.dexFilters
     };
 
     let r = await request.apiClient.post({
