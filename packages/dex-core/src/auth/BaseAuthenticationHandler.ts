@@ -45,7 +45,7 @@ export abstract class BaseAuthenticationHandler implements IAuthenticationHandle
         let signature: string;
         if (this.isWalletConnect) {
             const p = this.signer.provider as any;
-            signature = await p.send('personal_sign', [ethers.utils.toUtf8Bytes(data), address.toLowerCase()]);
+            signature = await p.send('personal_sign', [ethers.utils.hexlify(ethers.utils.toUtf8Bytes(data)), address.toLowerCase()]);
         } else {
             signature = await this.signer.signMessage(data);
         }
