@@ -78,7 +78,14 @@ export type WalletConnectionWithSigner = WalletConnectionBase & {
 
 }
 
-export type WalletConnection = WalletConnectionWithProvider | WalletConnectionWithSigner;
+export type WalletConnectionWithInfura = WalletConnectionBase & {
+    /**
+     * An infura key to stand up a temporary provider
+     */
+    infuraKey: string;
+}
+
+export type WalletConnection = WalletConnectionWithProvider | WalletConnectionWithSigner | WalletConnectionWithInfura;
 
 
 export default class SDK {
@@ -110,7 +117,7 @@ export default class SDK {
 
 
     static async create(props: WalletConnection): Promise<SDK> {
-        const provider = 'provider' in props
+        let provider = 'provider' in props
             ? props.provider
             : undefined;
 
@@ -119,7 +126,27 @@ export default class SDK {
             ? props.signer
             : undefined;
 
+        const infuraKey = 'infuraKey' in props 
+            ? props.infuraKey
+            : undefined;
+
+        if(!provider && !signer && !infuraKey) {
+            throw new Error("Must supply a provider, signer, or infuraKey to create an SDK instance");
+        }
+
         const specifiedChainId = props.chainId;
+
+        if(infuraKey) {
+            if(!specifiedChainId) {
+                throw new Error("Must supply a chainId when using infura as a temporary provider");
+            }
+            provider = new ethers.providers.InfuraProvider(specifiedChainId, infuraKey);
+            props = {
+                ...props,
+                provider
+            } as WalletConnectionWithProvider;
+        }
+        
 
         const resolvedChainId = await SDK.resolveChainId({
             provider,
