@@ -14,7 +14,7 @@
     "axios": "^0.21.1",
     "axios-retry": "^3.2.5",
     "dexible-logger": "^1.0.6",
-    "ethers": "^5.1.4"
+    "ethers": "^5.7.0"
   },
   "devDependencies": {
     "@pollyjs/adapter-node-http": "^6.0.5",

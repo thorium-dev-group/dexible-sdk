@@ -13,7 +13,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "dexible-logger": "^1.0.6",
-    "ethers": "^5.1.0"
+    "ethers": "^5.7.0"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",

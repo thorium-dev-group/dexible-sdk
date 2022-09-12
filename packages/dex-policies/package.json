@@ -14,7 +14,7 @@
     "dexible-common": "^1.0.6",
     "dexible-logger": "^1.0.6",
     "dexible-web3": "^1.0.6",
-    "ethers": "^5.3.1"
+    "ethers": "^5.7.0"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
