@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 
 const log = new Logger({ component: "JwtSessionHandler" });
 
-type LoginDetails = { token: string, expiration: number };
+type LoginDetails = {token: string; expiration: number; needRegistration: boolean;};
 
 export interface JwtSessionHandlerProps extends BaseAuthenticationHandlerProps {
     signer: ethers.Signer;
@@ -86,19 +86,19 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         let response: LoginDetails;
         try {
             response = await this.login();
+            if(response.needRegistration) {
+                if(this.autoRegisterUser) {
+                    await this.register();
+                } else {
+                    throw new Error('Cannot automatically register users on this network');
+                }
+                response = await this.login();
+            }
         } catch (e) {
             log.debug({
                 err: e
             });
-            // attempt user registration
-            if (this.autoRegisterUser) {
-                await this.register();
-
-                // second login attempt
-                response = await this.login();
-            } else {
-                throw e;
-            }
+            throw e;
         }
 
         return response;
@@ -122,13 +122,17 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
             throw e;
         }
 
-        if (!nonceResponse) {
+        if (!nonceResponse || !nonceResponse.nonce) {
             throw new Error(`Failed to get nonce response`);
         }
 
         // needs to register
         if (!nonceResponse.canLogin) {
-            throw new Error("User registration is required");
+            return {
+                token: '',
+                expiration: 0,
+                needRegistration: true
+            };
         }
 
         // sign nonce
@@ -148,6 +152,7 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         await this.tokenHandler.storeToken(loginResponse.token, loginResponse.expiration);
 
         return {
+            needRegistration: false,
             token: loginResponse.token,
             expiration: loginResponse.expiration,
         };
@@ -156,7 +161,7 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
     protected async register() {
         const address = await this.signer.getAddress();
         try {
-            const response = await this.sdk.authentication.register({
+            await this.sdk.authentication.register({
                 address,
                 marketing: this.marketing,
             });
