@@ -122,12 +122,12 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
             throw e;
         }
 
-        if (!nonceResponse || !nonceResponse.nonce) {
+        if (!nonceResponse) {
             throw new Error(`Failed to get nonce response`);
         }
 
         // needs to register
-        if (!nonceResponse.canLogin) {
+        if (!nonceResponse.nonce || !nonceResponse.canLogin) {
             return {
                 token: '',
                 expiration: 0,
