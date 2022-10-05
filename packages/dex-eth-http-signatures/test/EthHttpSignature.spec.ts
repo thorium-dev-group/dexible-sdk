@@ -1,55 +1,105 @@
 import HttpDigest from '../src/HttpDigest';
 import EthHttpSignature from "../src/EthHttpSignature";
 import {ethers} from 'ethers';
+import { HttpSignatureRequestProps } from '../src/HttpSignature';
 
-describe('#generateSignature()', () => {
+describe('EthHttpSignature', () => {
     const mnemonic = 'test key '.repeat(5) + 'test able';
     const wallet = ethers.Wallet.fromMnemonic(mnemonic);
-    
-    const requestMethod = 'POST';
-    const urlPath = '/';
-    const body = 'this.is.a.test.'
-    
-    const requiredHeaderFields = ['Date', 'Digest'];
-    const headers = {
-        'Date': (new Date('December 17, 1995 03:24:00')).toISOString(),
-    }
-    
-    const digest = HttpDigest.generateDigest(body);
-    headers['Digest'] = digest;
 
-    const requestProps = {
-        requestMethod,
-        urlPath,
-        headers,
-        requiredHeaderFields,
+    const baseUrl = 'http://localhost:8080';
+    const body = 'this.is.a.test.';
+    const requestPropsPost : HttpSignatureRequestProps = {
+        requestMethod: 'POST',
+        requestUrl: baseUrl + '/',
+        requiredHeaderFields: ['Date', 'Digest'],
+        headers: {
+            'Date': (new Date('December 17, 1995 03:24:00')).toISOString(),
+            'Digest': HttpDigest.generateDigest(body),
+        },
     }
 
+    const requestPropsGetWithParamsInUrl : HttpSignatureRequestProps = {
+        requestMethod: 'GET',
+        requestUrl: baseUrl + '/search?z=foo&x=bar&y=',
+        requiredHeaderFields: ['Date'],
+        headers: {
+            'Date': (new Date('December 17, 1995 03:24:00')).toISOString(),
+        },
+    }
+
+    const requestPropsGetWithSeparateParams : HttpSignatureRequestProps = {
+        requestMethod: 'GET',
+        requestUrl: baseUrl + '/search',
+        requestQueryParams: {
+            z: 'foo',
+            x: 'bar',
+            y: undefined
+        },
+        requiredHeaderFields: ['Date'],
+        headers: {
+            'Date': (new Date('December 17, 1995 03:24:00')).toISOString(),
+        },
+    }
+        
     const signer = new EthHttpSignature();
     
-    it('should return a signature string', async () => {
+    it('POST - should return a signature string', async () => {
         
-        const signature = await signer.generateSignatureString(wallet, requestProps);
+        const signature = await signer.generateSignatureString(wallet, requestPropsPost);
 
         expect(typeof signature).toBe('string');
     })
 
-    it('signature should be parsable', async () => {
+    it('POST - signature should be parsable', async () => {
         const address = await wallet.getAddress();
-        const signature = await signer.generateSignatureString(wallet, requestProps);
+        const signature = await signer.generateSignatureString(wallet, requestPropsPost);
 
         const parsedSignatureFields = signer.parseSignatureLine(signature);
         
         expect(parsedSignatureFields.keyId).toEqual(address);
     })
 
-    it('signature should validate', async () => {
+    it('POST - signature should validate', async () => {
         const address = await wallet.getAddress();
-        const signature = await signer.generateSignatureString(wallet, requestProps);
+        const signature = await signer.generateSignatureString(wallet, requestPropsPost);
 
         const parsedSignatureFields = signer.parseSignatureLine(signature);
     
-        signer.validate(parsedSignatureFields, requestProps);        
+        signer.validate(parsedSignatureFields, requestPropsPost);        
+    });
+
+    it('GET - signature should validate - params in url', async () => {
+        const signature = await signer.generateSignatureString(wallet, requestPropsGetWithParamsInUrl);
+
+        const parsedSignatureFields = signer.parseSignatureLine(signature);
+    
+        signer.validate(parsedSignatureFields, requestPropsGetWithParamsInUrl);        
+    });
+
+    it('GET - signature should validate - separate params', async () => {
+        const signature = await signer.generateSignatureString(wallet, requestPropsGetWithSeparateParams);
+
+        const parsedSignatureFields = signer.parseSignatureLine(signature);
+    
+        signer.validate(parsedSignatureFields, requestPropsGetWithParamsInUrl);        
+    });
+
+    it('GET - signature should match - separate params / params in url', async () => {
+        expect.assertions(1);
+
+        const signatureWithParamsInUrl = await signer.generateSignatureString(
+            wallet, 
+            requestPropsGetWithParamsInUrl
+        );
+
+        const signatureWithSeparateParams = await signer.generateSignatureString(
+            wallet, 
+            requestPropsGetWithSeparateParams
+        );
+
+        expect(signatureWithParamsInUrl)
+            .toEqual(signatureWithSeparateParams);    
     });
 
     test.todo('should conform to http-signature spec');
