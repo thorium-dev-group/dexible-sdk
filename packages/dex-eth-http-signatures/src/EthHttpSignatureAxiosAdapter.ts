@@ -39,7 +39,10 @@ export default class EthHttpSignatureAxiosAdapter {
                 additionalHeaders['Digest'] = digest;  
             }
 
-            const requestUrl = config.url || config.baseURL || '/';
+            const requestUrl = config.url || config.baseURL;
+            if (! requestUrl) {
+                throw new Error(`url or baseUrl is required`);
+            }
 
             const requestQueryParams : {
                 [key: string]: string
