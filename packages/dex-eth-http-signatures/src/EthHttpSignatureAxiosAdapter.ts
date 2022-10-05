@@ -1,8 +1,8 @@
 import { default as axios, AxiosAdapter, AxiosRequestConfig } from 'axios';
 import { ethers } from 'ethers';
 import { EthHttpSignature, HttpDigest } from '.';
-import { URL } from 'url';
 import Logger from 'dexible-logger';
+import { HttpSignatureRequestProps } from './HttpSignature';
 
 const log = new Logger({component: "EthHttpSignatureAxiosAdapter"});
 
@@ -22,7 +22,7 @@ export default class EthHttpSignatureAxiosAdapter {
         return async (config: AxiosRequestConfig) => {
 
             if (! axios.defaults.adapter) {
-                throw new Error('')
+                throw new Error('Failed to load default axios adapter')
             }
 
             const originalHeaders = config.headers || {}
@@ -39,10 +39,28 @@ export default class EthHttpSignatureAxiosAdapter {
                 additionalHeaders['Digest'] = digest;  
             }
 
+            const requestUrl = config.url || config.baseURL || '/';
+
+            const requestQueryParams : {
+                [key: string]: string
+            }= { };
+            for(const key of Object.keys(config.params)) {
+                const value = config.params[key];
+                // Axios drops any params with a `undefined` value from the final
+                // request. If we don't do the same, our signatures will not match
+                // on the server side.
+                if (value !== null && value !== undefined) {
+                    // convert value to string, on the server side we will
+                    // reconstruct the signing payload before any type coercion
+                    // is applied to query params.
+                    requestQueryParams[key] = `${value}`;
+                }
+            }
+            
             // add signature auth header
-            const requestUrl = new URL(config.url || '/')
-            const requestProps = {
-                urlPath: requestUrl.pathname + requestUrl.search,
+            const requestProps : HttpSignatureRequestProps = {
+                requestUrl,
+                requestQueryParams,
                 requestMethod: (config.method || 'GET').toUpperCase(),
                 requiredHeaderFields: Object.keys(additionalHeaders),
                 headers: {
