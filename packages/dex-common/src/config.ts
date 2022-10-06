@@ -94,6 +94,19 @@ const EthereumMainnet: BlockchainDefinition = {
     networkName: 'ethereum',
 } as const;
 
+const EthereumGoerli: BlockchainDefinition = {
+    apiDomain: 'ethereum.goerli.api.dexible.io',
+    chainId: 5,
+    chainName: 'goerli',
+    contracts: {
+        Multicall: "0x5ba1e12693dc8f9c48aad8770482f4739beed696",
+        Settlement: "0x9c2e88c5b633fd05f0ff60125a72ab82d07d0696",
+    },
+    id: 'ethereum-goerli',
+    idAlias: 'goerli',
+    networkName: 'ethereum',
+} as const;
+
 const EthereumRopsten: BlockchainDefinition = {
     apiDomain: 'ethereum.ropsten.api.dexible.io',
     chainId: 3,
@@ -127,6 +140,7 @@ const AllBlockchains = [
     FantomMainnet,
     EthereumKovan,
     EthereumMainnet,
+    EthereumGoerli,
     EthereumRopsten,
     PolygonMainnet,
 ] as const;
@@ -136,6 +150,7 @@ const SupportedBlockchains = [
     BinanceMainnet,
     FantomMainnet,
     EthereumMainnet,
+    EthereumGoerli,
     EthereumRopsten,
     PolygonMainnet,
 ] as const;
