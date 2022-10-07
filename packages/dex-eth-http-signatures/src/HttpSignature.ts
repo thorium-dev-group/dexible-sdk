@@ -1,6 +1,5 @@
 import { ethers } from 'ethers';
 import Logger from 'dexible-logger';
-
 const log = new Logger({ component: "HttpSignature" });
 
 const PARAMETER_SEPARATOR_PATTERN = /\s*,\s*/;
@@ -14,9 +13,6 @@ const VALID_PARAMETERS = new Set([
     'algorithm',
     'headers',
     'signature',
-    // TODO: add support for created & expires params for message replay protection
-    // 'created',
-    // 'expires', 
 ]);
 
 const REQUIRED_PARAMETERS = new Set([
@@ -24,9 +20,6 @@ const REQUIRED_PARAMETERS = new Set([
     'algorithm',
     'headers',
     'signature',
-    // TODO: add support for created & expires params for message replay protection
-    // 'created',
-    // 'expires',
 ]);
 
 type QueryParams = {
@@ -34,15 +27,15 @@ type QueryParams = {
 };
 
 export interface HttpSignatureParams {
-    keyId: string
-    algorithm: string
-    headers: string
-    signature: string
+    keyId: string;
+    algorithm: string;
+    headers: string;
+    signature: string;
 }
 
 
 export interface HttpSignatureRequestProps {
-    requestUrl: string;
+    requestPath: string;
     requestMethod: string;
     requestQueryParams?: QueryParams;
     requiredHeaderFields: Array<string>;
@@ -57,11 +50,8 @@ export default abstract class HttpSignature {
     abstract validate(parsedSignatureFields: HttpSignatureParams, requestProps): Promise<void>
 
     static validateCommonFields(parsedSignatureFields: HttpSignatureParams, requestProps): void {
-        REQUIRED_PARAMETERS.forEach((requiredParam) => {
-            if (parsedSignatureFields.hasOwnProperty(requiredParam) === false) {
-                throw new Error(`signature missing ${requiredParam}`);
-            }
-        });
+
+        HttpSignature.validateHttpSignatureParams(parsedSignatureFields)
     }
 
     /**
@@ -101,7 +91,7 @@ export default abstract class HttpSignature {
     static buildSigningStringFromRequest(props: HttpSignatureRequestProps): string {
 
         const {
-            requestUrl,
+            requestPath,
             requestMethod,
             requiredHeaderFields,
             headers
@@ -109,39 +99,28 @@ export default abstract class HttpSignature {
 
         const requestQueryParams = props.requestQueryParams || {};
 
-        const parsedUrl = new URL(requestUrl);
-        const parsedQueryParams = HttpSignature.extractSearchParams(parsedUrl);
-
         // protect against receiving mixed query params in both path & requestQueryParams
-        if (Object.keys(requestQueryParams).length &&
-            Object.keys(parsedQueryParams).length
-        ) {
+        if (requestPath.includes('?')) {
             throw new Error(`Query parameters cannot be included in urlPath - specify as requestQueryParms`)
         }
 
         // NOTE: for now we'll omit all but the URL path to simplify processing
         // requests behind proxies, etc. but this should be improved in the future...
         // const normalizedUrl = parsedUrl.protocol + '//' + parsedUrl.host + parsedUrl.pathname
-        const normalizedUrl = parsedUrl.pathname
         const requestTargetTuple = [
             REQUEST_TARGET_FIELD,
-            requestMethod.toLowerCase() + ' ' + normalizedUrl
+            requestMethod.toLowerCase() + ' ' + requestPath
         ];
-
-        const resolvedQueryParams = {
-            ...requestQueryParams,
-            ...parsedQueryParams,
-        };
 
         // Proper handling of query params is not covered in the rfc, following
         // AWS HTTP Signature approach in this case.
         // see: https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
-        const queryTuples = Object.keys(resolvedQueryParams)
+        const queryTuples = Object.keys(requestQueryParams)
             .sort()
             .map((field) => {
                 return [
                     field,
-                    resolvedQueryParams[field] || '',
+                    requestQueryParams[field] || '',
                 ];
             });
 
@@ -159,15 +138,6 @@ export default abstract class HttpSignature {
         return signaturePayload;
     }
 
-    protected static extractSearchParams(url: URL): QueryParams {
-        const params: QueryParams = {};
-
-        for (const key of url.searchParams.keys()) {
-            params[key] = url.searchParams.get(key);
-        }
-
-        return params;
-    }
 
     /**
      * Construct signature line from all params (requires signature)
@@ -180,7 +150,7 @@ export default abstract class HttpSignature {
         const parts: string[] = [];
         for (const key of VALID_PARAMETERS) {
             const value = params[key];
-            if (value) {
+            if (value !== null && value !== undefined) {
                 parts.push(key + '="' + value + '"');
             } else if (REQUIRED_PARAMETERS.has(key)) {
                 throw new Error(`Missing required value: ${key}`);
