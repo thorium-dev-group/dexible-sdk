@@ -1,0 +1,13 @@
+undecided:
+  - dexible-algos
+  - dexible-common
+  - dexible-core
+  - dexible-eth-http-signatures
+  - dexible-gas-prices
+  - dexible-logger
+  - dexible-order
+  - dexible-policies
+  - dexible-quote
+  - dexible-sdk
+  - dexible-token
+  - dexible-web3

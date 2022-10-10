@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION="1.0.9"
+VERSION="1.0.11"
 
 yarn workspaces foreach version $VERSION;
 yarn run build;
