@@ -50,16 +50,19 @@ export default class EthHttpSignatureAxiosAdapter {
                 [key: string]: string
             } = {};
 
-            for (const key of Object.keys(config.params)) {
-                const value = config.params[key];
-                // Axios drops any params with a `undefined` value from the final
-                // request. If we don't do the same, our signatures will not match
-                // on the server side.
-                if (value !== null && value !== undefined) {
-                    // convert value to string, on the server side we will
-                    // reconstruct the signing payload before any type coercion
-                    // is applied to query params.
-                    requestQueryParams[key] = `${value}`;
+            // Axios may return undefined for params
+            if (config.params) {
+                for (const key of Object.keys(config.params)) {
+                    const value = config.params[key];
+                    // Axios drops any params with a `undefined` value from the final
+                    // request. If we don't do the same, our signatures will not match
+                    // on the server side.
+                    if (value !== null && value !== undefined) {
+                        // convert value to string, on the server side we will
+                        // reconstruct the signing payload before any type coercion
+                        // is applied to query params.
+                        requestQueryParams[key] = `${value}`;
+                    }
                 }
             }
 
