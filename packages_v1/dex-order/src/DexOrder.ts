@@ -1,7 +1,7 @@
 import {BigNumberish } from 'ethers';
 import {IAlgo} from 'dexible-algos';
 import {ethers} from 'ethers';
-import {QuoteGrabber, QuoteRequest} from 'dexible-quote';
+import {QuoteGrabber, QuoteRequest} from '../../dex-quote/dist';
 import {
     toErrorWithMessage,
     APIClient,

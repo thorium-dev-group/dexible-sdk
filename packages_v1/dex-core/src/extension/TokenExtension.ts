@@ -1,4 +1,4 @@
-import * as TokenServices from 'dexible-token';
+import * as TokenServices from '../../../dex-token/dist';
 import {
     APIClient,
     APIExtensionProps,

@@ -1,5 +1,5 @@
 import {IPolicy, GasCost, Slippage} from 'dexible-policies';
-import { Verifiable, Serializable } from 'dexible-common';
+import { Verifiable, Serializable } from '../../dex-common/dist';
 import Logger from 'dexible-logger';
 import IAlgo from './IAlgo';
 

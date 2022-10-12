@@ -1,4 +1,4 @@
-import {Serializable, Verifiable} from 'dexible-common';
+import {Serializable, Verifiable} from '../../dex-common/dist';
 
 type SlippageGetter = () => number;
 type MaxRounds = () => number;

@@ -1,4 +1,4 @@
-import * as OrderSupport from 'dexible-order';
+import * as OrderSupport from '../../../dex-order/dist';
 import {
     APIClient,
     APIExtensionProps,

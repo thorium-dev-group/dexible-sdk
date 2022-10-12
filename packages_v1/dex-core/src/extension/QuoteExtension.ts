@@ -1,4 +1,4 @@
-import {QuoteGrabber,QuoteRequest} from 'dexible-quote';
+import {QuoteGrabber,QuoteRequest} from '../../../dex-quote/dist';
 import {
     APIClient,
     APIExtensionProps,

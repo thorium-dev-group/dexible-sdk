@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { IAuthenticationHandler } from "dexible-common/src/services/IAuthenticationHandler";
 import { BaseAuthenticationHandler } from "./BaseAuthenticationHandler";
-import { EthHttpSignatureAxiosAdapter } from 'dexible-eth-http-signatures';
+import { EthHttpSignatureAxiosAdapter } from '../../../dex-eth-http-signatures/dist';
 import Logger from "dexible-logger";
 
 const log = new Logger({ component: "SignatureAuthenticationHandler" });

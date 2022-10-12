@@ -1,4 +1,4 @@
-import { SDK, Token, Policies, Price, Tag, Algos } from "./";
+import { SDK, Token, Policies, Price, Tag, Algos } from ".";
 import {BigNumberish} from 'ethers';
 
 const dur = require("dayjs/plugin/duration");
