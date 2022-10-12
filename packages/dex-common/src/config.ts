@@ -43,6 +43,19 @@ const AvalancheMumbai: BlockchainDefinition = {
     networkName: 'avalanche',
 } as const;
 
+const ArbitrumMainnet: BlockchainDefinition = {
+    apiDomain: "arbitrum.mainnet.api.dexible.io",
+    chainId: 42161,
+    chainName: 'mainnet',
+    contracts: {
+        Multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        Settlement: '0x3c2918430dbfc84960f554377d9d1248ab1977f0'
+    },
+    id: 'arbitrum-mainnet',
+    idAlias: 'arbitrum',
+    networkName: 'arbitrum'
+}
+
 const BinanceMainnet: BlockchainDefinition = {
     apiDomain: 'bsc.mainnet.api.dexible.io',
     chainId: 56,
@@ -120,6 +133,19 @@ const EthereumRopsten: BlockchainDefinition = {
     networkName: 'ethereum',
 } as const;
 
+const OptimismMainnet: BlockchainDefinition = {
+    apiDomain: 'optimism.mainnet.api.dexible.io',
+    chainId: 10,
+    chainName: 'optimism',
+    contracts: {
+        Multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+        Settlement: '0x6fee44c705aa554120bb91a9157392eedd95372c'
+    },
+    id: 'optimism-mainnet',
+    idAlias: 'optimism',
+    networkName: 'optimism'
+} as const;
+
 const PolygonMainnet: BlockchainDefinition = {
     apiDomain: 'polygon.mainnet.api.dexible.io',
     chainId: 137,
@@ -134,6 +160,7 @@ const PolygonMainnet: BlockchainDefinition = {
 } as const;
 
 const AllBlockchains = [
+    ArbitrumMainnet,
     AvalancheMainnet,
     AvalancheMumbai,
     BinanceMainnet,
@@ -142,16 +169,19 @@ const AllBlockchains = [
     EthereumMainnet,
     EthereumGoerli,
     EthereumRopsten,
+    OptimismMainnet,
     PolygonMainnet,
 ] as const;
 
 const SupportedBlockchains = [
+    ArbitrumMainnet,
     AvalancheMainnet,
     BinanceMainnet,
     FantomMainnet,
     EthereumMainnet,
     EthereumGoerli,
     EthereumRopsten,
+    OptimismMainnet,
     PolygonMainnet,
 ] as const;
 

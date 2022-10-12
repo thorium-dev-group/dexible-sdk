@@ -124,6 +124,7 @@ export default abstract class HttpSignature {
                 ];
             });
 
+        requiredHeaderFields.sort();
         const headerTuples = requiredHeaderFields.map((field) => {
             const value = HttpSignature.getHeaderValue(field, headers);
             return [field.toLowerCase(), value];
