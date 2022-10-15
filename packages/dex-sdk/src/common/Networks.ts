@@ -1,7 +1,6 @@
 
 export type BlockchainDefinition = {
     apiDomain: string;
-    rpcDomain: string;
     chainId: number;
     chainName: string;
     contracts?: ContractDefinition;
@@ -25,7 +24,6 @@ type ContractDefinition = {
  */
  export const AvalancheMainnet: BlockchainDefinition = {
     apiDomain: 'avalanche.mainnet.api.dexible.io',
-    rpcDomain: 'avalance.mainnet.rpc.dexible.io',
     chainId: 43114,
     chainName: 'mainnet',
     contracts: {
@@ -39,7 +37,6 @@ type ContractDefinition = {
 
 export const ArbitrumMainnet: BlockchainDefinition = {
     apiDomain: "arbitrum.mainnet.api.dexible.io",
-    rpcDomain: "arbitrum.mainnet.rpc.dexible.io",
     chainId: 42161,
     chainName: 'mainnet',
     contracts: {
@@ -53,7 +50,6 @@ export const ArbitrumMainnet: BlockchainDefinition = {
 
 export const BinanceMainnet: BlockchainDefinition = {
     apiDomain: 'bsc.mainnet.api.dexible.io',
-    rpcDomain: 'bsc.mainnet.rpc.dexible.io',
     chainId: 56,
     chainName: 'mainnet',
     contracts: {
@@ -67,7 +63,6 @@ export const BinanceMainnet: BlockchainDefinition = {
 
 export const FantomMainnet: BlockchainDefinition = {
     apiDomain: 'fantom.opera.api.dexible.io',
-    rpcDomain: 'fantom.opera.rpc.dexible.io',
     chainId: 250,
     chainName: 'opera',
     contracts: {
@@ -81,7 +76,6 @@ export const FantomMainnet: BlockchainDefinition = {
 
 export const EthereumMainnet: BlockchainDefinition = {
     apiDomain: 'ethereum.mainnet.api.dexible.io',
-    rpcDomain: 'ethereum.mainnet.rpc.dexible.io',
     chainId: 1,
     chainName: 'mainnet',
     contracts: {
@@ -95,7 +89,6 @@ export const EthereumMainnet: BlockchainDefinition = {
 
 export const EthereumGoerli: BlockchainDefinition = {
     apiDomain: 'ethereum.goerli.api.dexible.io',
-    rpcDomain: 'ethereum.goerli.rpc.dexible.io',
     chainId: 5,
     chainName: 'goerli',
     contracts: {
@@ -109,7 +102,6 @@ export const EthereumGoerli: BlockchainDefinition = {
 
 export const OptimismMainnet: BlockchainDefinition = {
     apiDomain: 'optimism.mainnet.api.dexible.io',
-    rpcDomain: 'optimism.mainnet.api.dexible.io',
     chainId: 10,
     chainName: 'optimism',
     contracts: {
@@ -123,7 +115,6 @@ export const OptimismMainnet: BlockchainDefinition = {
 
 export const PolygonMainnet: BlockchainDefinition = {
     apiDomain: 'polygon.mainnet.api.dexible.io',
-    rpcDomain: 'polygon.mainnet.rpc.dexible.io',
     chainId: 137,
     chainName: 'mainnet',
     contracts: {

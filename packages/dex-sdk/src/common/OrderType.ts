@@ -1,0 +1,9 @@
+
+export enum OrderType {
+    MARKET = "MARKET",
+    LIMIT = "LIMIT",
+    STOP_LIMIT = "STOP_LIMIT",
+    STOP_LOSS = "STOP_LOSS",
+    TAKE_PROFIT = "TAKE_PROFIT",
+    TRAILING_STOP = "TRAILING_STOP"
+}

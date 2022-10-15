@@ -19,6 +19,7 @@
   ],
   "exclude": [
     "./dist",
+    "./packages_v1/**",
     "node_modules"
   ]
 }

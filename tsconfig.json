@@ -16,5 +16,10 @@
       "src/types/**/*d.ts"
     ],
     "outDir": "dist",
+    "exclude": [
+      "./dist",
+      "./packages_v1",
+      "node_modules"
+    ]
   }
 }

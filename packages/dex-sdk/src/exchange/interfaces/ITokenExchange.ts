@@ -1,10 +1,11 @@
-import { IBaseSwap } from "./IBaseSwap";
+import { BaseSwap } from "../swap_types/BaseSwap";
 import { BigNumber } from "ethers";
 import { IERC20Token } from "../../common";
 import { TxnStatus } from "../../common/TxnStatus";
 import { ExecutionStatus } from "../../common/ExecutionStatus";
 
 export interface IQuoteResponse {
+    id: string | number;
     amountOut: BigNumber;
     rounds: number;
     bpsFee: BigNumber;
@@ -19,18 +20,16 @@ export interface ISpotRequest {
 }
 
 export interface ISpotResponse {
-    rate: number;
+    price: number;
 }
 
 export interface ITxnDetails {
     hash: string;
     status: TxnStatus;
-    gasUsed: number;
-    gasCost: BigNumber;
 }
 
 export interface ISwapResult {
-    id: number;
+    id: string;
     status: ExecutionStatus;
     tokenIn: IERC20Token;
     tokenOut: IERC20Token;
@@ -39,23 +38,25 @@ export interface ISwapResult {
     totalInput: BigNumber;
     progress: number;
     cummulativeGasFee: BigNumber;
-    feeToken: IERC20Token;
+    feeToken?: IERC20Token;
     cummulativeBpsFee: BigNumber;
     transactions: Array<ITxnDetails>;
 }
+
 
 export interface ITokenSupportResponse {
     supported: boolean;
     reason?: string;
 }
 
+
 export interface ITokenExchange {
-    quote<T extends IBaseSwap>(swapType: T): Promise<IQuoteResponse>;
+    quote<T extends BaseSwap>(swapType: T): Promise<IQuoteResponse>;
     spotRate(request: ISpotRequest): Promise<ISpotResponse>;
-    swap<T extends IBaseSwap>(request: T): Promise<ISwapResult>;
-    status(id: number): Promise<ISwapResult>;
-    cancel(id: number): Promise<ISwapResult>;
-    pause(id: number): Promise<ISwapResult>;
-    resume(id: number): Promise<ISwapResult>;
+    swap<T extends BaseSwap>(request: T): Promise<ISwapResult>;
     supportsToken(token: IERC20Token): Promise<ITokenSupportResponse>;
+    status(id: string): Promise<ISwapResult>;
+    cancel(id:string): Promise<ISwapResult>;
+    pause(id: string): Promise<ISwapResult>;
+    resume(id: string): Promise<ISwapResult>;
 }

@@ -1,4 +1,6 @@
 import {ethers} from 'ethers';
+import { SDKError } from '../common';
+import { IWeb3Factory } from '../common/IWeb3Factory';
 import { getNetwork } from '../common/Networks';
 
 let inst: Web3Factory | null = null;
@@ -15,12 +17,23 @@ export class Web3Factory {
     providers: {
         [k: number]: ethers.providers.Provider;
     } = {};
+    suppliedImpl?: IWeb3Factory;
+
+    set factoryImpl(impl: IWeb3Factory) {
+        this.suppliedImpl = impl;
+    }
 
     async getProvider(chainId: number): Promise<ethers.providers.Provider> {
         let p = this.providers[+chainId];
+        
         if(!p) {
-            const net = getNetwork(chainId);
-            p = new ethers.providers.JsonRpcProvider(net.rpcDomain);
+            if(!this.suppliedImpl) {
+                throw new SDKError({
+                    message: "Must provide an IWeb3Factory implementation to Dexible"
+                });
+            }
+
+            p = await this.suppliedImpl.getProvider(chainId);
             this.providers[chainId] = p;
         }
         return p;
