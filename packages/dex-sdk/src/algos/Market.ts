@@ -4,6 +4,9 @@ export interface MarketAlgoParams extends BaseParams {
     
 }
 
+/**
+ * Basic market order without restrictions or conditions
+ */
 export default class Market extends Base {
 
     static get tag() {

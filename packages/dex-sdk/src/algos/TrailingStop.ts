@@ -5,6 +5,11 @@ export interface TrailingStopAlgoParams extends BaseParams {
 
 }
 
+/**
+ * Algo that converts to market once a market falls beyond 
+ * a threshold percentage. The bottom threshold price moves 
+ * up with market as it increases.
+ */
 export default class TrailingStop extends Base {
 
     static get tag() {

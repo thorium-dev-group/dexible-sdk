@@ -5,6 +5,10 @@ export interface StopLossAlgoParams extends BaseParams {
 
 }
 
+/**
+ * Stop loss algo that converts to market order once market price
+ * drops below a trigger.
+ */
 export default class StopLoss extends Base {
 
     static get tag() {

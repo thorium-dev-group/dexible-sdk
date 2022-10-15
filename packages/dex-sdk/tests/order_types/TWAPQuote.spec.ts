@@ -1,14 +1,17 @@
 import { ethers } from 'ethers';
-import {Dexible, Networks, Slippage,  TrailingStopSwap} from '../../src';
+import { TWAPSwap } from '../../src/exchange/swap_types/TWAP';
+import {Dexible, Networks, Slippage} from '../../src';
 import { units } from '../../src/common/units';
 import {StaticWeb3Factory} from '../StaticWeb3Factory';
-import {UNI, WETH} from '../tokens';
+import {DAI, UNI, USDC, WETH} from '../tokens';
 
 require("dotenv").config();
 
-describe("TrailingStopSwap", function()  {
-    jest.setTimeout(30000);
-    it("Should submit trailing stop", async () => {
+const sleep = async (ms) => new Promise((done)=>setTimeout(done, ms));
+
+describe("TWAPQuote", function()  {
+    jest.setTimeout(30000000);
+    it("Should get twap quote", async () => {
 
         const traderKey = process.env.TRADER_KEY;
         if(!traderKey) {
@@ -22,15 +25,15 @@ describe("TrailingStopSwap", function()  {
             web3Factory: new StaticWeb3Factory()
         });
 
-        const sl = new TrailingStopSwap({
-            amountIn:  units.inBNETH(".146"),
-            tokenIn: UNI[Networks.EthereumGoerli.chainId],
-            tokenOut: WETH[Networks.EthereumGoerli.chainId],
+        const twap = new TWAPSwap({
+            amountIn:  units.inBNUnits(".1", 18),
+            tokenOut: UNI[Networks.EthereumGoerli.chainId],
+            tokenIn: WETH[Networks.EthereumGoerli.chainId],
             slippage: new Slippage(.5, false),
-            spotPercentage: 10,
+            timeWindowSeconds: 86400
         });
 
-        const q = await dex.exchange.quote(sl);
+        const q = await dex.exchange.quote(twap);
         if(!q) {
             throw new Error("Expected a quote");
         }
@@ -38,8 +41,5 @@ describe("TrailingStopSwap", function()  {
             throw new Error("Expected rounds");
         }
         console.log(q);
-        console.log(q.amountOut.toString());
-        const o = await dex.exchange.swap(sl);
-        console.log("Order submitted", o);
     });
 })

@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
-import {Dexible, Networks, MarketSwap, Slippage, ExecutionStatus} from '../src';
-import { units } from '../src/common/units';
-import {StaticWeb3Factory} from './StaticWeb3Factory';
-import {DAI, UNI, USDC, WETH} from './tokens';
+import {Dexible, Networks, MarketSwap, Slippage, ExecutionStatus} from '../../src';
+import { units } from '../../src/common/units';
+import {StaticWeb3Factory} from '../StaticWeb3Factory';
+import {DAI, UNI, USDC, WETH} from '../tokens';
 
 require("dotenv").config();
 

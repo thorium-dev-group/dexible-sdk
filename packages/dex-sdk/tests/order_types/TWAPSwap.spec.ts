@@ -1,14 +1,14 @@
 import { ethers } from 'ethers';
-import {Dexible, Networks, Slippage, Price, GoerliDexFilter, StopLimitSwap} from '../../src';
+import {Dexible, Networks, DexFilters, Slippage, LimitSwap, Price, GoerliDexFilter, ExecutionStatus, TWAPSwap} from '../../src';
 import { units } from '../../src/common/units';
 import {StaticWeb3Factory} from '../StaticWeb3Factory';
 import {UNI, WETH} from '../tokens';
 
 require("dotenv").config();
 
-describe("StopLimitSwap", function()  {
+describe("TWAPSwap", function()  {
     jest.setTimeout(30000);
-    it("Should get limit quote", async () => {
+    it("Should submit twap order", async () => {
 
         const traderKey = process.env.TRADER_KEY;
         if(!traderKey) {
@@ -22,23 +22,21 @@ describe("StopLimitSwap", function()  {
             web3Factory: new StaticWeb3Factory()
         });
 
-        const limit = new StopLimitSwap({
+        const twap = new TWAPSwap({
             amountIn:  units.inBNETH(".1"),
             tokenIn: WETH[Networks.EthereumGoerli.chainId],
             tokenOut: UNI[Networks.EthereumGoerli.chainId],
             slippage: new Slippage(.5, false),
-            limitPrice: new Price({
-                inAmount: units.inBNETH(".68"),
-                inToken: WETH[Networks.EthereumGoerli.chainId],
-                outAmount: units.inBNETH("1"),
-                outToken: UNI[Networks.EthereumGoerli.chainId]
-            }),
-            trigger: new Price({
-                inAmount: units.inBNETH(".69"),
-                inToken: WETH[Networks.EthereumGoerli.chainId],
-                outAmount: units.inBNETH("1"),
-                outToken: UNI[Networks.EthereumGoerli.chainId]
-            }),
+            timeWindowSeconds: 3600,
+            priceRange: {
+                basePrice: new Price({
+                    inAmount: units.inBNETH(".63"),
+                    inToken: WETH[Networks.EthereumGoerli.chainId],
+                    outAmount: units.inBNETH("1"),
+                    outToken: UNI[Networks.EthereumGoerli.chainId]
+                }),
+                upperBoundPercent: 5
+            },
             customizations: {
                 dexFilters: {
                     include: [GoerliDexFilter.SushiSwap]
@@ -46,7 +44,7 @@ describe("StopLimitSwap", function()  {
             }
         });
 
-        const q = await dex.exchange.quote(limit);
+        const q = await dex.exchange.quote(twap);
         if(!q) {
             throw new Error("Expected a quote");
         }
@@ -55,7 +53,7 @@ describe("StopLimitSwap", function()  {
         }
         console.log(q);
         console.log(q.amountOut.toString());
-        let o = await dex.exchange.swap(limit);
+        let o = await dex.exchange.swap(twap);
         console.log("Order submitted", o);
     });
 })

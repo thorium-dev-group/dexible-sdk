@@ -1,7 +1,7 @@
-import {Dexible, Networks, StopLossSwap, Slippage, Price} from '../src';
-import { units } from '../src/common/units';
-import {StaticWeb3Factory} from './StaticWeb3Factory';
-import {UNI, WETH} from './tokens';
+import {Dexible, Networks, StopLossSwap, Slippage, Price} from '../../src';
+import { units } from '../../src/common/units';
+import {StaticWeb3Factory} from '../StaticWeb3Factory';
+import {UNI, WETH} from '../tokens';
 
 require("dotenv").config();
 

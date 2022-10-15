@@ -4,6 +4,9 @@ import IAlgo from './IAlgo';
 
 const log = new Logger({component: "BaseAlgo"});
 
+/**
+ * Algo base class that holds policies for specific algos
+ */
 export interface BaseParams {
     policies: Array<IPolicy>;
     maxRounds?: number;

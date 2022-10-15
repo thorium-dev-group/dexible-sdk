@@ -5,6 +5,9 @@ export interface LimitAlgoParams extends BaseParams {
     
 }
 
+/**
+ * Limit algo that applies a limit price policy to order
+ */
 export default class Limit extends Base  {
 
     static get tag() {

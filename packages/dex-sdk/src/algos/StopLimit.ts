@@ -5,6 +5,10 @@ export interface StopLimitAlgoParams extends BaseParams {
 
 }
 
+/**
+ * Stop limit algo that monitors for up-trending price and enters
+ * a position after a trigger and up to a max limit.
+ */
 export default class StopLimit extends Base {
 
     static get tag() {
