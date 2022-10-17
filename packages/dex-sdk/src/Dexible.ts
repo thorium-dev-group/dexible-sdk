@@ -115,7 +115,7 @@ export class Dexible {
             }
             const chainInfo = getNetwork(token.chainId);
             const con = new ethers.Contract(token.address, abi.ERC20ABI, this.signer);
-            return con.approve(chainInfo.contracts?.Settlement, amount);
+            return await con.approve(chainInfo.contracts?.Settlement, amount);
         }
         return false;
     }
