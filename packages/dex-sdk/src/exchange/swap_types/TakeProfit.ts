@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { OrderType, Price } from "../../common";
+import { SwapOrderType, Price } from "../../common";
 import { QuoteRequest } from "../../services/quote/QuoteService";
 import { BaseSwap, BaseSwapConfig, IValidationContext, MIN_SLIPPAGE } from "./BaseSwap";
 import {units} from '../../common';
@@ -12,11 +12,15 @@ export interface TakeProfitSwapConfig extends BaseSwapConfig {
     startingPrice: Price;
 }
 
+/**
+ * TakeProfit exits a position once the profit level reaches a specified
+ * threshold. Once tripped, it converts to a market order.
+ */
 export class TakeProfitSwap extends BaseSwap {
     profitPercentage: number;
     startingPrice: Price;
     constructor(props: TakeProfitSwapConfig) {
-        super(props, OrderType.TAKE_PROFIT);
+        super(props, SwapOrderType.TAKE_PROFIT);
         this.profitPercentage = props.profitPercentage;
         this.startingPrice = props.startingPrice;
     }
@@ -24,23 +28,12 @@ export class TakeProfitSwap extends BaseSwap {
     toAlgo(): IAlgo {
         let maxFixedGas: BigNumber | undefined = undefined;
         if(this.customizations?.maxGasPriceGwei) {
-            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei, 9);
+            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei.toFixed(9), 9);
         }
 
         return new TakeProfit({
             policies: [
-                (maxFixedGas ? 
-                    new GasCostPolicy({
-                        gasType: 'fixed',
-                        amount: maxFixedGas
-                    }) :
-                    new GasCostPolicy({
-                        gasType: 'relative',
-                        deviation: 0
-                    })),
-                new SlippagePolicy({
-                    amount: this.slippage.asPercentage()
-                }),
+                ...this._basePolicies(),
                 new TakeProfitPolicy({
                     profitPercentage: this.profitPercentage,
                     startingPrice: this.startingPrice

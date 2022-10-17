@@ -1,9 +1,8 @@
 import { BigNumber } from "ethers";
-import { IERC20Token } from "../../common";
+import { ExecutionStatus, IERC20Token } from "../../common";
 import { DexFilters, MarketingProps } from "../../extras";
 import {IAlgo} from '../../algos';
 import { APIClientFactory } from "../APIClientFactory";
-import { APIClient } from "../../client";
 
 export interface IOrderParams {
     tokenIn: IERC20Token;
@@ -83,6 +82,14 @@ export class OrderService {
 
     async cancel(orderId:number): Promise<any> {
         const apiClient = APIClientFactory.instance.getClient(this.chainId)
+        const o = await this.getOne(orderId);
+        if(!o) {
+            return false;
+        }
+        if(o.state === ExecutionStatus.CANCELLED || 
+            o.state === ExecutionStatus.COMPLETED) {
+            return o;
+        }
 
         return apiClient.post({
             data: {orderId},
@@ -94,7 +101,14 @@ export class OrderService {
 
     async pause(orderId:number): Promise<any> {
         const apiClient = APIClientFactory.instance.getClient(this.chainId)
-
+        const o = await this.getOne(orderId);
+        if(!o) {
+            return null;
+        }
+        if(o.state === ExecutionStatus.CANCELLED || 
+            o.state === ExecutionStatus.COMPLETED) {
+            return o;
+        }
         return apiClient.post({
             data: {orderId},
             endpoint: `orders/${orderId}/actions/pause`,
@@ -105,7 +119,13 @@ export class OrderService {
 
     async resume(orderId:number): Promise<any> {
         const apiClient = APIClientFactory.instance.getClient(this.chainId)
-
+        const o = await this.getOne(orderId);
+        if(!o) {
+            return null;
+        }
+        if(o.state !== ExecutionStatus.PAUSED) {
+            return o;
+        }
         return apiClient.post({
             data: {orderId},
             endpoint: `orders/${orderId}/actions/resume`,

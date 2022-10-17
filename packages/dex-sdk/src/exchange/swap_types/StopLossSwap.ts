@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { OrderType, Price } from "../../common";
+import { SwapOrderType, Price } from "../../common";
 import { QuoteRequest } from "../../services/quote/QuoteService";
 import { BaseSwap, BaseSwapConfig, IValidationContext, MIN_SLIPPAGE } from "./BaseSwap";
 import {units} from '../../common';
@@ -11,33 +11,26 @@ export interface StopLossSwapConfig extends BaseSwapConfig {
     trigger: Price;
 }
 
+/**
+ * StopLoss attempts to exit a position once the price hits or falls below 
+ * a trigger price. Then it becomes a market order.
+ */
 export class StopLossSwap extends BaseSwap {
     trigger: Price;
     constructor(props: StopLossSwapConfig) {
-        super(props, OrderType.STOP_LOSS);
+        super(props, SwapOrderType.STOP_LOSS);
         this.trigger = props.trigger;
     }
 
     toAlgo(): IAlgo {
         let maxFixedGas: BigNumber | undefined = undefined;
         if(this.customizations?.maxGasPriceGwei) {
-            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei, 9);
+            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei.toFixed(9), 9);
         }
     
         return new StopLoss({
             policies: [
-                (maxFixedGas ? 
-                    new GasCostPolicy({
-                        gasType: 'fixed',
-                        amount: maxFixedGas
-                    }) :
-                    new GasCostPolicy({
-                        gasType: 'relative',
-                        deviation: 0
-                    })),
-                new SlippagePolicy({
-                    amount: this.slippage.asPercentage()
-                }),
+                ...this._basePolicies(),
                 new StopPricePolicy({
                     above: false,
                     trigger: this.trigger

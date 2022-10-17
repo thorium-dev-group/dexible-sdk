@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { OrderType, Price } from "../../common";
+import { SwapOrderType, Price } from "../../common";
 import { QuoteRequest } from "../../services/quote/QuoteService";
 import { BaseSwap, BaseSwapConfig, IValidationContext, MIN_SLIPPAGE } from "./BaseSwap";
 import {units} from '../../common';
@@ -10,60 +10,34 @@ import { validateFilters } from "../../extras";
 export interface LimitSwapConfig extends BaseSwapConfig {
     price: Price;
 }
+
+/**
+ * Limit swap request is to only execute the swap if the price hits a particular
+ * price.
+ */
 export class LimitSwap extends BaseSwap {
     price: Price;
 
     constructor(props: LimitSwapConfig) {
-        super(props, OrderType.LIMIT);
+        super(props, SwapOrderType.LIMIT);
         this.price = props.price;
     }
 
     toQuoteRequest(): QuoteRequest {
-
-        let maxFixedGas: BigNumber | undefined = undefined;
-        let minOrderSize: BigNumber | undefined = undefined;
-        if(this.customizations?.maxGasPriceGwei) {
-            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei, 9);
-        }
-        if(this.customizations?.maxNumberRounds) {
-            minOrderSize = this.amountIn.div(this.customizations.maxNumberRounds);
-        }
-        if(this.customizations?.dexFilters) {
-            validateFilters(this.tokenIn.chainId, this.customizations.dexFilters);
-        }
-        return {
-            amountIn: this.amountIn,
-            chainId: this.tokenIn.chainId,
-            slippagePercent: this.slippage ? this.slippage.amount : MIN_SLIPPAGE.amount,
-            tokenIn: this.tokenIn,
-            tokenOut: this.tokenOut,
-            dexFilters: this.customizations?.dexFilters,
-            maxFixedGas,
-            fixedPrice: this.price.rate,
-            minOrderSize
-        } as QuoteRequest;
+        const qr:QuoteRequest = super.toQuoteRequest();
+        qr.fixedPrice = this.price.rate;
+        return qr;
     }
 
     toAlgo(): IAlgo {
         let maxFixedGas: BigNumber | undefined = undefined;
         if(this.customizations?.maxGasPriceGwei) {
-            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei, 9);
+            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei.toFixed(9), 9);
         }
 
         return new Limit({
             policies: [
-                (maxFixedGas ? 
-                    new GasCostPolicy({
-                        gasType: 'fixed',
-                        amount: maxFixedGas
-                    }) :
-                    new GasCostPolicy({
-                        gasType: 'relative',
-                        deviation: 0
-                    })),
-                new SlippagePolicy({
-                    amount: this.slippage.asPercentage()
-                }),
+                ...this._basePolicies(),
                 new LimitPricePolicy({
                     price: this.price
                 })

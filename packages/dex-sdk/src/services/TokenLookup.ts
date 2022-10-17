@@ -3,7 +3,7 @@ import {getNetwork, IERC20Token, SDKError} from '../common';
 import * as abi from '../abi';
 import {BigNumber, ethers} from 'ethers';
 import * as Multicall from '../multicall';
-import {Web3Factory} from '../web3';
+import { Web3FactoryHolder } from '../web3';
 
 export interface TokenInfo {
     address: string;
@@ -92,7 +92,7 @@ export class TokenLookup {
             });
         }
 
-        const provider = await Web3Factory.instance.getProvider(chainId);
+        const provider = await Web3FactoryHolder.instance.factory!.getProvider(chainId);
 
         let r = await Multicall.aggregate({
             calls,

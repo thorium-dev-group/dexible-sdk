@@ -52,7 +52,7 @@ describe("TWAPSwap", function()  {
             throw new Error("Expected rounds");
         }
         console.log(q);
-        console.log(q.amountOut.toString());
+        console.log(q.minAmountOut.toString());
         let o = await dex.exchange.swap(twap);
         console.log("Order submitted", o);
     });

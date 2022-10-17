@@ -38,6 +38,6 @@ describe("TrailingStopQuote", function()  {
             throw new Error("Expected rounds");
         }
         console.log(q);
-        console.log(q.amountOut.toString());
+        console.log(q.minAmountOut.toString());
     });
 })

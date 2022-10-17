@@ -1,30 +1,58 @@
 import {BigNumber, ethers} from 'ethers';
-import { IERC20Token, OrderType, SDKError, units } from '../../common';
+import { IERC20Token, SwapOrderType, SDKError, units } from '../../common';
 import { Slippage } from '../../common/Slippage';
-import {AllowedFiltersByNetwork, DexFilters, MarketingProps, MarketingUtils, validateFilters} from '../../extras';
+import {DexFilters, MarketingProps, MarketingUtils, validateFilters} from '../../extras';
 import { QuoteRequest } from '../../services/quote/QuoteService';
 import {IAlgo} from '../../algos';
 import { TokenLookup } from '../../services';
 import { IQuoteResponse } from '../interfaces';
+import { GasCostPolicy, IPolicy, SlippagePolicy } from '../../policies';
 
 //min allowed slippage is 50bps
 export const MIN_SLIPPAGE = new Slippage(.05, false);
 
+/**
+ * Custom settings for swap requests
+ */
 export interface ICustomizations {
+
+    //max gas willing to pay
     maxGasPriceGwei?: number;
+
+    //max number of rounds for a large swap request
     maxNumberRounds?: number;
+
+    //should the swap request expire after some time
     expiration?: Date;
+
+    //only include or exclude certain DEXs in the execution
     dexFilters?: DexFilters;
 }
 
+
+/**
+ * Basic configuratoin for all swap requests
+ */
 export interface BaseSwapConfig {
+
+    //input token (selling)
     tokenIn: IERC20Token;
+
+    //output token (buying)
     tokenOut: IERC20Token;
+
+    //amount sold
     amountIn: BigNumber;
+
+    //slippage factor if others move ahead of you
     slippage: Slippage;
+
+    //any customizations for the request
     customizations?: ICustomizations;
 }
 
+
+//internal use for validating swap details
 export interface IValidationContext {
     signer: ethers.Signer;
     marketing?: MarketingProps;
@@ -32,16 +60,18 @@ export interface IValidationContext {
 }
 
 
+/**
+ * Base class for swap requests
+ */
 export abstract class BaseSwap {
     tokenIn: IERC20Token;
     tokenOut: IERC20Token;
     amountIn: BigNumber;
-    //either provide slippage or an exact minimum output amount
     slippage: Slippage;
     customizations?: ICustomizations;
-    swapType: OrderType;
+    swapType: string;
 
-    constructor(props: BaseSwapConfig, sType: OrderType) {
+    constructor(props: BaseSwapConfig, sType: string) {
         this.tokenIn = props.tokenIn;
         this.tokenOut = props.tokenOut;
         this.amountIn = props.amountIn;
@@ -55,11 +85,12 @@ export abstract class BaseSwap {
         let maxFixedGas: BigNumber | undefined = undefined;
         let minOrderSize: BigNumber | undefined = undefined;
         if(this.customizations?.maxGasPriceGwei) {
-            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei, 9);
+            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei.toFixed(9), 9);
         }
-        if(this.customizations?.maxNumberRounds) {
+        if(this.customizations?.maxNumberRounds && this.customizations.maxNumberRounds > 0) {
             minOrderSize = this.amountIn.div(this.customizations.maxNumberRounds);
         }
+        
         if(this.customizations?.dexFilters) {
             validateFilters(this.tokenIn.chainId, this.customizations.dexFilters);
         }
@@ -142,5 +173,27 @@ export abstract class BaseSwap {
             tokenIn: this.tokenIn.address,
             tokenOut: this.tokenOut.address,
         }
+    }
+
+    protected _basePolicies(): IPolicy[] {
+        let maxFixedGas: BigNumber | undefined = undefined;
+        if(this.customizations?.maxGasPriceGwei) {
+            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei.toFixed(9), 9);
+        }
+        
+       return [
+            (maxFixedGas ? 
+                new GasCostPolicy({
+                    gasType: 'fixed',
+                    amount: maxFixedGas
+                }) :
+                new GasCostPolicy({
+                    gasType: 'relative',
+                    deviation: 0
+                })),
+                new SlippagePolicy({
+                    amount: this.slippage? this.slippage.amount : MIN_SLIPPAGE.amount
+                }),
+        ];
     }
 }

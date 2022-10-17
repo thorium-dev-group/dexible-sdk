@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { OrderType, Price } from "../../common";
+import { SwapOrderType, Price } from "../../common";
 import { QuoteRequest } from "../../services/quote/QuoteService";
 import { BaseSwap, BaseSwapConfig, IValidationContext, MIN_SLIPPAGE } from "./BaseSwap";
 import {units} from '../../common';
@@ -11,12 +11,20 @@ export interface StopLimitSwapConfig extends BaseSwapConfig {
     trigger: Price;
     limitPrice: Price;
 }
+
+/**
+ * StopLimit executes when two conditions are met: 
+ * 1) the prices move above an initial trigger
+ * 2) the price stays below a limit price
+ * 
+ * Once #1 is triggered, the request becomes a limit order and #2 applies
+ */
 export class StopLimitSwap extends BaseSwap {
     trigger: Price;
     limitPrice: Price;
 
     constructor(props: StopLimitSwapConfig) {
-        super(props, OrderType.STOP_LIMIT);
+        super(props, SwapOrderType.STOP_LIMIT);
         this.trigger = props.trigger;
         this.limitPrice = props.limitPrice;
     }
@@ -24,23 +32,12 @@ export class StopLimitSwap extends BaseSwap {
     toAlgo(): IAlgo {
         let maxFixedGas: BigNumber | undefined = undefined;
         if(this.customizations?.maxGasPriceGwei) {
-            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei, 9);
+            maxFixedGas = units.inBNUnits(this.customizations.maxGasPriceGwei.toFixed(9), 9);
         }
        
         return new StopLimit({
             policies: [
-                (maxFixedGas ? 
-                    new GasCostPolicy({
-                        gasType: 'fixed',
-                        amount: maxFixedGas
-                    }) :
-                    new GasCostPolicy({
-                        gasType: 'relative',
-                        deviation: 0
-                    })),
-                new SlippagePolicy({
-                    amount: this.slippage.asPercentage()
-                }),
+                ...this._basePolicies(),
                 new StopLimitPolicy({
                     limitPrice: this.limitPrice,
                     trigger: this.trigger

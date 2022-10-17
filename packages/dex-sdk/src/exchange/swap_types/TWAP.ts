@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { OrderType, Price } from "../../common";
+import { SwapOrderType, Price } from "../../common";
 import { BaseSwap, BaseSwapConfig, IValidationContext } from "./BaseSwap";
 import {units} from '../../common';
 import { IAlgo, TWAP } from "../../algos";
@@ -18,13 +18,19 @@ export interface TWAPConfig extends BaseSwapConfig {
     priceRange?: PriceRangeProps;
 }
 
+/**
+ * TWAP simply breaks a large swap request over time so that an average 
+ * market price is realized during the order. It can be used for
+ * dollar cost averaging. An optional price range can be applied to ensure
+ * the price stays in a particular range during the time window.
+ */
 export class TWAPSwap extends BaseSwap {
     timeWindowSeconds: number;
     expireAfterTimeWindow?: boolean;
     priceRange?: PriceRangeProps;
 
     constructor(props: TWAPConfig) {
-        super(props, OrderType.TWAP);
+        super(props, SwapOrderType.TWAP);
         this.timeWindowSeconds = props.timeWindowSeconds;
         this.expireAfterTimeWindow = props.expireAfterTimeWindow;
         this.priceRange = props.priceRange;

@@ -24,6 +24,9 @@ export interface BigNumberPrice {
     outAmount: BigNumber;
 }
 
+/**
+ * Price class that allows expressing rates through in/out token pairing
+ */
 export class Price {
     inToken: IERC20Token;
     outToken: IERC20Token;

@@ -1,5 +1,9 @@
 import { IJWTHandler } from './IJWTHandler';
 
+/**
+ * This is an in-memory implementation of the IJWTHandler that simply keeps
+ * the JWT data in memory.
+ */
 export class InMemoryJwtHandler implements IJWTHandler {
     token: string | null = null;
     expiration: number | null = null;

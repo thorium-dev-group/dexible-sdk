@@ -4,7 +4,7 @@ export * from './TxnStatus';
 export * from './Slippage';
 export * from './Networks';
 export * from './SDKError';
-export * from './OrderType';
+export * from './SwapOrderType';
 export * from './IWeb3Factory';
 export * from './Price';
 export * from './units';

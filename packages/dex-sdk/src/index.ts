@@ -4,3 +4,4 @@ export * from './algos';
 export * from './policies';
 export * from './Dexible';
 export * from './extras';
+export * from './web3';

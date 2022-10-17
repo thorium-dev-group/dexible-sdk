@@ -1,1 +1,2 @@
-export * from './Web3Factory';
+export * from './InfuraWeb3Factory';
+export * from './Web3FactoryHolder';

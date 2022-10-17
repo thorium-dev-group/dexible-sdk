@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { OrderType, Price } from "../../common";
+import { SwapOrderType, Price } from "../../common";
 import { BaseSwap, BaseSwapConfig, IValidationContext } from "./BaseSwap";
 import {units} from '../../common';
 import { IAlgo, TrailingStop } from "../../algos";
@@ -9,11 +9,16 @@ export interface TrailingStopSwapConfig extends BaseSwapConfig {
     spotPercentage: number;
 }
 
+/**
+ * TrailingStop requests follow the price of an asset up and resets the
+ * peak price on each upward movement. Then it applies a percentage of 
+ * drop below that peak before converting to a market order.
+ */
 export class TrailingStopSwap extends BaseSwap {
     spotPercentage: number;
 
     constructor(props: TrailingStopSwapConfig) {
-        super(props, OrderType.TAKE_PROFIT);
+        super(props, SwapOrderType.TAKE_PROFIT);
         this.spotPercentage = props.spotPercentage;
     }
 
@@ -25,18 +30,7 @@ export class TrailingStopSwap extends BaseSwap {
 
         return new TrailingStop({
             policies: [
-                (maxFixedGas ? 
-                    new GasCostPolicy({
-                        gasType: 'fixed',
-                        amount: maxFixedGas
-                    }) :
-                    new GasCostPolicy({
-                        gasType: 'relative',
-                        deviation: 0
-                    })),
-                new SlippagePolicy({
-                    amount: this.slippage.asPercentage()
-                }),
+                ...this._basePolicies(),
                 new TrailingStopPolicy({
                     spotPercentage: this.spotPercentage
                 })

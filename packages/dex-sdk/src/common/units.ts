@@ -1,5 +1,9 @@
 import { BigNumber, BigNumberish, ethers } from "ethers";
 
+/**
+ * Utilities for converting to/from BN's
+ */
+
 export const inBNUnits = (value: BigNumberish, u: number): BigNumber => {
     return ethers.utils.parseUnits(value.toString(), u);
 }

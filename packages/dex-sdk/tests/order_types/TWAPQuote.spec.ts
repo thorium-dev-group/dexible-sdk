@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { TWAPSwap } from '../../src/exchange/swap_types/TWAP';
-import {Dexible, Networks, Slippage} from '../../src';
+import {Dexible, IERC20Token, Networks, Slippage} from '../../src';
 import { units } from '../../src/common/units';
 import {StaticWeb3Factory} from '../StaticWeb3Factory';
 import {DAI, UNI, USDC, WETH} from '../tokens';
@@ -13,6 +13,7 @@ describe("TWAPQuote", function()  {
     jest.setTimeout(30000000);
     it("Should get twap quote", async () => {
 
+        
         const traderKey = process.env.TRADER_KEY;
         if(!traderKey) {
             throw new Error("Missing TRADER_KEY in environment");

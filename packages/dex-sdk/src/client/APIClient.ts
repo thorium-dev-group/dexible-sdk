@@ -37,7 +37,11 @@ export interface RequestParams {
 
 export type AuthenticationMode = 'jwt' | 'signature' | 'none';
 
-
+/**
+ * APIClient is responsible for low-level communication with Dexible's backend
+ * infra. It's best to use the abstraction layers such as ITokenExchange
+ * or Dexible that use this class to communicate with API layer.
+ */
 export class APIClient {
 
     static defaults = {

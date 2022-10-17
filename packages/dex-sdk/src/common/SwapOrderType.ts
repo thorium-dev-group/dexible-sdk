@@ -1,5 +1,8 @@
 
-export enum OrderType {
+/**
+ * All swap order types supported by Dexible
+ */
+export enum SwapOrderType {
     MARKET = "MARKET",
     LIMIT = "LIMIT",
     STOP_LIMIT = "STOP_LIMIT",

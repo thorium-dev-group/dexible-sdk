@@ -1,4 +1,7 @@
 
+/**
+ * Slippage property. This allows slippage to be represented in different way.s
+ */
 export class Slippage {
     amount: number;
 
