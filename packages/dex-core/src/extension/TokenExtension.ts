@@ -14,6 +14,17 @@ export interface SpendIncreaseProps {
 const sleep = ms => new Promise(done=>setTimeout(done, ms));
 const bn = ethers.BigNumber.from;
 
+//MKR has issues with ERC20 function compliance so have to hardwire its lookup info
+const MKR = "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2";
+const KNOWN_TOKENS = {
+    [MKR]: {
+        address: MKR,
+        decimals: 18,
+        symbol: "MKR",
+        name: "MakerDAO"
+    } as Token
+};
+
 interface CacheInfo {
     token: Token;
     updated: number;
@@ -65,6 +76,11 @@ export class TokenExtension {
     }
 
     async lookup(address:string): Promise<Token> {
+        const known = KNOWN_TOKENS[address.toLowerCase()];
+        if(known) {
+            return known;
+        }
+
         let r = await this.verify(address);
         if(!r || r.error) {
             throw new Error("Unsupported token address:" + address);
