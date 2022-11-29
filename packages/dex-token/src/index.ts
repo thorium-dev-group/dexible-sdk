@@ -1,8 +1,9 @@
-import {default as TokenFinder, TokenFindProps} from './TokenFinder';
+import {default as TokenFinder, getBalanceInfo, TokenFindProps} from './TokenFinder';
 import * as TokenUtils from './TokenUtils';
 
 export {
     TokenFinder,
     TokenFindProps,
+    getBalanceInfo,
     TokenUtils
 }

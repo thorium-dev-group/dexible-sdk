@@ -4,7 +4,7 @@ import {
     APIExtensionProps,
     Token
 } from 'dexible-common';
-import {BigNumberish, ethers} from 'ethers';
+import {BigNumber, BigNumberish, ethers} from 'ethers';
 
 export interface SpendIncreaseProps {
     token: Token;
@@ -21,7 +21,9 @@ const KNOWN_TOKENS = {
         address: MKR,
         decimals: 18,
         symbol: "MKR",
-        name: "MakerDAO"
+        name: "MakerDAO",
+        balance: BigNumber.from(0),
+        allowance: BigNumber.from(0)
     } as Token
 };
 
@@ -77,7 +79,29 @@ export class TokenExtension {
 
     async lookup(address:string): Promise<Token> {
         const known = KNOWN_TOKENS[address.toLowerCase()];
+        let owner : string | undefined;
+        try {
+            owner = await this.getSignerAddress();
+        } catch(e) {
+            // allow lookup w/o owner (TokenFinder will return partial results)
+        }
+
         if(known) {
+            if(owner) {
+                const balInfo = await TokenServices.getBalanceInfo({
+                    token: address,
+                    chainId: this.chainId,
+                    owner,
+                    provider: this.provider
+                });
+                if(balInfo) {
+                    return {
+                        ...known,
+                        balance: bn(balInfo.balance||0),
+                        allowance: bn(balInfo.allowance||0)
+                    }
+                }
+            }
             return known;
         }
 
@@ -86,12 +110,7 @@ export class TokenExtension {
             throw new Error("Unsupported token address:" + address);
         }
 
-        let owner : string | undefined;
-        try {
-            owner = await this.getSignerAddress();
-        } catch(e) {
-            // allow lookup w/o owner (TokenFinder will return partial results)
-        }
+        
 
         let info:CacheInfo = this.cache[address.toLowerCase()];
         if(info) {

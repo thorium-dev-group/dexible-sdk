@@ -36,7 +36,7 @@ interface InfoProps {
     token: string;
     owner?:string;
     chainId:number;
-    provider:ethers.providers.Provider
+    provider:ethers.providers.Provider;
 }
 
 interface InfoResponse {
@@ -44,6 +44,48 @@ interface InfoResponse {
     symbol: string,
     balance?:string,
     allowance?:string
+}
+
+export const getBalanceInfo = async (props: InfoProps): Promise<InfoResponse> => {
+    let baseCall = {
+        abi: abi.ERC20ABI, 
+        address: props.token
+    };
+    let chainId = props.chainId || 1;
+
+    let dexibleAddress = chainConfig[chainId].Settlement;
+    let ifc = new ethers.utils.Interface(abi.ERC20ABI);
+    let balance = ifc.encodeFunctionData("balanceOf", [props.owner]);
+    let allowance = ifc.encodeFunctionData("allowance", [props.owner, dexibleAddress]);
+    
+    let calls = [
+       {
+            ...baseCall,
+            method: "balanceOf",
+            callData: balance as string
+        },{
+            ...baseCall,
+            method: "allowance",
+            callData: allowance as string
+        }
+    ];
+
+    let cfg = chainConfig[chainId];
+
+    let r = await Multicall.aggregate({
+        calls,
+        provider: props.provider,
+        mcAddress: cfg.Multicall
+    });
+    let bal = r[0][0];
+    let allow = r[1][0];
+   
+    return {
+        decimals: 0,
+        symbol: "IGNORE",
+        balance: bal?bal.toString():0,
+        allowance: allow?allow.toString():0
+    } as InfoResponse
 }
 
 const getInfo = async (props:InfoProps):Promise<InfoResponse> => {
