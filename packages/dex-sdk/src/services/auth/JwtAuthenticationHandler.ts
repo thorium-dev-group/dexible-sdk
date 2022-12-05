@@ -124,12 +124,12 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         }
 
         log.debug("Generating JWTToken...");
-        const address = await this.signer.getAddress();
+        const address = (await this.signer.getAddress()).toLowerCase();
 
         let nonceResponse: AuthNonceResponse;
         try {
             nonceResponse = await this.authService.nonce({
-                address,
+                address: address
             });
         } catch (e) {
             log.error({
@@ -179,7 +179,7 @@ export class JwtAuthenticationHandler extends BaseAuthenticationHandler implemen
         const address = await this.signer.getAddress();
         try {
             await this.authService.register({
-                address
+                address: address.toLowerCase()
             });
         } catch (e) {
             log.error({ err: e }, "Problem registering user");

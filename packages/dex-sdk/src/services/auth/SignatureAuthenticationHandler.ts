@@ -43,7 +43,7 @@ export class SignatureAuthenticationHandler extends BaseAuthenticationHandler im
     }
 
     protected async register(): Promise<void> {
-        const address = await this.signer.getAddress();
+        const address = (await this.signer.getAddress()).toLowerCase();
 
         log.debug("Must first register wallet before login");
         try {
