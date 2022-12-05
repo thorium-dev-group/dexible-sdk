@@ -20,7 +20,7 @@ export class InMemoryJwtHandler implements IJWTHandler {
 
 
     protected validate() {
-        if (this.expiration && Date.now() > this.expiration) {
+        if (this.expiration && Math.ceil(Date.now()/1000) > this.expiration) {
             this.expiration = null;
             this.token = null;
         }
