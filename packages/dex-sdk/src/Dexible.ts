@@ -10,6 +10,9 @@ import { Web3FactoryHolder } from "./web3";
 import { MarketingProps } from "./extras";
 import {ReportService} from './services';
 
+
+const MIN_APPROVAL_GAS = BigNumber.from(75_000);
+
 /**
  * Primary configuration for Dexible SDK
  */
@@ -115,7 +118,13 @@ export class Dexible {
             }
             const chainInfo = getNetwork(token.chainId);
             const con = new ethers.Contract(token.address, abi.ERC20ABI, this.signer);
-            return await con.approve(chainInfo.contracts?.Settlement, amount);
+            let est = await con.estimateGas.approve(chainInfo.contracts?.Settlement, amount);
+            if(BigNumber.from(est).lt(MIN_APPROVAL_GAS)) {
+                est = MIN_APPROVAL_GAS;
+            }
+            return await con.approve(chainInfo.contracts?.Settlement, amount, {
+                gasLimit: est
+            });
         }
         return false;
     }
