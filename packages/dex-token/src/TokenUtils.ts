@@ -1,7 +1,8 @@
-import { BigNumberish, ethers } from 'ethers';
+import { BigNumberish, BigNumber, ethers } from 'ethers';
 import {abi, Token, chainConfig} from 'dexible-common';
 
 
+const MIN_APPROVAL_GAS = BigNumber.from(75_000);
 export interface SpendingParams {
     token: Token;
     signer: ethers.Signer,
@@ -22,5 +23,11 @@ export const increaseSpending = async(props:SpendingParams) : Promise<any> => {
     }
 
     let con = new ethers.Contract(props.token.address, abi.ERC20ABI, props.signer);
-    return con.approve(settle, props.amount);
+    let est = await con.estimateGas.approve(settle, props.amount);
+    if(BigNumber.from(est).lt(MIN_APPROVAL_GAS)) {
+        est = MIN_APPROVAL_GAS;
+    }
+    return con.approve(settle, props.amount, {
+        gasLimit:est
+    });
 }
