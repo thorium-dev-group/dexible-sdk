@@ -322,61 +322,49 @@ export class APIClient {
                 : undefined,
         });
 
-        if (typeof response?.data === 'object') {
+        // handle error objects returned in response body
+        if (response?.data?.error ) {
             this.throwOnResponseErrorData(response);
         }
 
-        let data: any;
-        if (typeof data === 'string') {
+        // fallback to constructing error from response body that does not
+        // contain a top-level error property
+        let responseData: any;
+        if (typeof response?.data === 'object') {
+            responseData = response?.data;
+        } else if (typeof response?.data === 'string') {
             try {
-                data = JSON.parse(response?.data);
+                responseData = JSON.parse(response?.data);
             } catch (e) {
-                data = response?.data;
+                // intentionally left blank
             }
+        } else {
+            responseData = {};
         }
 
-        const requestId = data?.requestId;
-
         throw new SDKError({
-            data,
             message,
-            requestId,
+            ...responseData,
         });
     }
 
     /**
-     * 
+     * Handle a response body that matches { error: ... }
      * @param response 
      */
     protected throwOnResponseErrorData(response: AxiosResponse): void {
-        let data: any;
-
-        if (typeof response.data === 'string') {
-            try {
-                data = JSON.parse(response.data);
-            } catch (e) {
-                data = response.data;
-            }
-        }
-
         if (response.data.error) {
             log.error("Problem reported from server", response.data.error);
 
-            const err = data.error;
+            const err = response.data.error;
 
             const message = err.message
                 ? err.message
                 : err;
 
-            const code = err.code;
-
-            const requestId = err.requestId;
-
             throw new SDKError({
-                code,
-                data,
                 message,
-                requestId,
+                ...err,
             });
         }
     }
