@@ -17,11 +17,6 @@ export interface PriceUnits {
     outUnits: number;
 }
 
-export interface PriceUSD {
-    token: Token;
-    price: BigNumber;
-}
-
 export interface BigNumberPrice {
     inToken: Token;
     outToken: Token;
@@ -31,7 +26,7 @@ export interface BigNumberPrice {
     // USD Pricing Support
     isUSD?: boolean;
     usdPrice?: BigNumber;
-    usdPricedToken?: Token;    
+    outPricedToken?: Token;    
 }
 
 export default class Price {
@@ -44,10 +39,10 @@ export default class Price {
     // USD Pricing Support
     isUSD: boolean;
     usdPrice: BigNumber | undefined;
-    usdPricedToken: Token | undefined;
+    outPricedToken: Token | undefined;
     
     static unitsToPrice(props:PriceUnits) {
-        const {
+        let {
             inToken,
             outToken,
             inUnits,
@@ -62,19 +57,6 @@ export default class Price {
         });
     }
 
-    static usdToPrice(props: PriceUSD) {
-        const {
-            price,
-            token,
-        } = props;
-
-        return new Price({
-            isUSD: true,
-            usdPrice: price,
-            usdPricedToken: token,
-        });
-    }
-
     constructor(props: BigNumberPrice) {
         this.inToken = props.inToken;
         this.outToken = props.outToken;
@@ -84,7 +66,7 @@ export default class Price {
         // USD Pricing Support
         this.isUSD = props.isUSD || false;
         this.usdPrice = props.usdPrice;
-        this.usdPricedToken = props.usdPricedToken;
+        this.outPricedToken = props.outPricedToken;
 
         let inUnits = +asDecs(this.inAmount, this.inToken.decimals);
         let outUnits = +asDecs(this.outAmount, this.outToken.decimals);
@@ -97,11 +79,7 @@ export default class Price {
             inToken: this.outToken,
             outToken: this.inToken,
             inAmount: this.outAmount,
-            outAmount: this.inAmount,
-            // TODO: ... is this the correct behavior for a usd token?
-            isUSD: this.isUSD,
-            usdPricedToken: this.usdPricedToken,
-            usdPrice: this.usdPrice,
+            outAmount: this.inAmount
         });
     }
 
@@ -118,10 +96,7 @@ export default class Price {
             inToken,
             outToken,
             inAmount,
-            outAmount,
-            usdPricedToken,
-            isUSD,
-            usdPrice,
+            outAmount
         } = this;
 
         return {
@@ -136,17 +111,7 @@ export default class Price {
                 decimals: outToken.decimals
             },
             inAmount: inAmount.toString(),
-            outAmount: outAmount.toString(),
-
-            isUSD: isUSD,
-            usdPricedToken: usdPricedToken
-                ? {
-                    address: usdPricedToken.address,
-                    symbol: usdPricedToken.symbol,
-                    decimals: usdPricedToken.decimals    
-                }
-                : undefined,
-            usdPrice: usdPrice?.toString(),
+            outAmount: outAmount.toString()
         }
     }
 }
