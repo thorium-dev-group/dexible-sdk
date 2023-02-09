@@ -9,6 +9,7 @@ import { BigNumber, ethers } from 'ethers';
 
 const asDecs = ethers.utils.formatUnits;
 const asUnits = ethers.utils.parseUnits;
+const bn = ethers.BigNumber.from;
 
 export interface PriceUnits {
     inToken: Token;
@@ -68,7 +69,20 @@ export default class Price {
             token,
         } = props;
 
+        //for usd prices, the in/out token and amounts are ignored
         return new Price({
+            inToken: {
+                address: ethers.constants.AddressZero,
+                decimals: 0,
+                symbol: "NONE"
+            } as Token,
+            outToken: {
+                address: ethers.constants.AddressZero,
+                decimals: 0,
+                symbol: "NONE"
+            } as Token,
+            inAmount: bn(1),
+            outAmount: bn(1),
             isUSD: true,
             usdPrice: price,
             usdPricedToken: token,

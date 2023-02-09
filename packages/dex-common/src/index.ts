@@ -16,8 +16,6 @@ export {
     Verifiable,
 };
 
-export const Foo = 'foo';
-
 export * from './config';
 export * from './error-utils';
 export * from './types';
