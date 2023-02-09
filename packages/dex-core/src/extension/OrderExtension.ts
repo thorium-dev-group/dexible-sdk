@@ -9,6 +9,9 @@ import {
 } from 'dexible-common';
 import { BigNumberish } from 'ethers';
 import { IAlgo } from 'dexible-algos';
+import type {
+    ChartData,
+} from '../types'
 
 export interface OrderSpec {
     tokenIn: Token;
@@ -100,6 +103,18 @@ export class OrderExtension {
         return this.apiClient.post({
             data: {orderId},
             endpoint: `orders/${orderId}/actions/resume`,
+            requiresAuthentication: true,
+            withRetrySupport: true,
+        });
+    }
+
+    async getChartData(orderId:number): Promise<ChartData> {
+        return this.apiClient.post({
+            endpoint: `/order-chart/data`,
+            data: {
+                orderId,
+                chainId: this.chainId,
+            },
             requiresAuthentication: true,
             withRetrySupport: true,
         });
