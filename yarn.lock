@@ -538,7 +538,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/contracts@npm:5.7.0":
+"@ethersproject/contracts@npm:5.7.0, @ethersproject/contracts@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/contracts@npm:5.7.0"
   dependencies:
@@ -640,6 +640,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ethersproject/networks@npm:5.7.1":
+  version: 5.7.1
+  resolution: "@ethersproject/networks@npm:5.7.1"
+  dependencies:
+    "@ethersproject/logger": ^5.7.0
+  checksum: 0339f312304c17d9a0adce550edb825d4d2c8c9468c1634c44172c67a9ed256f594da62c4cda5c3837a0f28b7fabc03aca9b492f68ff1fdad337ee861b27bd5d
+  languageName: node
+  linkType: hard
+
 "@ethersproject/pbkdf2@npm:5.7.0, @ethersproject/pbkdf2@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/pbkdf2@npm:5.7.0"
@@ -684,6 +693,34 @@ __metadata:
     bech32: 1.1.4
     ws: 7.4.6
   checksum: a6f80cea838424ceb367ff8e0f004f9fd6b43a87505da9d6aef33eb2bbc77cdb03ab51709ae83b7aa07d038fadf00634e08d8683fe6ae8b17b9351e3b30b26cb
+  languageName: node
+  linkType: hard
+
+"@ethersproject/providers@npm:5.7.2, @ethersproject/providers@npm:^5.7.2":
+  version: 5.7.2
+  resolution: "@ethersproject/providers@npm:5.7.2"
+  dependencies:
+    "@ethersproject/abstract-provider": ^5.7.0
+    "@ethersproject/abstract-signer": ^5.7.0
+    "@ethersproject/address": ^5.7.0
+    "@ethersproject/base64": ^5.7.0
+    "@ethersproject/basex": ^5.7.0
+    "@ethersproject/bignumber": ^5.7.0
+    "@ethersproject/bytes": ^5.7.0
+    "@ethersproject/constants": ^5.7.0
+    "@ethersproject/hash": ^5.7.0
+    "@ethersproject/logger": ^5.7.0
+    "@ethersproject/networks": ^5.7.0
+    "@ethersproject/properties": ^5.7.0
+    "@ethersproject/random": ^5.7.0
+    "@ethersproject/rlp": ^5.7.0
+    "@ethersproject/sha2": ^5.7.0
+    "@ethersproject/strings": ^5.7.0
+    "@ethersproject/transactions": ^5.7.0
+    "@ethersproject/web": ^5.7.0
+    bech32: 1.1.4
+    ws: 7.4.6
+  checksum: 1754c731a5ca6782ae9677f4a9cd8b6246c4ef21a966c9a01b133750f3c578431ec43ec254e699969c4a0f87e84463ded50f96b415600aabd37d2056aee58c19
   languageName: node
   linkType: hard
 
@@ -732,7 +769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/solidity@npm:5.7.0":
+"@ethersproject/solidity@npm:5.7.0, @ethersproject/solidity@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/solidity@npm:5.7.0"
   dependencies:
@@ -785,7 +822,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/wallet@npm:5.7.0":
+"@ethersproject/wallet@npm:5.7.0, @ethersproject/wallet@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/wallet@npm:5.7.0"
   dependencies:
@@ -818,6 +855,19 @@ __metadata:
     "@ethersproject/properties": ^5.7.0
     "@ethersproject/strings": ^5.7.0
   checksum: 9d4ca82f8b1295bbc1c59d58cb351641802d2f70f4b7d523fc726f51b0615296da6d6585dee5749b4d5e4a6a9af6d6650d46fe562d5b04f43a0af5c7f7f4a77e
+  languageName: node
+  linkType: hard
+
+"@ethersproject/web@npm:5.7.1, @ethersproject/web@npm:^5.7.1":
+  version: 5.7.1
+  resolution: "@ethersproject/web@npm:5.7.1"
+  dependencies:
+    "@ethersproject/base64": ^5.7.0
+    "@ethersproject/bytes": ^5.7.0
+    "@ethersproject/logger": ^5.7.0
+    "@ethersproject/properties": ^5.7.0
+    "@ethersproject/strings": ^5.7.0
+  checksum: 7028c47103f82fd2e2c197ce0eecfacaa9180ffeec7de7845b1f4f9b19d84081b7a48227aaddde05a4aaa526af574a9a0ce01cc0fc75e3e371f84b38b5b16b2b
   languageName: node
   linkType: hard
 
@@ -1389,6 +1439,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/bn.js@npm:^5.1.0":
+  version: 5.1.1
+  resolution: "@types/bn.js@npm:5.1.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: e50ed2dd3abe997e047caf90e0352c71e54fc388679735217978b4ceb7e336e51477791b715f49fd77195ac26dd296c7bad08a3be9750e235f9b2e1edb1b51c2
+  languageName: node
+  linkType: hard
+
 "@types/graceful-fs@npm:^4.1.3":
   version: 4.1.5
   resolution: "@types/graceful-fs@npm:4.1.5"
@@ -1440,6 +1499,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pbkdf2@npm:^3.0.0":
+  version: 3.1.0
+  resolution: "@types/pbkdf2@npm:3.1.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: d15024b1957c21cf3b8887329d9bd8dfde754cf13a09d76ae25f1391cfc62bb8b8d7b760773c5dbaa748172fba8b3e0c3dbe962af6ccbd69b76df12a48dfba40
+  languageName: node
+  linkType: hard
+
 "@types/pollyjs__adapter@npm:*":
   version: 4.3.1
   resolution: "@types/pollyjs__adapter@npm:4.3.1"
@@ -1470,6 +1538,15 @@ __metadata:
   version: 2.7.0
   resolution: "@types/prettier@npm:2.7.0"
   checksum: bf5d0c7c1270909b39399539ac106d20ddaa85fe92eb1d59922dc99159604b4f8d5e41b0045fb29c8011585cf5bca2350b7441ef3d9816c08bd0e10ebd4b31d4
+  languageName: node
+  linkType: hard
+
+"@types/secp256k1@npm:^4.0.1":
+  version: 4.0.3
+  resolution: "@types/secp256k1@npm:4.0.3"
+  dependencies:
+    "@types/node": "*"
+  checksum: 1bd10b9afa724084b655dc81b7b315def3d2d0e272014ef16009fa76e17537411c07c0695fdea412bc7b36d2a02687f5fea33522d55b8ef29eda42992f812913
   languageName: node
   linkType: hard
 
@@ -1814,6 +1891,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base-x@npm:^3.0.2":
+  version: 3.0.9
+  resolution: "base-x@npm:3.0.9"
+  dependencies:
+    safe-buffer: ^5.0.1
+  checksum: 957101d6fd09e1903e846fd8f69fd7e5e3e50254383e61ab667c725866bec54e5ece5ba49ce385128ae48f9ec93a26567d1d5ebb91f4d56ef4a9cc0d5a5481e8
+  languageName: node
+  linkType: hard
+
 "basic-auth@npm:~2.0.1":
   version: 2.0.1
   resolution: "basic-auth@npm:2.0.1"
@@ -1827,6 +1913,13 @@ __metadata:
   version: 1.1.4
   resolution: "bech32@npm:1.1.4"
   checksum: 0e98db619191548390d6f09ff68b0253ba7ae6a55db93dfdbb070ba234c1fd3308c0606fbcc95fad50437227b10011e2698b89f0181f6e7f845c499bd14d0f4b
+  languageName: node
+  linkType: hard
+
+"blakejs@npm:^1.1.0":
+  version: 1.2.1
+  resolution: "blakejs@npm:1.2.1"
+  checksum: d699ba116cfa21d0b01d12014a03e484dd76d483133e6dc9eb415aa70a119f08beb3bcefb8c71840106a00b542cba77383f8be60cd1f0d4589cb8afb922eefbe
   languageName: node
   linkType: hard
 
@@ -1844,7 +1937,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bn.js@npm:^5.2.1":
+"bn.js@npm:^5.1.2, bn.js@npm:^5.2.0, bn.js@npm:^5.2.1":
   version: 5.2.1
   resolution: "bn.js@npm:5.2.1"
   checksum: 3dd8c8d38055fedfa95c1d5fc3c99f8dd547b36287b37768db0abab3c239711f88ff58d18d155dd8ad902b0b0cee973747b7ae20ea12a09473272b0201c9edd3
@@ -1913,6 +2006,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"browserify-aes@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "browserify-aes@npm:1.2.0"
+  dependencies:
+    buffer-xor: ^1.0.3
+    cipher-base: ^1.0.0
+    create-hash: ^1.1.0
+    evp_bytestokey: ^1.0.3
+    inherits: ^2.0.1
+    safe-buffer: ^5.0.1
+  checksum: 4a17c3eb55a2aa61c934c286f34921933086bf6d67f02d4adb09fcc6f2fc93977b47d9d884c25619144fccd47b3b3a399e1ad8b3ff5a346be47270114bcf7104
+  languageName: node
+  linkType: hard
+
 "browserslist@npm:^4.20.2":
   version: 4.21.3
   resolution: "browserslist@npm:4.21.3"
@@ -1936,6 +2043,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bs58@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "bs58@npm:4.0.1"
+  dependencies:
+    base-x: ^3.0.2
+  checksum: b3c5365bb9e0c561e1a82f1a2d809a1a692059fae016be233a6127ad2f50a6b986467c3a50669ce4c18929dcccb297c5909314dd347a25a68c21b68eb3e95ac2
+  languageName: node
+  linkType: hard
+
+"bs58check@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "bs58check@npm:2.1.2"
+  dependencies:
+    bs58: ^4.0.0
+    create-hash: ^1.1.0
+    safe-buffer: ^5.1.2
+  checksum: 43bdf08a5dd04581b78f040bc4169480e17008da482ffe2a6507327bbc4fc5c28de0501f7faf22901cfe57fbca79cbb202ca529003fedb4cb8dccd265b38e54d
+  languageName: node
+  linkType: hard
+
 "bser@npm:2.1.1":
   version: 2.1.1
   resolution: "bser@npm:2.1.1"
@@ -1949,6 +2076,13 @@ __metadata:
   version: 1.1.2
   resolution: "buffer-from@npm:1.1.2"
   checksum: 0448524a562b37d4d7ed9efd91685a5b77a50672c556ea254ac9a6d30e3403a517d8981f10e565db24e8339413b43c97ca2951f10e399c6125a0d8911f5679bb
+  languageName: node
+  linkType: hard
+
+"buffer-xor@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "buffer-xor@npm:1.0.3"
+  checksum: 10c520df29d62fa6e785e2800e586a20fc4f6dfad84bcdbd12e1e8a83856de1cb75c7ebd7abe6d036bbfab738a6cf18a3ae9c8e5a2e2eb3167ca7399ce65373a
   languageName: node
   linkType: hard
 
@@ -2062,6 +2196,16 @@ __metadata:
   version: 3.3.2
   resolution: "ci-info@npm:3.3.2"
   checksum: fd81f1edd2d3b0f6cb077b2e84365136d87b9db8c055928c1ad69da8a76c2c2f19cba8ea51b90238302157ca927f91f92b653e933f2398dde4867500f08d6e62
+  languageName: node
+  linkType: hard
+
+"cipher-base@npm:^1.0.0, cipher-base@npm:^1.0.1, cipher-base@npm:^1.0.3":
+  version: 1.0.4
+  resolution: "cipher-base@npm:1.0.4"
+  dependencies:
+    inherits: ^2.0.1
+    safe-buffer: ^5.0.1
+  checksum: 47d3568dbc17431a339bad1fe7dff83ac0891be8206911ace3d3b818fc695f376df809bea406e759cdea07fff4b454fa25f1013e648851bec790c1d75763032e
   languageName: node
   linkType: hard
 
@@ -2208,6 +2352,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"create-hash@npm:^1.1.0, create-hash@npm:^1.1.2, create-hash@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "create-hash@npm:1.2.0"
+  dependencies:
+    cipher-base: ^1.0.1
+    inherits: ^2.0.1
+    md5.js: ^1.3.4
+    ripemd160: ^2.0.1
+    sha.js: ^2.4.0
+  checksum: 02a6ae3bb9cd4afee3fabd846c1d8426a0e6b495560a977ba46120c473cb283be6aa1cace76b5f927cf4e499c6146fb798253e48e83d522feba807d6b722eaa9
+  languageName: node
+  linkType: hard
+
+"create-hmac@npm:^1.1.4, create-hmac@npm:^1.1.7":
+  version: 1.1.7
+  resolution: "create-hmac@npm:1.1.7"
+  dependencies:
+    cipher-base: ^1.0.3
+    create-hash: ^1.1.0
+    inherits: ^2.0.1
+    ripemd160: ^2.0.0
+    safe-buffer: ^5.0.1
+    sha.js: ^2.4.8
+  checksum: ba12bb2257b585a0396108c72830e85f882ab659c3320c83584b1037f8ab72415095167ced80dc4ce8e446a8ecc4b2acf36d87befe0707d73b26cf9dc77440ed
+  languageName: node
+  linkType: hard
+
 "create-require@npm:^1.1.0":
   version: 1.1.1
   resolution: "create-require@npm:1.1.1"
@@ -2317,7 +2488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexible-algos@^1.0.19, dexible-algos@workspace:packages/dex-algos":
+"dexible-algos@^1.0.20-0, dexible-algos@workspace:packages/dex-algos":
   version: 0.0.0-use.local
   resolution: "dexible-algos@workspace:packages/dex-algos"
   dependencies:
@@ -2325,10 +2496,10 @@ __metadata:
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
     axios: ^0.21.1
-    dexible-common: ^1.0.19
-    dexible-logger: ^1.0.19
-    dexible-policies: ^1.0.19
-    dexible-web3: ^1.0.19
+    dexible-common: ^1.0.20-0
+    dexible-logger: ^1.1.0-beta.0
+    dexible-policies: ^1.1.0-beta.0
+    dexible-web3: ^1.1.0-beta.0
     dotenv: ^10.0.0
     ethers: ^5.7.0
     jest: ^28.1.2
@@ -2338,7 +2509,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-common@^1.0.19, dexible-common@workspace:packages/dex-common":
+"dexible-common@^1.0.20-0, dexible-common@workspace:packages/dex-common":
   version: 0.0.0-use.local
   resolution: "dexible-common@workspace:packages/dex-common"
   dependencies:
@@ -2351,7 +2522,7 @@ __metadata:
     "@types/setup-polly-jest": ^0.5.1
     axios: ^0.21.1
     axios-retry: ^3.2.5
-    dexible-logger: ^1.0.19
+    dexible-logger: ^1.1.0-beta.0
     ethers: ^5.7.0
     jest: ^28.1.2
     jest-jasmine2: ^28.1.1
@@ -2364,7 +2535,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-core@^1.0.19, dexible-core@workspace:packages/dex-core":
+"dexible-core@^1.0.20-0, dexible-core@workspace:packages/dex-core":
   version: 0.0.0-use.local
   resolution: "dexible-core@workspace:packages/dex-core"
   dependencies:
@@ -2374,16 +2545,16 @@ __metadata:
     axios: ^0.21.1
     axios-auth-refresh: ^3.3.1
     dayjs: ^1.10.6
-    dexible-algos: ^1.0.19
-    dexible-common: ^1.0.19
-    dexible-eth-http-signatures: ^1.0.19
-    dexible-gas-prices: ^1.0.19
-    dexible-logger: ^1.0.19
-    dexible-order: ^1.0.19
-    dexible-policies: ^1.0.19
-    dexible-quote: ^1.0.19
-    dexible-token: ^1.0.19
-    dexible-web3: ^1.0.19
+    dexible-algos: ^1.0.20-0
+    dexible-common: ^1.0.20-0
+    dexible-eth-http-signatures: ^1.0.20-0
+    dexible-gas-prices: ^1.1.0-beta.0
+    dexible-logger: ^1.1.0-beta.0
+    dexible-order: ^1.1.0-beta.0
+    dexible-policies: ^1.1.0-beta.0
+    dexible-quote: ^1.1.0-beta.0
+    dexible-token: ^1.1.0-beta.0
+    dexible-web3: ^1.1.0-beta.0
     dotenv: ^10.0.0
     ethers: ^5.7.0
     jest: ^28.1.2
@@ -2393,7 +2564,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-eth-http-signatures@^1.0.19, dexible-eth-http-signatures@workspace:packages/dex-eth-http-signatures":
+"dexible-eth-http-signatures@^1.0.20-0, dexible-eth-http-signatures@workspace:packages/dex-eth-http-signatures":
   version: 0.0.0-use.local
   resolution: "dexible-eth-http-signatures@workspace:packages/dex-eth-http-signatures"
   dependencies:
@@ -2401,7 +2572,7 @@ __metadata:
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
     axios: ^0.21.1
-    dexible-logger: ^1.0.19
+    dexible-logger: ^1.1.0-beta.0
     ethers: ^5.7.0
     jest: ^28.1.2
     rimraf: ^3.0.2
@@ -2411,15 +2582,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-gas-prices@^1.0.19, dexible-gas-prices@workspace:packages/dex-gas-prices":
+"dexible-gas-prices@^1.1.0-beta.0, dexible-gas-prices@workspace:packages/dex-gas-prices":
   version: 0.0.0-use.local
   resolution: "dexible-gas-prices@workspace:packages/dex-gas-prices"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
-    dexible-common: ^1.0.19
-    dexible-logger: ^1.0.19
+    dexible-common: ^1.0.20-0
+    dexible-logger: ^1.1.0-beta.0
     dotenv: ^10.0.0
     jest: ^28.1.2
     rimraf: ^3.0.2
@@ -2428,7 +2599,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-logger@^1.0.19, dexible-logger@workspace:packages/dex-logger":
+"dexible-logger@^1.1.0-beta.0, dexible-logger@workspace:packages/dex-logger":
   version: 0.0.0-use.local
   resolution: "dexible-logger@workspace:packages/dex-logger"
   dependencies:
@@ -2443,7 +2614,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-order@^1.0.19, dexible-order@workspace:packages/dex-order":
+"dexible-order@^1.1.0-beta.0, dexible-order@workspace:packages/dex-order":
   version: 0.0.0-use.local
   resolution: "dexible-order@workspace:packages/dex-order"
   dependencies:
@@ -2451,11 +2622,11 @@ __metadata:
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
     axios: ^0.21.1
-    dexible-algos: ^1.0.19
-    dexible-common: ^1.0.19
-    dexible-logger: ^1.0.19
-    dexible-quote: ^1.0.19
-    dexible-web3: ^1.0.19
+    dexible-algos: ^1.0.20-0
+    dexible-common: ^1.0.20-0
+    dexible-logger: ^1.1.0-beta.0
+    dexible-quote: ^1.1.0-beta.0
+    dexible-web3: ^1.1.0-beta.0
     dotenv: ^10.0.0
     ethers: ^5.7.0
     jest: ^28.1.2
@@ -2465,7 +2636,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-policies@^1.0.19, dexible-policies@workspace:packages/dex-policies":
+"dexible-policies@^1.1.0-beta.0, dexible-policies@workspace:packages/dex-policies":
   version: 0.0.0-use.local
   resolution: "dexible-policies@workspace:packages/dex-policies"
   dependencies:
@@ -2473,9 +2644,9 @@ __metadata:
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
     axios: ^0.21.1
-    dexible-common: ^1.0.19
-    dexible-logger: ^1.0.19
-    dexible-web3: ^1.0.19
+    dexible-common: ^1.0.20-0
+    dexible-logger: ^1.1.0-beta.0
+    dexible-web3: ^1.1.0-beta.0
     dotenv: ^10.0.0
     ethers: ^5.7.0
     jest: ^28.1.2
@@ -2485,7 +2656,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-quote@^1.0.19, dexible-quote@workspace:packages/dex-quote":
+"dexible-pot-lib@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "dexible-pot-lib@npm:1.0.3"
+  dependencies:
+    "@ethersproject/abi": ^5.7.0
+    "@ethersproject/address": ^5.7.0
+    "@ethersproject/bignumber": ^5.7.0
+    "@ethersproject/bytes": ^5.7.0
+    "@ethersproject/constants": ^5.7.0
+    "@ethersproject/contracts": ^5.7.0
+    "@ethersproject/hash": ^5.7.0
+    "@ethersproject/providers": ^5.7.2
+    "@ethersproject/solidity": ^5.7.0
+    "@ethersproject/transactions": ^5.7.0
+    "@ethersproject/wallet": ^5.7.0
+    "@ethersproject/web": ^5.7.1
+    ethereumjs-util: ^7.1.5
+    ethers: ^5.7.2
+  checksum: 572afcda703e1451a78f332cfb84e0a5bdf8c1ed4fb0bb5cbefac914716024e370ce6078770beac15dfaf343cb78de69bd27c9faf3be60565e8e4008ec56f106
+  languageName: node
+  linkType: hard
+
+"dexible-quote@^1.1.0-beta.0, dexible-quote@workspace:packages/dex-quote":
   version: 0.0.0-use.local
   resolution: "dexible-quote@workspace:packages/dex-quote"
   dependencies:
@@ -2493,11 +2686,11 @@ __metadata:
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
     axios: ^0.21.1
-    dexible-common: ^1.0.19
-    dexible-eth-http-signatures: ^1.0.19
-    dexible-logger: ^1.0.19
-    dexible-token: ^1.0.19
-    dexible-web3: ^1.0.19
+    dexible-common: ^1.0.20-0
+    dexible-eth-http-signatures: ^1.0.20-0
+    dexible-logger: ^1.1.0-beta.0
+    dexible-token: ^1.1.0-beta.0
+    dexible-web3: ^1.1.0-beta.0
     dotenv: ^10.0.0
     ethers: ^5.7.0
     jest: ^28.1.2
@@ -2517,17 +2710,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-sdk@^1.0.19, dexible-sdk@workspace:packages/dex-sdk":
+"dexible-sdk@^1.1.0-beta.0, dexible-sdk@workspace:packages/dex-sdk":
   version: 0.0.0-use.local
   resolution: "dexible-sdk@workspace:packages/dex-sdk"
   dependencies:
     "@tsconfig/node14": ^1.0.1
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
-    dexible-algos: ^1.0.19
-    dexible-common: ^1.0.19
-    dexible-core: ^1.0.19
-    dexible-policies: ^1.0.19
+    dexible-algos: ^1.0.20-0
+    dexible-common: ^1.0.20-0
+    dexible-core: ^1.0.20-0
+    dexible-policies: ^1.1.0-beta.0
     esbuild: ^0.12.14
     jest: ^28.1.2
     rimraf: ^3.0.2
@@ -2536,7 +2729,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-token@^1.0.19, dexible-token@workspace:packages/dex-token":
+"dexible-token@^1.1.0-beta.0, dexible-token@workspace:packages/dex-token":
   version: 0.0.0-use.local
   resolution: "dexible-token@workspace:packages/dex-token"
   dependencies:
@@ -2544,8 +2737,9 @@ __metadata:
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
     axios: ^0.21.1
-    dexible-common: ^1.0.19
-    dexible-web3: ^1.0.19
+    dexible-common: ^1.0.20-0
+    dexible-pot-lib: ^1.0.3
+    dexible-web3: ^1.1.0-beta.0
     dotenv: ^10.0.0
     ethers: ^5.7.0
     jest: ^28.1.2
@@ -2555,7 +2749,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dexible-web3@^1.0.19, dexible-web3@workspace:packages/dex-web3":
+"dexible-web3@^1.1.0-beta.0, dexible-web3@workspace:packages/dex-web3":
   version: 0.0.0-use.local
   resolution: "dexible-web3@workspace:packages/dex-web3"
   dependencies:
@@ -2615,7 +2809,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"elliptic@npm:6.5.4":
+"elliptic@npm:6.5.4, elliptic@npm:^6.5.4":
   version: 6.5.4
   resolution: "elliptic@npm:6.5.4"
   dependencies:
@@ -2867,6 +3061,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ethereum-cryptography@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "ethereum-cryptography@npm:0.1.3"
+  dependencies:
+    "@types/pbkdf2": ^3.0.0
+    "@types/secp256k1": ^4.0.1
+    blakejs: ^1.1.0
+    browserify-aes: ^1.2.0
+    bs58check: ^2.1.2
+    create-hash: ^1.2.0
+    create-hmac: ^1.1.7
+    hash.js: ^1.1.7
+    keccak: ^3.0.0
+    pbkdf2: ^3.0.17
+    randombytes: ^2.1.0
+    safe-buffer: ^5.1.2
+    scrypt-js: ^3.0.0
+    secp256k1: ^4.0.1
+    setimmediate: ^1.0.5
+  checksum: 54bae7a4a96bd81398cdc35c91cfcc74339f71a95ed1b5b694663782e69e8e3afd21357de3b8bac9ff4877fd6f043601e200a7ad9133d94be6fd7d898ee0a449
+  languageName: node
+  linkType: hard
+
+"ethereumjs-util@npm:^7.1.5":
+  version: 7.1.5
+  resolution: "ethereumjs-util@npm:7.1.5"
+  dependencies:
+    "@types/bn.js": ^5.1.0
+    bn.js: ^5.1.2
+    create-hash: ^1.1.2
+    ethereum-cryptography: ^0.1.3
+    rlp: ^2.2.4
+  checksum: 27a3c79d6e06b2df34b80d478ce465b371c8458b58f5afc14d91c8564c13363ad336e6e83f57eb0bd719fde94d10ee5697ceef78b5aa932087150c5287b286d1
+  languageName: node
+  linkType: hard
+
 "ethers@npm:^5.7.0":
   version: 5.7.0
   resolution: "ethers@npm:5.7.0"
@@ -2905,6 +3135,55 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ethers@npm:^5.7.2":
+  version: 5.7.2
+  resolution: "ethers@npm:5.7.2"
+  dependencies:
+    "@ethersproject/abi": 5.7.0
+    "@ethersproject/abstract-provider": 5.7.0
+    "@ethersproject/abstract-signer": 5.7.0
+    "@ethersproject/address": 5.7.0
+    "@ethersproject/base64": 5.7.0
+    "@ethersproject/basex": 5.7.0
+    "@ethersproject/bignumber": 5.7.0
+    "@ethersproject/bytes": 5.7.0
+    "@ethersproject/constants": 5.7.0
+    "@ethersproject/contracts": 5.7.0
+    "@ethersproject/hash": 5.7.0
+    "@ethersproject/hdnode": 5.7.0
+    "@ethersproject/json-wallets": 5.7.0
+    "@ethersproject/keccak256": 5.7.0
+    "@ethersproject/logger": 5.7.0
+    "@ethersproject/networks": 5.7.1
+    "@ethersproject/pbkdf2": 5.7.0
+    "@ethersproject/properties": 5.7.0
+    "@ethersproject/providers": 5.7.2
+    "@ethersproject/random": 5.7.0
+    "@ethersproject/rlp": 5.7.0
+    "@ethersproject/sha2": 5.7.0
+    "@ethersproject/signing-key": 5.7.0
+    "@ethersproject/solidity": 5.7.0
+    "@ethersproject/strings": 5.7.0
+    "@ethersproject/transactions": 5.7.0
+    "@ethersproject/units": 5.7.0
+    "@ethersproject/wallet": 5.7.0
+    "@ethersproject/web": 5.7.1
+    "@ethersproject/wordlists": 5.7.0
+  checksum: b7c08cf3e257185a7946117dbbf764433b7ba0e77c27298dec6088b3bc871aff711462b0621930c56880ff0a7ceb8b1d3a361ffa259f93377b48e34107f62553
+  languageName: node
+  linkType: hard
+
+"evp_bytestokey@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "evp_bytestokey@npm:1.0.3"
+  dependencies:
+    md5.js: ^1.3.4
+    node-gyp: latest
+    safe-buffer: ^5.1.1
+  checksum: ad4e1577f1a6b721c7800dcc7c733fe01f6c310732bb5bf2240245c2a5b45a38518b91d8be2c610611623160b9d1c0e91f1ce96d639f8b53e8894625cf20fa45
+  languageName: node
+  linkType: hard
+
 "examples@workspace:packages/examples":
   version: 0.0.0-use.local
   resolution: "examples@workspace:packages/examples"
@@ -2912,7 +3191,7 @@ __metadata:
     "@tsconfig/node14": ^1.0.1
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
-    dexible-sdk: ^1.0.19
+    dexible-sdk: ^1.1.0-beta.0
     dotenv: ^10.0.0
     ethers: ^5.7.0
     jest: ^28.1.2
@@ -3342,7 +3621,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hash.js@npm:1.1.7, hash.js@npm:^1.0.0, hash.js@npm:^1.0.3":
+"hash-base@npm:^3.0.0":
+  version: 3.1.0
+  resolution: "hash-base@npm:3.1.0"
+  dependencies:
+    inherits: ^2.0.4
+    readable-stream: ^3.6.0
+    safe-buffer: ^5.2.0
+  checksum: 26b7e97ac3de13cb23fc3145e7e3450b0530274a9562144fc2bf5c1e2983afd0e09ed7cc3b20974ba66039fad316db463da80eb452e7373e780cbee9a0d2f2dc
+  languageName: node
+  linkType: hard
+
+"hash.js@npm:1.1.7, hash.js@npm:^1.0.0, hash.js@npm:^1.0.3, hash.js@npm:^1.1.7":
   version: 1.1.7
   resolution: "hash.js@npm:1.1.7"
   dependencies:
@@ -3514,7 +3804,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inherits@npm:2, inherits@npm:2.0.4, inherits@npm:^2.0.3, inherits@npm:^2.0.4":
+"inherits@npm:2, inherits@npm:2.0.4, inherits@npm:^2.0.1, inherits@npm:^2.0.3, inherits@npm:^2.0.4":
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: 4a48a733847879d6cf6691860a6b1e3f0f4754176e4d71494c41f3475553768b10f84b5ce1d40fbd0e34e6bfbb864ee35858ad4dd2cf31e02fc4a154b724d7f1
@@ -4235,6 +4525,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"keccak@npm:^3.0.0":
+  version: 3.0.3
+  resolution: "keccak@npm:3.0.3"
+  dependencies:
+    node-addon-api: ^2.0.0
+    node-gyp: latest
+    node-gyp-build: ^4.2.0
+    readable-stream: ^3.6.0
+  checksum: f08f04f5cc87013a3fc9e87262f761daff38945c86dd09c01a7f7930a15ae3e14f93b310ef821dcc83675a7b814eb1c983222399a2f263ad980251201d1b9a99
+  languageName: node
+  linkType: hard
+
 "kleur@npm:^3.0.3":
   version: 3.0.3
   resolution: "kleur@npm:3.0.3"
@@ -4372,6 +4674,17 @@ __metadata:
   dependencies:
     tmpl: 1.0.5
   checksum: b38a025a12c8146d6eeea5a7f2bf27d51d8ad6064da8ca9405fcf7bf9b54acd43e3b30ddd7abb9b1bfa4ddb266019133313482570ddb207de568f71ecfcf6060
+  languageName: node
+  linkType: hard
+
+"md5.js@npm:^1.3.4":
+  version: 1.3.5
+  resolution: "md5.js@npm:1.3.5"
+  dependencies:
+    hash-base: ^3.0.0
+    inherits: ^2.0.1
+    safe-buffer: ^5.1.2
+  checksum: 098494d885684bcc4f92294b18ba61b7bd353c23147fbc4688c75b45cb8590f5a95fd4584d742415dcc52487f7a1ef6ea611cfa1543b0dc4492fe026357f3f0c
   languageName: node
   linkType: hard
 
@@ -4623,6 +4936,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-addon-api@npm:^2.0.0":
+  version: 2.0.2
+  resolution: "node-addon-api@npm:2.0.2"
+  dependencies:
+    node-gyp: latest
+  checksum: 31fb22d674648204f8dd94167eb5aac896c841b84a9210d614bf5d97c74ef059cc6326389cf0c54d2086e35312938401d4cc82e5fcd679202503eb8ac84814f8
+  languageName: node
+  linkType: hard
+
 "node-domexception@npm:^1.0.0":
   version: 1.0.0
   resolution: "node-domexception@npm:1.0.0"
@@ -4638,6 +4960,17 @@ __metadata:
     fetch-blob: ^3.1.4
     formdata-polyfill: ^4.0.10
   checksum: e65322431f4897ded04197aa5923eaec63a8d53e00432de4e70a4f7006625c8dc32629c5c35f4fe8ee719a4825544d07bf53f6e146a7265914262f493e8deac1
+  languageName: node
+  linkType: hard
+
+"node-gyp-build@npm:^4.2.0":
+  version: 4.6.0
+  resolution: "node-gyp-build@npm:4.6.0"
+  bin:
+    node-gyp-build: bin.js
+    node-gyp-build-optional: optional.js
+    node-gyp-build-test: build-test.js
+  checksum: 25d78c5ef1f8c24291f4a370c47ba52fcea14f39272041a90a7894cd50d766f7c8cb8fb06c0f42bf6f69b204b49d9be3c8fc344aac09714d5bdb95965499eb15
   languageName: node
   linkType: hard
 
@@ -4891,6 +5224,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pbkdf2@npm:^3.0.17":
+  version: 3.1.2
+  resolution: "pbkdf2@npm:3.1.2"
+  dependencies:
+    create-hash: ^1.1.2
+    create-hmac: ^1.1.4
+    ripemd160: ^2.0.1
+    safe-buffer: ^5.0.1
+    sha.js: ^2.4.8
+  checksum: 2c950a100b1da72123449208e231afc188d980177d021d7121e96a2de7f2abbc96ead2b87d03d8fe5c318face097f203270d7e27908af9f471c165a4e8e69c92
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"
@@ -5022,6 +5368,15 @@ __metadata:
   version: 2.2.0
   resolution: "querystringify@npm:2.2.0"
   checksum: 5641ea231bad7ef6d64d9998faca95611ed4b11c2591a8cae741e178a974f6a8e0ebde008475259abe1621cb15e692404e6b6626e927f7b849d5c09392604b15
+  languageName: node
+  linkType: hard
+
+"randombytes@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "randombytes@npm:2.1.0"
+  dependencies:
+    safe-buffer: ^5.1.0
+  checksum: d779499376bd4cbb435ef3ab9a957006c8682f343f14089ed5f27764e4645114196e75b7f6abf1cbd84fd247c0cb0651698444df8c9bf30e62120fbbc52269d6
   languageName: node
   linkType: hard
 
@@ -5164,6 +5519,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ripemd160@npm:^2.0.0, ripemd160@npm:^2.0.1":
+  version: 2.0.2
+  resolution: "ripemd160@npm:2.0.2"
+  dependencies:
+    hash-base: ^3.0.0
+    inherits: ^2.0.1
+  checksum: 006accc40578ee2beae382757c4ce2908a826b27e2b079efdcd2959ee544ddf210b7b5d7d5e80467807604244e7388427330f5c6d4cd61e6edaddc5773ccc393
+  languageName: node
+  linkType: hard
+
+"rlp@npm:^2.2.4":
+  version: 2.2.7
+  resolution: "rlp@npm:2.2.7"
+  dependencies:
+    bn.js: ^5.2.0
+  bin:
+    rlp: bin/rlp
+  checksum: 3db4dfe5c793f40ac7e0be689a1f75d05e6f2ca0c66189aeb62adab8c436b857ab4420a419251ee60370d41d957a55698fc5e23ab1e1b41715f33217bc4bb558
+  languageName: node
+  linkType: hard
+
 "route-recognizer@npm:^0.3.4":
   version: 0.3.4
   resolution: "route-recognizer@npm:0.3.4"
@@ -5178,7 +5554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:5.2.1, safe-buffer@npm:~5.2.0":
+"safe-buffer@npm:5.2.1, safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0, safe-buffer@npm:^5.1.1, safe-buffer@npm:^5.1.2, safe-buffer@npm:^5.2.0, safe-buffer@npm:~5.2.0":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
   checksum: b99c4b41fdd67a6aaf280fcd05e9ffb0813654894223afb78a31f14a19ad220bba8aba1cb14eddce1fcfb037155fe6de4e861784eb434f7d11ed58d1e70dd491
@@ -5192,10 +5568,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scrypt-js@npm:3.0.1":
+"scrypt-js@npm:3.0.1, scrypt-js@npm:^3.0.0":
   version: 3.0.1
   resolution: "scrypt-js@npm:3.0.1"
   checksum: b7c7d1a68d6ca946f2fbb0778e0c4ec63c65501b54023b2af7d7e9f48fdb6c6580d6f7675cd53bda5944c5ebc057560d5a6365079752546865defb3b79dea454
+  languageName: node
+  linkType: hard
+
+"secp256k1@npm:^4.0.1":
+  version: 4.0.3
+  resolution: "secp256k1@npm:4.0.3"
+  dependencies:
+    elliptic: ^6.5.4
+    node-addon-api: ^2.0.0
+    node-gyp: latest
+    node-gyp-build: ^4.2.0
+  checksum: 21e219adc0024fbd75021001358780a3cc6ac21273c3fcaef46943af73969729709b03f1df7c012a0baab0830fb9a06ccc6b42f8d50050c665cb98078eab477b
   languageName: node
   linkType: hard
 
@@ -5266,6 +5654,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"setimmediate@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "setimmediate@npm:1.0.5"
+  checksum: c9a6f2c5b51a2dabdc0247db9c46460152ffc62ee139f3157440bd48e7c59425093f42719ac1d7931f054f153e2d26cf37dfeb8da17a794a58198a2705e527fd
+  languageName: node
+  linkType: hard
+
 "setprototypeof@npm:1.2.0":
   version: 1.2.0
   resolution: "setprototypeof@npm:1.2.0"
@@ -5279,6 +5674,18 @@ __metadata:
   peerDependencies:
     "@pollyjs/core": "*"
   checksum: da51152eabf8e7b0d09d16e877d56a83ef9ca6b2531d268d11ca75f7ebe733ff952f5d7e619315186f161af75c1417ba3d06d5544b818d235b05b088192c969d
+  languageName: node
+  linkType: hard
+
+"sha.js@npm:^2.4.0, sha.js@npm:^2.4.8":
+  version: 2.4.11
+  resolution: "sha.js@npm:2.4.11"
+  dependencies:
+    inherits: ^2.0.1
+    safe-buffer: ^5.0.1
+  bin:
+    sha.js: ./bin.js
+  checksum: ebd3f59d4b799000699097dadb831c8e3da3eb579144fd7eb7a19484cbcbb7aca3c68ba2bb362242eb09e33217de3b4ea56e4678184c334323eca24a58e3ad07
   languageName: node
   linkType: hard
 

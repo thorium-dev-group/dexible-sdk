@@ -1,5 +1,6 @@
-import {BigNumber, ethers} from 'ethers';
+import {BigNumber, Contract, ethers} from 'ethers';
 import {abi, chainConfig, Token, Multicall} from 'dexible-common';
+import { ContractFactory } from 'dexible-pot-lib';
 
 export interface TokenFindProps {
     address: string;
@@ -53,10 +54,15 @@ export const getBalanceInfo = async (props: InfoProps): Promise<InfoResponse> =>
     };
     let chainId = props.chainId || 1;
 
-    let dexibleAddress = chainConfig[chainId].Settlement;
+    //let dexibleAddress = chainConfig[chainId].Settlement;
+    const dexible = await ContractFactory.getDexible(props.provider);
+    if(!dexible || !dexible.address) {
+        throw new Error(`Could not resolve Dexible address on network: ${chainId}`);
+    }
+
     let ifc = new ethers.utils.Interface(abi.ERC20ABI);
     let balance = ifc.encodeFunctionData("balanceOf", [props.owner]);
-    let allowance = ifc.encodeFunctionData("allowance", [props.owner, dexibleAddress]);
+    let allowance = ifc.encodeFunctionData("allowance", [props.owner, dexible.address]);
     
     let calls = [
        {
@@ -95,7 +101,12 @@ const getInfo = async (props:InfoProps):Promise<InfoResponse> => {
     };
     let chainId = props.chainId || 1;
 
-    let dexibleAddress = chainConfig[chainId].Settlement;
+    //let dexibleAddress = chainConfig[chainId].Settlement;
+    const dexible = await ContractFactory.getDexible(props.provider);
+    if(!dexible || !dexible.address) {
+        throw new Error(`Could not resolve Dexible address on network: ${chainId}`);
+    }
+
     let ifc = new ethers.utils.Interface(abi.ERC20ABI);
     let getDecimals = ifc.encodeFunctionData("decimals");
     let getSymbol = ifc.encodeFunctionData("symbol");
@@ -103,7 +114,7 @@ const getInfo = async (props:InfoProps):Promise<InfoResponse> => {
     let allowance:undefined | string = undefined;
     if(props.owner) {
         balance = ifc.encodeFunctionData("balanceOf", [props.owner]);
-        allowance = ifc.encodeFunctionData("allowance", [props.owner, dexibleAddress]);
+        allowance = ifc.encodeFunctionData("allowance", [props.owner, dexible.address]);
     }
     let calls = [
         {

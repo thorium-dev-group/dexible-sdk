@@ -2,7 +2,6 @@ undecided:
   - dexible-algos
   - dexible-common
   - dexible-core
-  - dexible-eth-http-signatures
   - dexible-gas-prices
   - dexible-logger
   - dexible-order
@@ -11,3 +10,4 @@ undecided:
   - dexible-sdk
   - dexible-token
   - dexible-web3
+  - examples

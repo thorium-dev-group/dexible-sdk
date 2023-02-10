@@ -208,7 +208,7 @@ export function resolveApiEndpointByChainId(chainId: number): string {
         throw new Error(`Unsupported blockchain (${blockchain.id})`);
     }
 
-    const baseUrl = 'https://' + apiDomain + '/v1';
+    const baseUrl = 'https://' + apiDomain + '/v2';
 
     return baseUrl;
 };
