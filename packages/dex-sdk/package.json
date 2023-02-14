@@ -1,6 +1,6 @@
 {
   "name": "dexible-sdk",
-  "version": "1.1.0-beta.3",
+  "version": "1.1.0-beta.12",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -10,10 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "dexible-algos": "^1.1.0-beta.3",
-    "dexible-common": "^1.1.0-beta.3",
-    "dexible-core": "^1.1.0-beta.3",
-    "dexible-policies": "^1.1.0-beta.3"
+    "dexible-algos": "^1.1.0-beta.12",
+    "dexible-common": "^1.1.0-beta.12",
+    "dexible-core": "^1.1.0-beta.12",
+    "dexible-policies": "^1.1.0-beta.12"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",

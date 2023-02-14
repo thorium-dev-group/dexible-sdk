@@ -1,7 +1,7 @@
 {
   "name": "dexible-eth-http-signatures",
   "types": "./dist/index.d.ts",
-  "version": "1.1.0-beta.3",
+  "version": "1.1.0-beta.12",
   "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dexible-logger": "^1.1.0-beta.3",
+    "dexible-logger": "^1.1.0-beta.12",
     "ethers": "^5.7.0"
   },
   "devDependencies": {

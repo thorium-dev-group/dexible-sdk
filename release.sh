@@ -1,7 +1,7 @@
 #!/bin/sh
 
-OLD_V="1.1.0-beta.2"
-VERSION="1.1.0-beta.3"
+OLD_V="1.1.0-beta.11"
+VERSION="1.1.0-beta.12"
 
 for f in `find ./packages -name "package.json" -not -path "*/node_modules/*" -type f`
 do 
