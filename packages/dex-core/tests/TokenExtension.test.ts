@@ -1,4 +1,5 @@
 import { 
+    FeeToken,
     TokenExtension
 } from '../src/extension/TokenExtension'
 import { ethers, BigNumber } from 'ethers';
@@ -53,5 +54,43 @@ describe('TokenExtension', () => {
         // not currently fetching token name
         // expect(response.name).toBe('USD Coin');
         expect(response.name).toBeUndefined();
+    }, TIMEOUT)
+
+    it('should resolve fee tokens', async () => {
+        expect.assertions(6);
+        const chainId = 1;
+        const feeToken : FeeToken = {
+            address: '0x' + '0'.repeat(40),
+            decimals: 18,
+            symbol: 'FEE',
+            name: 'Mock Fee Token',
+        };
+
+        const mockGet = jest.fn((url) => [feeToken]);
+        const apiClient : any = {
+            get: mockGet
+        } as const;
+        const marketing = {};
+        const gnosisSafe = undefined;
+        const signer = undefined;
+        const provider = ethers.providers.getDefaultProvider('homestead');      
+
+        const ext = new TokenExtension({
+            apiClient,
+            chainId,
+            marketing,
+            provider,
+            gnosisSafe,
+            signer,
+        });
+
+        const response = await ext.getFeeTokens();
+
+        expect(mockGet.mock.calls.length).toBe(1);
+        expect(response.length).toEqual(1);
+        expect(response[0].address).toStrictEqual(feeToken.address);
+        expect(response[0].name).toStrictEqual(feeToken.name);
+        expect(response[0].decimals).toBe(feeToken.decimals);       
+        expect(response[0].symbol).toBe(feeToken.symbol);
     }, TIMEOUT)
 })

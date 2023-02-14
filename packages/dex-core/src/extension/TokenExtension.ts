@@ -6,6 +6,13 @@ import {
 } from 'dexible-common';
 import {BigNumber, BigNumberish, ethers} from 'ethers';
 
+export interface FeeToken {
+    name: string;
+    symbol: string;
+    address: string;
+    decimals: number;
+}
+
 export interface SpendIncreaseProps {
     token: Token;
     amount: BigNumberish;
@@ -174,6 +181,28 @@ export class TokenExtension {
         }
 
         const endpoint = `token/verify/${this.chainId}/${address}`;
+
+        return this.apiClient.get({
+            endpoint,
+            requiresAuthentication: false,
+            withRetrySupport: true,
+        });
+    }
+
+
+    /**
+     * Return a list of valid fee tokens for the configured network.
+     * 
+     * @returns FeeToken[]
+     */
+    async getFeeTokens() : Promise<FeeToken[]> {
+
+        if (this.chainId === 0) {
+            let net = await this.provider.getNetwork();
+            this.chainId = net.chainId;
+        }
+
+        const endpoint = `token/fee-tokens/${this.chainId}`;
 
         return this.apiClient.get({
             endpoint,
